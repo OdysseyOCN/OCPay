@@ -15,8 +15,7 @@
 .article p{
     font-size: 13px;
     line-height: 22px;
-    word-wrap:break-word
-    /* text-indent: 2em; */
+    word-wrap:break-word;
 }
 p.title{
     text-indent: 2em;

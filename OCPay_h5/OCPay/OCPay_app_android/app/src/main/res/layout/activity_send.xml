@@ -1,0 +1,285 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="minGasPrice"
+            type="Integer" />
+
+        <variable
+            name="maxGasPrice"
+            type="Integer" />
+
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+
+        <include
+            android:id="@+id/include_action_bar"
+            layout="@layout/layout_action_bar"
+            android:background="@color/white" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/et_send_wallet_address"
+                style="@style/WalletImportEditView"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:hint="Address To"
+                android:inputType="text" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:padding="14dp"
+                android:src="@mipmap/ic_address_list" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="14dp"
+            android:background="@color/color_item_line" />
+
+        <EditText
+            android:id="@+id/tv_transfer_amount"
+            style="@style/WalletImportEditView"
+            android:background="@color/white"
+            android:hint="Transfer Amount"
+            android:inputType="numberDecimal" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="14dp"
+            android:background="@color/color_item_line" />
+
+        <EditText
+            android:id="@+id/tv_note"
+            style="@style/WalletImportEditView"
+            android:background="@color/white"
+            android:hint="Note"
+            android:inputType="numberDecimal" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="14dp"
+            android:background="@color/color_item_line" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:paddingBottom="12dp">
+
+            <LinearLayout
+                android:id="@+id/ll_simple_input"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="14dp"
+                    android:layout_marginTop="20dp"
+                    android:text="Miner costs"
+                    android:textColor="#FF38525F"
+                    android:textSize="14sp" />
+
+
+                <SeekBar
+                    android:id="@+id/seekBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="13dp"
+                    android:max="100"
+                    android:min="1" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="14dp"
+                    android:layout_marginRight="14dp"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:text="Slow"
+                        android:textColor="#FFB5BDC8"
+                        android:textSize="12sp" />
+
+
+                    <TextView
+                        android:id="@+id/tv_seek_bar_gas_fee"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center"
+                        android:text="0.43543466 ether"
+                        android:textColor="#FF38525F"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:text="Fast"
+                        android:textColor="#FFB5BDC8"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/ll_custom_input"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:visibility="invisible">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/et_custom_gas_price"
+                        style="@style/WalletImportEditView"
+                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="Custom Gas Price"
+                        android:inputType="number" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="14dp"
+                        android:text="@string/unit_gwei"
+                        android:textColor="#FFB5BDC8"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="14dp"
+                    android:layout_marginRight="14dp"
+                    android:background="@color/color_item_line" />
+
+
+                <EditText
+                    android:id="@+id/et_custom_gas"
+                    style="@style/WalletImportEditView"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:hint="Custom Gas"
+                    android:inputType="number" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="14dp"
+                    android:layout_marginRight="14dp"
+                    android:background="@color/color_item_line" />
+
+                <EditText
+                    android:id="@+id/et_custom_hex"
+                    style="@style/WalletImportEditView"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Hex data"
+                    android:inputType="numberDecimal" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="14dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:text="How to design parameters？"
+                        android:textColor="#FF2870C3"
+                        android:textSize="12sp" />
+
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/btn_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_gravity="right|bottom"
+                android:layout_marginRight="14dp"
+                android:layout_marginTop="70dp"
+                android:background="@drawable/shape_corner_btn_main_r2"
+                android:gravity="center_vertical"
+                android:paddingBottom="4dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="4dp"
+                android:text="Enable advanced mode"
+                android:textColor="#FFA4AFB4"
+                android:textSize="9sp" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/color_wallet_item_selected"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/tv_next_step"
+                style="@style/MnemonicBackupBtn"
+                android:layout_marginBottom="16dp"
+                android:text="@string/transfer_next_step" />
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

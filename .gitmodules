@@ -1,0 +1,3 @@
+[submodule "OCPay_app_iOS"]
+	path = OCPay_app_iOS
+	url = http://git.stormfives.com/OdysseyWallet/odwallet_app_ios.git

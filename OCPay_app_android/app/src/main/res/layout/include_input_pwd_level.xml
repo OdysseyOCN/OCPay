@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="14dp"
+            android:orientation="horizontal">
+
+
+            <EditText
+                android:id="@+id/et_wallet_pwd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@null"
+                android:hint="@string/edit_hint_password"
+                android:inputType="textPassword"
+                android:paddingBottom="14dp"
+                android:paddingTop="20dp"
+                android:textColor="@color/color_text_main"
+                android:textColorHint="@color/color_edit_hint"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/tv_pwd_lv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/wallet_create_pwd_tip_weak"
+                android:textColor="@color/color_edit_tip_red"
+                android:textSize="14sp"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/iv_pwd_lv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="7dp"
+                android:src="@mipmap/ic_pwd_null"
+                android:visibility="invisible" />
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="14dp"
+            android:background="@color/color_item_line" />
+
+
+        <TextView
+            android:id="@+id/tv_pwd_tip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="14dp"
+            android:layout_marginTop="3dp"
+            android:gravity="right"
+            android:text="@string/wallet_create_tip_require"
+            android:textColor="@color/color_edit_tip_red"
+            android:textSize="9sp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+</layout>

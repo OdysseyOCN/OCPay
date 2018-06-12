@@ -1,0 +1,80 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/include_action_bar"
+            layout="@layout/layout_action_bar" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="14dp"
+            android:layout_marginTop="20dp"
+            android:text="Signer address"
+            android:textColor="#FFB5BDC8"
+            android:textSize="14sp" />
+
+
+        <TextView
+            android:id="@+id/tv_wallet_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="14dp"
+            android:layout_marginTop="2dp"
+            android:text="0X9DCf3Fd8AD560BD14B91e0501Fc807bc72A4561"
+            android:textColor="#FF38525F"
+            android:textSize="12sp" />
+
+        <View
+            android:layout_width="360dp"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="20dp"
+            android:background="#FFE1E5E9" />
+
+        <TextView
+            android:layout_width="29dp"
+            android:layout_height="18dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="14dp"
+            android:layout_marginTop="24dp"
+            android:text="Data"
+            android:textColor="#FFB5BDC8"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_data"
+            android:layout_width="332dp"
+            android:layout_height="18dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="14dp"
+            android:layout_marginTop="2dp"
+            android:text="data          cf5to06wif"
+            android:textColor="#FF38525F"
+            android:textSize="12sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/tv_action"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginBottom="14dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="14dp"
+            android:background="@drawable/shape_corner_btn_blue_r3"
+            android:gravity="center"
+            android:text="Next Step"
+            android:textColor="#FFFFFFFF"
+            android:textSize="13sp" />
+    </LinearLayout>
+</layout>

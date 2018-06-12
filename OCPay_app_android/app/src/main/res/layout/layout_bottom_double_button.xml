@@ -20,12 +20,14 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/iv_bottom_first"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:layout_gravity="center_vertical"
                     android:src="@mipmap/ic_create_wallet_white_bg" />
 
                 <TextView
+                    android:id="@+id/tv_bottom_create_wallet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -51,12 +53,14 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/iv_bottom_two"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:layout_gravity="center_vertical"
                     android:src="@mipmap/ic_import_wallet_white_bg" />
 
                 <TextView
+                    android:id="@+id/tv_bottom_import_wallet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"

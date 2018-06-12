@@ -6,22 +6,29 @@
 
     </data>
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#fff"
-        android:orientation="vertical"
-        android:paddingLeft="22dp"
-        android:paddingRight="22dp">
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/view_space"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            android:visibility="gone"
+            android:background="@color/color_wallet_item_selected" />
 
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
+            android:layout_marginLeft="12dp"
             android:layout_marginTop="17dp"
             android:text="Recent transactions"
-            android:textColor="#FFB5BDC8"
+            android:textColor="@color/color_token_transaction_title"
             android:textSize="12sp"
             android:visibility="gone" />
 
@@ -35,7 +42,9 @@
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:background="#fff"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp">
 
             <com.ocpay.wallet.widget.customview.CircleImageView
                 android:id="@+id/civ_wallet_icon"
@@ -56,8 +65,8 @@
 
                 <TextView
                     android:id="@+id/tv_wallet_name"
-                    android:layout_width="82.5dp"
-                    android:layout_height="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="WALLET NAME"
                     android:textColor="#FF38525F"
                     android:textSize="12sp" />
@@ -86,7 +95,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="8dp"
-                    android:layout_marginRight="16dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -113,7 +121,8 @@
             </LinearLayout>
 
         </LinearLayout>
-    </LinearLayout>
 
+
+    </LinearLayout>
 
 </layout>

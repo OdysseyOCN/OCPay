@@ -5,7 +5,7 @@
 
         <variable
             name="notification"
-            type="com.ocpay.wallet.bean.NotificationBean"
+            type="com.ocpay.wallet.greendao.NotificationBean"
 
             />
 
@@ -36,7 +36,6 @@
             <TextView
                 android:id="@+id/tv_notification_title"
                 android:layout_width="wrap_content"
-
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:text="@{notification.title}"
@@ -55,7 +54,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:gravity="center_vertical"
-                android:text="An hour ago"
                 android:textColor="#FFA4AFB4"
                 android:textSize="9sp" />
 
@@ -75,7 +73,6 @@
                 android:id="@+id/tv_notification_receiver"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Receiver: 0XDDC0222FB…75E42DERS"
                 android:textColor="#FF38525F"
                 android:textSize="9sp" />
 

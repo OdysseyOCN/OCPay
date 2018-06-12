@@ -33,7 +33,6 @@
             android:maxLines="2"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:text="OBike"
             android:textAlignment="center"
             android:textColor="#BBBBBB"
             android:textSize="9sp" />

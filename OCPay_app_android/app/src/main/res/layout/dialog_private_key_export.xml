@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_transparent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_corner_white_16"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_export_private"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="23dp"
+                android:text="Export Private"
+                android:textColor="#FF38525F"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/iv_close"
+                android:layout_width="21dp"
+                android:layout_height="21dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="15dp"
+                android:src="@mipmap/ic_close_black" />
+
+            <TextView
+                android:id="@+id/tv_export_private_warm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_export_private"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="17dp"
+                android:layout_marginRight="17dp"
+                android:layout_marginTop="20dp"
+                android:background="#FFFCF0EF"
+                android:padding="7dp"
+                android:text="@string/tip_warning_export"
+                android:textColor="#FFD6556D"
+                android:textSize="12sp" />
+
+
+            <TextView
+                android:id="@+id/tv_private_key"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_export_private_warm"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="17dp"
+                android:layout_marginRight="17dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/shape_stroke_corner_btn_gray_r6"
+                android:padding="7dp"
+                android:textColor="#FF38525F"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tv_copy_private_key"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_below="@+id/tv_private_key"
+                android:layout_marginBottom="30dp"
+                android:layout_marginLeft="17dp"
+                android:layout_marginRight="17dp"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/shape_corner_btn_main_r3"
+                android:gravity="center"
+                android:text="@string/dialog_copy"
+                android:textColor="#FFFFFFFF"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+    </LinearLayout>
+</layout>

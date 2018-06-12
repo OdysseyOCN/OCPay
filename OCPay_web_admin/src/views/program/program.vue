@@ -229,7 +229,7 @@ import {Banner,BannerEdit,BannerDelete,BannerAdd,BannerGet,upload} from '../../a
       //  查询表格数据
           getcoin(num){
             let para={
-              		"type":"2",
+              		"type":"1",
                   "pageNum":num,
                    "pageSize":"10"
               }

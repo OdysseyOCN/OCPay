@@ -1,0 +1,6 @@
+framework module Pods_OCPayTests {
+  umbrella header "Pods-OCPayTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

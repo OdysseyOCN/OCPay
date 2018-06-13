@@ -194,10 +194,10 @@
             android:id="@+id/tv_next_step"
             style="@style/MnemonicBackupBtn"
             android:layout_width="match_parent"
-            android:layout_marginBottom="0dp"
-            android:layout_marginLeft="0dp"
-            android:layout_marginRight="0dp"
-            android:background="@drawable/shape_corner_btn_main_r2"
+            android:layout_marginBottom="14dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="14dp"
+            android:background="@drawable/shape_corner_btn_main_r3"
             android:text="Next step" />
 
     </LinearLayout>

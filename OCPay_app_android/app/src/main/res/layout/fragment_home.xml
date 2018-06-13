@@ -16,7 +16,7 @@
         <android.support.v4.widget.NestedScrollView
             android:id="@+id/nv_result_safety"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:fillViewport="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -34,35 +34,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rl_token"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
+
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
-
-        <!--<ImageView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content" />-->
-
-        <!--<TextView-->
-        <!--android:id="@+id/tv_wallet_name"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content" />-->
-
-        <!--<TextView-->
-        <!--android:id="@+id/tv_wallet_address"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content" />-->
-
-        <!--<TextView-->
-        <!--android:id="@+id/tv_dunk"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content" />-->
-
-
-        <!--<Button-->
-        <!--android:id="@+id/action_create_wallet"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="创建wallet" />-->
-
 
     </LinearLayout>
 

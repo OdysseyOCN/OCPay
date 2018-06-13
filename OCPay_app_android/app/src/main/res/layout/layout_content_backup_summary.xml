@@ -76,7 +76,7 @@
             android:layout_weight="1">
 
             <TextView
-                android:id="@+id/tv_action_confirm"
+                android:id="@+id/tv_go_backup"
                 style="@style/MnemonicBackupBtn"
                 android:layout_above="@+id/tv_view_to_tutorial"
                 android:layout_alignParentBottom="false"

@@ -10,20 +10,16 @@
             android:id="@+id/include_action_bar"
             layout="@layout/layout_action_bar" />
 
-        <android.support.v7.widget.RecyclerView
-            android:visibility="gone"
-            android:id="@+id/rl_contacts"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-
 
         <com.ocpay.wallet.widget.swipelistview.SwipeListView
             android:id="@+id/slv_contacts"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:divider="@null"
-            android:scrollbars="none"/>
+            android:scrollbars="none" />
+        <include
+            android:id="@+id/include_no_record"
+            layout="@layout/include_no_record"/>
 
     </LinearLayout>
 </layout>

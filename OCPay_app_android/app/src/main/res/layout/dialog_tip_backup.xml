@@ -1,0 +1,153 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#7F7F7F"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="50dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/shape_corner_white_7"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:layout_width="164.5dp"
+                android:layout_height="16dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="19dp"
+                android:text="You need to backup first"
+                android:textColor="#FF38525F"
+                android:textSize="15sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="15dp"
+                android:background="#FFF2F2F2" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="17dp"
+                        android:layout_marginRight="17dp"
+                        android:layout_marginTop="18dp"
+                        android:background="@drawable/shape_stroke_corner_btn_blue_r4"
+                        android:gravity="left"
+                        android:padding="15dp"
+                        android:text="@string/tip_backup_content"
+                        android:textColor="#FF38525F"
+                        android:textSize="12sp" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="17dp"
+                        android:layout_marginRight="17dp"
+                        android:layout_marginTop="24dp">
+
+                        <ImageView
+                            android:id="@+id/iv_icon"
+                            android:layout_width="39dp"
+                            android:layout_height="39dp"
+                            android:layout_centerVertical="true"
+                            android:src="@mipmap/ic_mnemonic" />
+
+                        <TextView
+                            android:id="@+id/tv_mnemonic_key"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="9dp"
+                            android:layout_toRightOf="@+id/iv_icon"
+                            android:text="@string/tip_backup_mnemonic_words"
+                            android:textColor="#FF38525F"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/tv_mnemonic_content"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/tv_mnemonic_key"
+                            android:layout_marginLeft="9dp"
+                            android:layout_marginTop="6dp"
+                            android:layout_toRightOf="@+id/iv_icon"
+                            android:text="Use for recovering wallet,please store
+physically"
+                            android:textColor="#FFA4AFB4"
+                            android:textSize="12sp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp"
+                        android:layout_marginLeft="17dp"
+                        android:layout_marginRight="17dp"
+                        android:layout_marginTop="24dp">
+
+                        <ImageView
+                            android:id="@+id/iv_official_icon"
+                            android:layout_width="39dp"
+                            android:layout_height="39dp"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:src="@mipmap/ic_key" />
+
+                        <TextView
+                            android:id="@+id/tv_official_key"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="9dp"
+                            android:layout_toRightOf="@+id/iv_official_icon"
+                            android:text="Official Keystore"
+                            android:textColor="#FF38525F"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/tv_official_content"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/tv_official_key"
+                            android:layout_marginLeft="9dp"
+                            android:layout_marginTop="6dp"
+                            android:layout_toRightOf="@+id/iv_official_icon"
+                            android:text="Encrypted with your transaction password, please remember it"
+                            android:textColor="#FFA4AFB4"
+                            android:textSize="12sp" />
+                    </RelativeLayout>
+                </LinearLayout>
+            </ScrollView>
+
+            <TextView
+                android:id="@+id/tv_backup_now"
+                android:layout_width="286dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/shape_corner_btn_main_r2"
+                android:gravity="center"
+                android:text="Backup Now"
+                android:textColor="#FFFFFFFF"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+    </FrameLayout>
+</layout>

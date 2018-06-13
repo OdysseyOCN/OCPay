@@ -4,7 +4,7 @@
 
         <variable
             name="contact"
-            type="com.ocpay.wallet.bean.Contact" />
+            type="com.ocpay.wallet.greendao.Contact" />
 
         <import type="android.view.View" />
 
@@ -31,7 +31,8 @@
                 android:layout_height="70dp"
                 android:layout_marginBottom="3dp"
                 android:layout_marginLeft="22dp"
-                android:layout_marginTop="3dp" />
+                android:layout_marginTop="3dp"
+                android:src="@mipmap/ic_head_contacts" />
 
             <LinearLayout
                 android:layout_width="match_parent"

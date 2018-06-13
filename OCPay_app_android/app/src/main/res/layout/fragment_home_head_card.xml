@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -12,6 +13,7 @@
             android:background="@mipmap/bg_home_head_down" />
 
         <android.support.v7.widget.CardView
+            contentPadding="0dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="1dp"
@@ -19,7 +21,8 @@
             android:layout_marginRight="10dp"
             app:cardCornerRadius="5dp"
             app:cardElevation="2dp"
-            app:cardMaxElevation="2dp">
+            app:cardMaxElevation="2dp"
+            card_view:cardPreventCornerOverlap="false">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -32,15 +35,17 @@
                     android:background="@color/color_fragment_home_elephant"
                     android:orientation="horizontal">
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginLeft="10dp"
                         android:layout_weight="1"
                         android:orientation="vertical">
 
+
                         <TextView
+                            android:id="@+id/tv_clyiewallet"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="CLYTIEWALLET"
@@ -48,24 +53,44 @@
                             android:textSize="12sp"
                             android:textStyle="bold" />
 
+
                         <TextView
                             android:id="@+id/tv_wallet_address"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:text=""
+                            android:layout_below="@+id/tv_clyiewallet"
+                            android:layout_marginTop="3dp"
+                            android:text="0x1234...4234"
                             android:textColor="@color/color_text_subhead"
                             android:textSize="12sp" />
 
-                    </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tv_tap_back_up"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_toRightOf="@+id/tv_clyiewallet"
+                            android:background="@drawable/shape_stroke_corner_btn_blue_r45"
+                            android:paddingBottom="2dp"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:paddingTop="2dp"
+                            android:text="@string/tip_please_backup"
+                            android:textColor="#49AEDA"
+                            android:textSize="9dp"
+                            android:visibility="gone" />
+
+                    </RelativeLayout>
 
                     <ImageView
                         android:id="@+id/iv_address_qr"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="25dp"
-                        android:layout_marginRight="25dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:padding="5dp"
                         android:src="@mipmap/ic_qr" />
 
 
@@ -74,7 +99,7 @@
                 <LinearLayout
                     android:id="@+id/ll_asset"
                     android:layout_width="match_parent"
-                    android:layout_height="110dp"
+                    android:layout_height="130dp"
                     android:layout_below="@+id/ll_wallet_info_address"
                     android:background="@color/white"
                     android:orientation="vertical">
@@ -83,7 +108,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
-                        android:layout_marginRight="25dp"
+                        android:layout_marginRight="20dp"
                         android:layout_marginTop="10dp"
                         android:orientation="horizontal">
 
@@ -93,17 +118,18 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight="1"
                             android:gravity="center_vertical"
-                            android:text="TOTAL ASSETS(OCN)"
+                            android:text="@string/home_fragment_total_assets"
                             android:textColor="@color/color_text_subhead"
                             android:textSize="12sp"
                             android:textStyle="bold" />
 
                         <ImageView
-                            android:id="@+id/iv_hide_asset"
+                            android:id="@+id/iv_re_change"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:src="@mipmap/icon_show_asset" />
+                            android:padding="5dp"
+                            android:src="@mipmap/icon_rechange" />
 
                     </LinearLayout>
 
@@ -116,27 +142,24 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:id="@+id/tv_total_ocn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="1"
-                            android:text="2963134.01"
+                            android:text="0.0"
                             android:textColor="@color/color_text_main"
-                            android:textSize="45sp" />
+                            android:textSize="48sp" />
 
-                        <ImageView
-                            android:id="@+id/iv_re_change"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:src="@mipmap/icon_rechange" />
+
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/tv_estimate_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
-                        android:text="≈ 43523.36$"
+                        android:text="≈ 0"
                         android:textColor="@color/color_text_subhead"
                         android:textSize="15sp" />
 
@@ -146,7 +169,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="68dp"
+                    android:layout_height="50dp"
                     android:layout_below="@+id/ll_asset"
                     android:background="@color/white">
 

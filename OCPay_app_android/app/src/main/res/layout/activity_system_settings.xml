@@ -45,12 +45,47 @@
                 android:textColor="#FF38525F"
                 android:textSize="14sp" />
 
-            <Switch
+            <android.support.v7.widget.SwitchCompat
                 android:id="@+id/sh_touch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical" />
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="5dp"
+                 />
+
+
         </LinearLayout>
+
+        <!--<LinearLayout-->
+            <!--android:id="@+id/ll_settings_item"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="42dp"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:background="@color/white"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:paddingLeft="12dp"-->
+            <!--android:paddingRight="12dp">-->
+
+
+            <!--<TextView-->
+                <!--android:id="@+id/tv_settings_name"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center_vertical"-->
+                <!--android:layout_marginLeft="16dp"-->
+                <!--android:layout_weight="1"-->
+                <!--android:text="Touch ID"-->
+                <!--android:textColor="#FF38525F"-->
+                <!--android:textSize="14sp" />-->
+
+            <!--<android.support.v7.widget.SwitchCompat-->
+                <!--android:id="@+id/sh_touch"-->
+                <!--android:layout_width="35dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center_vertical" />-->
+
+
+        <!--</LinearLayout>-->
 
 
     </LinearLayout>

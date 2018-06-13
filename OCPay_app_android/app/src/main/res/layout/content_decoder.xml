@@ -4,30 +4,72 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/main_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-
-        >
+        android:layout_height="match_parent">
 
         <com.dlazaro66.qrcodereaderview.QRCodeReaderView
             android:id="@+id/qrdecoderview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true" />
+            android:layout_alignParentTop="true"
+            android:visibility="visible" />
 
 
-        <CheckBox
-            android:id="@+id/flashlight_checkbox"
+        <RelativeLayout
+            android:id="@+id/rl_top"
+            android:layout_width="match_parent"
+            android:layout_height="173dp"
+            android:layout_alignParentTop="true"
+            android:layout_below="@+id/include_action_bar"
+            android:background="@drawable/scan_mask"
+            android:orientation="horizontal" />
+
+        <include
+            android:id="@+id/include_action_bar"
+            layout="@layout/layout_action_bar" />
+
+
+        <LinearLayout
+            android:id="@+id/ll_middle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="#99000000"
-            android:checked="false"
-            android:padding="16dp"
-            android:text="On/Off flashlight"
-            android:textColor="#ffffff"
-            android:textSize="14sp" />
+            android:layout_below="@+id/rl_top"
+            android:orientation="horizontal">
 
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+
+                android:background="@drawable/scan_mask" />
+
+            <RelativeLayout
+                android:layout_width="245dp"
+                android:layout_height="245dp"
+                android:background="@mipmap/ic_scan_border">
+
+                <ImageView
+                    android:id="@+id/iv_scan_web"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@mipmap/ic_scan_web" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/scan_mask" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/ll_middle"
+            android:background="@drawable/scan_mask"
+            android:orientation="horizontal" />
 
     </RelativeLayout>
 

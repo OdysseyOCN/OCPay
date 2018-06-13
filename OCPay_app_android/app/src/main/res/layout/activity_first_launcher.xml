@@ -1,0 +1,68 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="minGasPrice"
+            type="Integer" />
+
+        <variable
+            name="maxGasPrice"
+            type="Integer" />
+
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@mipmap/ic_login_default">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="150dp"
+            android:src="@mipmap/ic_first_launcher" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="90dp"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/tv_create_wallet"
+                android:layout_width="240dp"
+                android:layout_height="40dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/shape_corner_btn_fist_login_100"
+                android:gravity="center"
+                android:text="@string/action_create_your_ocpay"
+                android:textColor="#FFFFFFFF"
+                android:textSize="13sp"
+
+                />
+
+            <TextView
+                android:id="@+id/tv_import_wallet"
+                android:layout_width="240dp"
+                android:layout_height="40dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/shape_corner_btn_fist_login_100"
+                android:gravity="center"
+                android:text="@string/action_signin_your_ocpay"
+                android:textColor="#FFFFFFFF"
+                android:textSize="13sp"
+
+                />
+        </LinearLayout>
+
+    </RelativeLayout>
+</layout>

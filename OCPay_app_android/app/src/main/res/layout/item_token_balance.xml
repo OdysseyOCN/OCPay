@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data></data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:id="@+id/ll_manage_wallet_item"
+            android:layout_width="match_parent"
+            android:layout_height="63dp"
+            android:layout_marginLeft="22dp"
+            android:layout_marginRight="22dp"
+            android:layout_weight="1"
+            android:background="#fff"
+            android:orientation="horizontal">
+
+            <com.ocpay.wallet.widget.customview.CircleImageView
+                android:id="@+id/civ_wallet_icon"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center_vertical" />
+
+
+            <TextView
+                android:id="@+id/tv_wallet_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="12dp"
+                android:layout_weight="1"
+                android:text="WALLET NAME"
+                android:textColor="#FF38525F"
+                android:textSize="15sp" />
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="16dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_balance"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="196413.0145"
+                        android:textAlignment="textEnd"
+                        android:textColor="#FF38525F"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/tv_value_balance"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="≈ 43523.36 SG$"
+                        android:textAlignment="textEnd"
+                        android:textColor="#FFA4AFB4"
+                        android:textSize="9sp" />
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/view_line"
+            android:layout_marginLeft="22dp"
+            android:layout_marginRight="22dp"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#FFE1E5E9" />
+    </LinearLayout>
+
+
+</layout>

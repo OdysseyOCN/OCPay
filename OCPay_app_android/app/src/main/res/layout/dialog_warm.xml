@@ -20,9 +20,10 @@
                 android:id="@+id/tv_warm_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="25dp"
-                android:layout_marginTop="30dp"
-                android:text="Wrong password"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:padding="10dp"
                 android:textColor="#FF38525F"
                 android:textSize="14sp" />
 

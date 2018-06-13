@@ -19,7 +19,9 @@
             android:background="@drawable/nav_bar_head_bg"
             android:gravity="center"
             android:text="Wallet Management"
-            android:textSize="12sp" />
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:textStyle="bold" />
 
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -47,8 +49,7 @@
                 <LinearLayout
                     android:id="@+id/ll_create_wallet"
                     android:layout_width="match_parent"
-                    android:layout_height="32dp"
-                    android:layout_marginTop="12dp"
+                    android:layout_height="56dp"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -74,7 +75,7 @@
                 <LinearLayout
                     android:id="@+id/ll_import_wallet"
                     android:layout_width="match_parent"
-                    android:layout_height="32dp"
+                    android:layout_height="56dp"
                     android:orientation="horizontal">
 
 

@@ -22,6 +22,7 @@
 
         <EditText
             android:id="@+id/et_address"
+            android:inputType="text"
             style="@style/WalletImportEditView"
             android:hint="@string/hint_wallet_address" />
 

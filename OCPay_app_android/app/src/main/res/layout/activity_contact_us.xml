@@ -1,0 +1,84 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/include_action_bar"
+            layout="@layout/layout_action_bar" />
+
+
+        <EditText
+            android:id="@+id/et_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="14dp"
+            android:background="@null"
+            android:hint="@string/tip_contact_us_email"
+            android:paddingBottom="12dp"
+            android:paddingTop="20dp"
+            android:textColor="@color/color_text_main"
+            android:textColorHint="#FFB5BDC8"
+            android:textSize="14sp" />
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="14dp"
+            android:background="#FFE1E5E9" />
+
+        <EditText
+            android:id="@+id/et_theme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="14dp"
+            android:background="@null"
+            android:hint="@string/tip_contact_us_theme"
+            android:paddingBottom="12dp"
+            android:paddingTop="20dp"
+            android:textColor="@color/color_text_main"
+            android:textColorHint="#FFB5BDC8"
+            android:textSize="14sp" />
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="14dp"
+            android:background="#FFE1E5E9" />
+
+
+        <EditText
+            android:id="@+id/et_desc"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="14dp"
+            android:background="@null"
+            android:gravity="left"
+            android:hint="@string/tip_contact_us_description"
+            android:paddingBottom="12dp"
+            android:paddingTop="20dp"
+            android:textColor="@color/color_text_main"
+            android:textColorHint="#FFB5BDC8"
+            android:textSize="14sp" />
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="14dp"
+            android:overScrollMode="never" />
+
+    </LinearLayout>
+</layout>

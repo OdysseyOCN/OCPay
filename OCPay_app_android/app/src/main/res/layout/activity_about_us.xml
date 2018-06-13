@@ -68,6 +68,22 @@
             android:id="@+id/include_check_version"
             layout="@layout/item_settings_text" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+
+        <TextView
+            android:id="@+id/tv_back_gate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="12dp"
+            android:gravity="center"
+            android:text="@string/tip_copyright"
+            android:textColor="#FFB5BDC8"
+            android:textSize="10sp" />
 
     </LinearLayout>
 </layout>

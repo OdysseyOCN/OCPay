@@ -28,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="have read and agreed to"
+                android:text="@string/tip_agreement_start"
                 android:textColor="#A4AFB4"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -40,7 +40,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="3dp"
             android:gravity="center_vertical"
-            android:text="@string/service_privacy"
+            android:text="@string/tip_service_privacy"
             android:textColor="@color/color_text_main"
             android:textSize="12sp" />
 

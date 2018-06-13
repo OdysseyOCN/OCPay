@@ -32,6 +32,7 @@
                 android:id="@+id/tab_import_wallet"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
+                app:tabTextAppearance="@style/CustomTab"
                 android:background="@color/color_transparent"
                 android:textSize="13sp"
                 app:tabBackground="@null"

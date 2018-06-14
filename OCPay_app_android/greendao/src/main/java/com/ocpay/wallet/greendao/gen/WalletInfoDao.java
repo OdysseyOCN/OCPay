@@ -31,6 +31,8 @@ public class WalletInfoDao extends AbstractDao<WalletInfo, Long> {
         public final static Property IsBackup = new Property(4, boolean.class, "isBackup", false, "IS_BACKUP");
         public final static Property PasswordTip = new Property(5, String.class, "passwordTip", false, "PASSWORD_TIP");
         public final static Property WalletType = new Property(6, int.class, "walletType", false, "WALLET_TYPE");
+        public final static Property EthBalance = new Property(7, String.class, "ethBalance", false, "ETH_BALANCE");
+        public final static Property StartBlock = new Property(8, String.class, "startBlock", false, "START_BLOCK");
     }
 
 
@@ -52,7 +54,9 @@ public class WalletInfoDao extends AbstractDao<WalletInfo, Long> {
                 "\"WALLET_ADDRESS\" TEXT NOT NULL ," + // 3: walletAddress
                 "\"IS_BACKUP\" INTEGER NOT NULL ," + // 4: isBackup
                 "\"PASSWORD_TIP\" TEXT," + // 5: passwordTip
-                "\"WALLET_TYPE\" INTEGER NOT NULL );"); // 6: walletType
+                "\"WALLET_TYPE\" INTEGER NOT NULL ," + // 6: walletType
+                "\"ETH_BALANCE\" TEXT," + // 7: ethBalance
+                "\"START_BLOCK\" TEXT);"); // 8: startBlock
     }
 
     /** Drops the underlying database table. */
@@ -87,6 +91,16 @@ public class WalletInfoDao extends AbstractDao<WalletInfo, Long> {
             stmt.bindString(6, passwordTip);
         }
         stmt.bindLong(7, entity.getWalletType());
+ 
+        String ethBalance = entity.getEthBalance();
+        if (ethBalance != null) {
+            stmt.bindString(8, ethBalance);
+        }
+ 
+        String startBlock = entity.getStartBlock();
+        if (startBlock != null) {
+            stmt.bindString(9, startBlock);
+        }
     }
 
     @Override
@@ -115,6 +129,16 @@ public class WalletInfoDao extends AbstractDao<WalletInfo, Long> {
             stmt.bindString(6, passwordTip);
         }
         stmt.bindLong(7, entity.getWalletType());
+ 
+        String ethBalance = entity.getEthBalance();
+        if (ethBalance != null) {
+            stmt.bindString(8, ethBalance);
+        }
+ 
+        String startBlock = entity.getStartBlock();
+        if (startBlock != null) {
+            stmt.bindString(9, startBlock);
+        }
     }
 
     @Override
@@ -131,7 +155,9 @@ public class WalletInfoDao extends AbstractDao<WalletInfo, Long> {
             cursor.getString(offset + 3), // walletAddress
             cursor.getShort(offset + 4) != 0, // isBackup
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // passwordTip
-            cursor.getInt(offset + 6) // walletType
+            cursor.getInt(offset + 6), // walletType
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // ethBalance
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8) // startBlock
         );
         return entity;
     }
@@ -145,6 +171,8 @@ public class WalletInfoDao extends AbstractDao<WalletInfo, Long> {
         entity.setIsBackup(cursor.getShort(offset + 4) != 0);
         entity.setPasswordTip(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setWalletType(cursor.getInt(offset + 6));
+        entity.setEthBalance(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setStartBlock(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
      }
     
     @Override

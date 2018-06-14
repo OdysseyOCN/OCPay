@@ -1,6 +1,10 @@
 package com.ocpay.wallet.greendao;
 
 
+import android.content.Context;
+
+import com.ocpay.wallet.greendao.manager.TokenBalanceDaoUtils;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
@@ -35,9 +39,13 @@ public class WalletInfo implements Serializable {
 
     private static final long serialVersionUID = 536871008L;
 
-    @Generated(hash = 1153502703)
-    public WalletInfo(Long id, String userId, String walletName, @NotNull String walletAddress, boolean isBackup, String passwordTip,
-                      int walletType) {
+    private String ethBalance;
+
+    private String startBlock;
+
+    @Generated(hash = 1149502771)
+    public WalletInfo(Long id, String userId, String walletName, @NotNull String walletAddress, boolean isBackup, String passwordTip, int walletType, String ethBalance,
+                      String startBlock) {
         this.id = id;
         this.userId = userId;
         this.walletName = walletName;
@@ -45,8 +53,9 @@ public class WalletInfo implements Serializable {
         this.isBackup = isBackup;
         this.passwordTip = passwordTip;
         this.walletType = walletType;
+        this.ethBalance = ethBalance;
+        this.startBlock = startBlock;
     }
-
 
     @Generated(hash = 1144910350)
     public WalletInfo() {
@@ -123,6 +132,28 @@ public class WalletInfo implements Serializable {
 
     public void setIsBackup(boolean isBackup) {
         this.isBackup = isBackup;
+    }
+
+
+    public String getEthBalance() {
+        return ethBalance;
+    }
+
+    public String getTokenBalance(Context context, String tokenName) {
+        return TokenBalanceDaoUtils.getTokenBalance(context, walletAddress, tokenName).toString();
+    }
+
+    public void setEthBalance(String ethBalance) {
+        this.ethBalance = ethBalance;
+    }
+
+
+    public String getStartBlock() {
+        return startBlock;
+    }
+
+    public void setStartBlock(String startBlock) {
+        this.startBlock = startBlock;
     }
 
 

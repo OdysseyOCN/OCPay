@@ -19,8 +19,20 @@ let routes = [
         name: '',
         hidden: true
     },
+
+    {
+        path: '/',
+        component: Home,
+        name: 'version',
+        iconCls: 'el-icon-setting',
+        children: [
+            { path: '/version', component: resolve=>require(['./views/version/Version.vue'],resolve), name: 'version' },
+            
+        ]
+    },
    
-  
+
+    // Homepage
     {
         path: '/',
         component: Home,
@@ -31,7 +43,7 @@ let routes = [
             
         ]
     },
-  
+    // Banner
     {
         path: '/',
         component: Home,
@@ -44,6 +56,7 @@ let routes = [
         ]
     },
 
+    // 账号管理
     {
         path: '/',
         component: Home,

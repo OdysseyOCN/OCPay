@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { version } from 'core-js';
 
-let base ='/get'+'/api/ocpay/v1/';
-let baseUrl='/get'+'/api/ocpay/upload/v1/';
+let base =''+'/api/ocpay/v1/';
+let baseUrl=''+'/api/ocpay/upload/token/v1/';
 // 登陆
 export const requestLogin = params => { return axios.post(`${base}/login`, params).then(res => res.data); };
 // 创建用户
@@ -14,8 +15,15 @@ export const AccountList = params => { return axios.get(`${base}/user/users`+par
 export const FeedbackUser= params => { return axios.post(`${base}/token/get-feedback`, params).then(res => res.data); };
 
 
- 
 
+// version
+export const versionList = params => { return axios.post(`${base}/get-version`,params).then(res => res.data); };
+// 添加
+export const versionAdd = params => { return axios.post(`${base}/add-version`,params).then(res => res.data); };
+// 编辑
+export const versionEdit = params => { return axios.post(`${base}/edit-version`,params).then(res => res.data); };
+// 删除
+export const versionDelete = params => { return axios.post(`${base}/delete-version`,params).then(res => res.data); };
 
 // Homepage
 export const Homepage = params => { return axios.post(`${base}/get-homePage`,params).then(res => res.data); };

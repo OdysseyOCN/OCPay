@@ -17,13 +17,18 @@
 				</template>
     </el-table-column>
     <el-table-column
+      prop="homePageId"
+      label="homePageId"
+      width="">
+    </el-table-column>
+    <el-table-column
       prop="showSort"
       label="showSort"
       width="">
     </el-table-column>
     <el-table-column
       prop="title"
-      label="rank"
+      label="title"
       width="">
     </el-table-column>
     
@@ -71,7 +76,7 @@
              <el-form-item label="ID">
                  <span>{{form.id}}</span>
              </el-form-item>
-             <el-form-item label="rank">
+             <el-form-item label="title">
              <el-input v-model="form.title"></el-input>
              </el-form-item>
               <el-form-item label="Content">
@@ -116,7 +121,7 @@
                      <el-option v-for="(item,index) in idArr" :key="index" :label="item.content" :value="item.id"></el-option>                   
               </el-select>   
              </el-form-item>
-             <el-form-item label="rank">
+             <el-form-item label="title">
              <el-input v-model="form1.title"></el-input>
              </el-form-item>
               <el-form-item label="Content">
@@ -224,7 +229,7 @@ import {Banner,BannerEdit,BannerDelete,BannerAdd,BannerGet,upload} from '../../a
       //  查询表格数据
           getcoin(num){
             let para={
-              		"type":"1",
+              		"type":"2",
                   "pageNum":num,
                    "pageSize":"10"
               }

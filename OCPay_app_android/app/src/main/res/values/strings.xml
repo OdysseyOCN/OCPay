@@ -1,17 +1,11 @@
 <resources>
-    <string name="app_name">OWallet</string>
+    <string name="app_name">OCPay</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="scan">SCAN</string>
     <string name="send">SEND</string>
-    <string name="bottom_bar_record">RECORD</string>
-    <string name="bottom_bar_markets">MARKETS</string>
-    <string name="bottom_bar_nearby">NEARBY</string>
-    <string name="bottom_bar_airdrop">AIRDROP</string>
-    <string name="bottom_bar_me">ME</string>
-    <string name="bottom_bar_home">HOME</string>
-    <string name="nav_bar_create_wallet">Create Wallet</string>
+
 
     <string name="address_copied_to_clipboard">Copied to Clipboard</string>
     <string name="copy_qr_code_address">Copy QR code payment address</string>
@@ -21,29 +15,21 @@
     <string name="activity_qr_share">Share</string>
     <string name="import_wallet">Import Wallet</string>
     <string name="import_wallet_mnemonic">Mnemonic</string>
-    <string name="import_wallet_official_wallet">Official wallet</string>
+    <string name="import_wallet_official_wallet">Official</string>
     <string name="import_wallet_private_key">Private key</string>
     <string name="import_wallet_observed">Observed</string>
     <string name="activity_title_create_wallet">Create Your Wallet</string>
-    <string name="hint_edit_password">Password</string>
-    <string name="hint_repeat_password">Repeat Password</string>
-    <string name="hint_password_hint_optional">Password hint(optional)</string>
-    <string name="service_privacy">Service &amp; Privacy Policy</string>
-    <string name="start_import">start import</string>
+    <string name="start_import">Start Import</string>
     <string name="what_is_a_mnemonic">What is a Mnemonic?</string>
     <string name="hint_keystore_password">KeyStore Password</string>
     <string name="what_keystore">What is a Keystore ?</string>
     <string name="what_private_key">What is a Private Key ?</string>
     <string name="what_offline_signature">How to use cold wallet offline signature ?</string>
-    <string name="hint_keystore">keystore</string>
-    <string name="hint_private_key">Plaintext private key</string>
-    <string name="hint_wallet_address">wallet address</string>
+    <string name="hint_keystore">Keystore</string>
+    <string name="hint_private_key">Please input your private key</string>
+    <string name="hint_wallet_address">Wallet Address</string>
     <string name="note_about_cold_wallet">Note: A cold wallet with a signature is required to watch the wallet send the transaction. You can use another idle mobile phone, open the flight mode as a cold wallet, import the wallet private key, and cooperate with the offline signature.</string>
     <string name="note_about_observe_wallet">Observe the wallet does not need to import the private key, only import the wallet address for daily viewing of accounts, transactions and acceptance of notifications. The private key of large funds is recommended to use cold wallet or hardware wallet management to avoid disclosure of theft</string>
-    <string name="edit_wallet_name">wallet name</string>
-    <string name="btn_create_wallet">Create Wallet</string>
-    <string name="note_create_wallet_one">The password is used to protect the private key and transaction authorization, the strength is very important</string>
-    <string name="note_create_wallet_two">Ocn does not store passwords, nor does it help you to retrieve them. Please remember to remember</string>
     <string name="action_next_step">Next step</string>
     <string name="action_confirm">Confirm</string>
     <string name="note_backup_confirm">Please click the mnemonic word in order to confirm your backup mnemonic words correctly.</string>
@@ -51,11 +37,9 @@
     <string name="create_your_ocpay">Create your OCPay</string>
     <string name="wallet_file_not_exists">Wallet File not exists</string>
     <string name="activity_wallet_manager">Wallet Manager</string>
-    <string name="backup_wallet_tip">The last step: immediate backup of your payment platform</string>
     <string name="backup_wallet_tip_content_p1">Block chain wallet is different from traditional website account. It is a de centralized accounting system for cryptography. </string>
     <string name="backup_wallet_tip_content_p2"> You must keep your wallet\'s private key and transaction password, any thought that it will lead to loss of assets.</string>
     <string name="backup_wallet_tip_content_p3"> We suggest that we do double backup first, then enter the small test, and finally start to use it happily.</string>
-    <string name="view_tutorial">View the tutorial</string>
     <string name="backup_wallet_mnemonic">Backup payment platform</string>
     <string name="wallet_detail">Wallet Detail</string>
     <string name="modify_current_password">Current Password</string>
@@ -68,7 +52,136 @@
     <string name="activity_transfer">Transfer</string>
 
 
+    <string name="activity_system_settings">System Settings</string>
+    <string name="activity_settings_language">Language</string>
+    <string name="activity_settings_unit">Currency Unit</string>
+    <string name="activity_currency_unit">Currency Unit</string>
+    <string name="loading_tip_trading">Trading...</string>
+    <string name="dialog_tx_detail_order_info">Order information</string>
+    <string name="dialog_tx_detail_from">Transfer From</string>
+    <string name="dialog_tx_detail_to">Transfer To</string>
+    <string name="dialog_tx_detail_fee">Fee</string>
+    <string name="dialog_tx_detail_amount">Amount</string>
+    <string name="dialog_tx_detail_transfer">Transfer</string>
+    <string name="unit_gwei">gwei</string>
+    <string name="wallet_create_pwd_tip_weak">Weak</string>
+    <string name="wallet_create_tip_great">Great</string>
+    <string name="wallet_create_tip_good">Good</string>
+    <string name="wallet_create_tip_so">So-so</string>
+    <string name="wallet_create_tip_weak">Weak</string>
+    <string name="characters">characters</string>
+    <string name="dialog_tip_name_token">The name is taken,please try another</string>
+    <string name="btn_bottom_send">Send</string>
+    <string name="btn_bottom_receive">Receive</string>
+    <string name="tip_backup_content">The wallet is your blockchain account which is total different from websit/app account and account and it’s crytographic based.\n\nYou need to double check the wallet is being back properly in case of any assets loss.\n\nWe suggesr you backup mnemonic words and keystore both,then test with tiny ethers untill you feel confidence.\n</string>
 
+
+    <!--lock pattern-->
+    <string name="create_gesture_default">set gesture password</string>
+    <string name="create_gesture_reset">Reset gesture</string>
+    <string name="create_gesture_correct">Set gesture password again</string>
+    <string name="create_gesture_less_error">At least 4 point required</string>
+    <string name="create_gesture_confirm_error">Not match,please draw it again</string>
+    <string name="create_gesture_confirm_correct">Set Gesture Password Successful</string>
+    <string name="gesture_default">@string/create_gesture_default</string>
+    <string name="gesture_error">Invalid Password</string>
+    <string name="gesture_correct">login successfully</string>
+
+    <string name="ocpay_touch_id">OCPay Touch ID</string>
+    <string name="fragment_title_export_keystore">Export Keystore</string>
+    <string name="wrong_password">Wrong Password</string>
+    <string name="tip_operation_failure">operation failure</string>
+    <string name="dialog_sign">Sign</string>
+    <string name="dialog_sign_successfully">Sign successfully</string>
+    <string name="sign_fail">Sign fail</string>
+    <string name="tip_offline_sign">This is a Watch Wallet which need a Clod Wallet holding the private key to sign transation.See How does offline signing work?</string>
+    <string name="tip_watching">Watching</string>
+    <string name="activity_title_preview_transfer">Preview the transaction</string>
+    <string name="tip_fee_detail">Gas(%s)*Gas Price(%s gwei)</string>
+    <string name="tip_please_backup">Please Backup</string>
+    <string name="activity_sign_detail">Sign Detail</string>
+
+
+    <!--activity first launcher-->
+    <string name="action_create_your_ocpay">Create your OCPay</string>
+    <string name="action_signin_your_ocpay">Sign your OCPay</string>
+
+    <!--activity risk assessment-->
+    <string name="activity_risk_assessment">Risk Assessment</string>
+    <string name="risk_assessment_title">Why do you need risk assessment</string>
+    <string name="risk_assessment_content">Blockchain is a brand new technology. Decentralization, irreconcilable, individual control (accounts, assets and data) that is the difference between the Internet and the conventional art features apart. The wallet is the passport of this new world. Its essence is the private key.\n\nOcpay is a wallet tool that helps you manage private keys. If there is no block chain and wallet basic understanding, if there is no high-speed driving license, this is a very dangerous thing. Therefore, we have established a risk assessment system to ensure your ability to meet specific standards before starting to use it. Everything is for safety, thank you for your cooperation!</string>
+    <string name="action_learn_more">Learn More</string>
+    <string name="action_create_your_wallet">Create your Wallet</string>
+
+    <!--activity risk assessment detail-->
+    <string name="risk_assessment_detail_content">Blockchain is a brand new technology. Decentralization, irreconcilable, individual control (accounts, assets and data) that is the difference between the Internet and the conventional art features apart. The wallet is the passport of this new world. Its essence is the private key. Ocpay is a wallet tool that helps you manage private keys.\n\n If there is no block chain and wallet basic understanding, if there is no high-speed driving license, this is a very dangerous thing. Therefore, we have established a risk assessment system to ensure your ability to meet specific standards before starting to use it. Everything is for safety, thank you for your cooperation!</string>
+    <string name="risk_assessment_detail_title">Why do you need risk assessment</string>
+    <string name="activity_title_create_your_wallet">Create Your Wallet</string>
+
+
+    <!--activity wallet create -->
+    <string name="create_wallet_tip_one">The password is used to protect the private key and transaction authorization, the strength is very important</string>
+    <string name="create_wallet_tip_two">Ocn does not store passwords, nor does it help you to retrieve them. Please remember to remember</string>
+    <string name="edit_hint_wallet_name">Wallet Name</string>
+    <string name="edit_hint_password">Password</string>
+    <string name="edit_hint_repeat_password">Repeat Password</string>
+    <string name="edit_hint_password_hint_optional">Password Hint(Optional)</string>
+    <string name="action_create_wallet">Create Wallet</string>
+    <string name="tip_agreement_start">I have read and agreed to</string>
+    <string name="tip_service_privacy">Service &amp; Privacy Policy</string>
+
+    <!--activity send-->
+    <string name="action_how_to_design_parameters">How to design parameters？</string>
+    <string name="action_enable_mode">Enable advanced mode</string>
+    <string name="action_turn_off_mode">Turn off advanced mode</string>
+    <string name="tip_coming_soon">Coming Soon!</string>
+
+    <!--activity about us-->
+    <string name="activity_about_us_content">Ocpay is a mobile light wallet app designed to provide ordinary users with a secure, easy-to-use and powerful digital asset wallet application.</string>
+    <string name="activity_about_us">About Us</string>
+    <string name="activity_about_us_use_agreement">Term of Use</string>
+    <string name="activity_about_us_privacy_policy">Privacy Policy</string>
+    <string name="activity_about_us_version_log">Version Log</string>
+    <string name="activity_about_us_product_guide">Product Guide</string>
+    <string name="activity_about_us_check_version">Check Version</string>
+    <string name="tip_copyright">Copyright 2018 Odyssey \nAll right reserved</string>
+
+    <!--notification -->
+    <string name="tip_notification_received_successfully">received successfully</string>
+    <string name="tip_notification_sent_successfully">sent successfully</string>
+    <string name="tip_notification_sent_failed_Sender">sent Failed</string>
+    <string name="notification_sender">Sender</string>
+    <string name="notification_receiver">Receiver</string>
+    <string name="ocp_official">OCPay</string>
+
+
+    <!--wallet create &password tip-->
+    <string name="wallet_create_tip_require">At least 8 characters,includes uppercase and lowercase letters,digits. </string>
+    <string name="tip_password_require">Password must be at at least 8 characters,includes uppercase and lowercase letters,digits. </string>
+
+
+    <!--mnemonic backup&ndash;&gt;-->
+    <string name="tip_backup_mnemonic_words">Mnemonic Words</string>
+
+
+    <string name="scan">SCAN</string>
+    <string name="qrcode_scan">@string/scan</string>
+
+
+    <!--activity home-->
+    <string name="home_fragment_total_assets">TOTAL ASSETS(ETH)</string>
+    <string name="bottom_bar_record">RECORD</string>
+    <string name="bottom_bar_markets">MARKETS</string>
+    <string name="bottom_bar_nearby">NEARBY</string>
+    <string name="bottom_bar_airdrop">AIRDROP</string>
+    <string name="bottom_bar_me">ME</string>
+    <string name="bottom_bar_home">HOME</string>
+    <string name="nav_bar_create_wallet">Create Wallet</string>
+    <string name="fragment_title_markets">Markets</string>
+    <string name="fragment_title_airdrop">Airdrop</string>
+    <string name="fragment_title_nearby">Nearby</string>
+
+    <!--me fragment-->
     <string name="settings_message_center">Message Center</string>
     <string name="settings_contacts">Contacts</string>
     <string name="settings_system">System Settings</string>
@@ -86,24 +199,46 @@
     <string name="contacts_phone_number">Phone Number</string>
     <string name="contact_email">Email</string>
     <string name="contact_note">Note</string>
-    <string name="activity_about_us_content">Ocpay is a mobile light wallet app designed to provide ordinary users with a secure, easy-to-use and powerful digital asset wallet application.</string>
-    <string name="activity_about_us">About Us</string>
-    <string name="activity_about_us_use_agreement">Use Agreement</string>
-    <string name="activity_about_us_check_version">Check Version</string>
-    <string name="activity_about_us_product_guide">Product Guide</string>
-    <string name="activity_about_us_version_log">Version Log</string>
-    <string name="activity_about_us_privacy_policy">Privacy Policy</string>
-    <string name="activity_system_settings">System Settings</string>
-    <string name="activity_settings_language">Language</string>
-    <string name="activity_settings_unit">Currency Unit</string>
-    <string name="activity_currency_unit">Currency Unit</string>
-    <string name="loading_tip_trading">Trading...</string>
-    <string name="dialog_tx_detail_order_info">Order information</string>
-    <string name="dialog_tx_detail_from">Transfer From</string>
-    <string name="dialog_tx_detail_to">Transfer To</string>
-    <string name="dialog_tx_detail_fee">Fee</string>
-    <string name="dialog_tx_detail_amount">Amount</string>
-    <string name="dialog_tx_detail_transfer">Transfer</string>
-    <string name="unit_gwei">gwei</string>
+    <string name="fragment_me_wallet_manage">Manage Wallet</string>
+
+
+    <!--contact us-->
+    <string name="tip_contact_us_description">Enter a description of the problem. If necessary, please cooperate with the picture</string>
+    <string name="tip_contact_us_email">Email</string>
+    <string name="tip_contact_us_theme">Theme</string>
+    <string name="settings_contact_us">Contact Us</string>
+    <string name="tip_input_not_null">Input can\'t be null</string>
+    <string name="tip_contact_us_email_format_error">Email format error</string>
+
+
+    <!-- wallet detail-->
+    <string name="tip_warning_export">Warning:Export plain private key is very dangerous. We recommend you backup with mnemonic or private key.</string>
+    <string name="tip_password_hint">Password Hint</string>
+    <string name="tip_change_password">Change Password</string>
+    <string name="tip_export_private_key">Export Private Key</string>
+    <string name="tip_export_keystore">Export Keystore</string>
+    <string name="tip_backup_mnemonic">Backup Mnemonic</string>
+    <string name="tip_delete_wallet">Delete Wallet</string>
+
+
+    <!--backup wallet-->
+    <string name="activity_backup_mnemonic_title">Backup Now</string>
+    <string name="backup_wallet_tip">The last step: Please backup your wallet now! </string>
+    <string name="view_tutorial">How to backup wallet？</string>
+    <string name="dialog_copy">Copy</string>
+    <string name="tip_no_records">No Records</string>
+    <string name="tip_contact_us_submit_success">Feedback submitted successful!</string>
+    <string name="tip_contact_us_submit_failed">Feedback submitted failed！</string>
+    <string name="mnemonic_hint">Please user space to separate the mnemonic words</string>
+    <string name="tip_scanlog_watch_title">complete sign</string>
+    <string name="tip_scanlog_watch_hint">Input signature</string>
+    <string name="tip_scanlog_watch_action">Complete Sign</string>
+    <string name="tip_scanlog_transaction_title">import signature</string>
+    <string name="tip_scanlog_transaction_hint">Signature</string>
+    <string name="tip_scanlog_transaction_action">Sending Transaction</string>
+
+
+    <!--other-->
+
 
 </resources>

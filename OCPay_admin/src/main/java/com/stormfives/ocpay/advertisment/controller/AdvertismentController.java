@@ -82,7 +82,7 @@ public class AdvertismentController {
      */
     @PostMapping("v1/get-advertisment")
     public ResponseValue getAdvertisment(@RequestBody AdvertismentReq advertismentReq) throws InvalidArgumentException {
-        if (advertismentReq.getHomePageId()==null){
+        if (advertismentReq.getType()==null){
             throw new InvalidArgumentException("param is error!");
         }
         return advertismentService.getAdvertisment(advertismentReq);

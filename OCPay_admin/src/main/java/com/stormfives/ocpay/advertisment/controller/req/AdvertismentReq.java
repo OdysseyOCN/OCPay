@@ -8,6 +8,7 @@ import jnr.ffi.annotations.In;
 public class AdvertismentReq {
 
     private Integer id;
+    private Integer type;
     private Integer homePageId;
     private Integer directType;
     private String directUrl;
@@ -25,6 +26,14 @@ public class AdvertismentReq {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 
     public Integer getHomePageId() {

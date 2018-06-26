@@ -3,6 +3,7 @@ package com.stormfives.ocpay.advertisment.service;
 import com.github.pagehelper.PageHelper;
 import com.stormfives.ocpay.advertisment.controller.req.HomePageReq;
 import com.stormfives.ocpay.advertisment.controller.resp.HomePageAdvertismentResp;
+import com.stormfives.ocpay.advertisment.controller.resp.HomePageIdVo;
 import com.stormfives.ocpay.advertisment.controller.resp.HomePageVo;
 import com.stormfives.ocpay.advertisment.dao.AdvertismentMapper;
 import com.stormfives.ocpay.advertisment.dao.HomePageContentMapper;
@@ -13,6 +14,7 @@ import com.stormfives.ocpay.advertisment.dao.entity.HomePageContentExample;
 import com.stormfives.ocpay.common.response.FailResponse;
 import com.stormfives.ocpay.common.response.ResponseValue;
 import com.stormfives.ocpay.common.response.SuccessResponse;
+import com.stormfives.ocpay.token.domain.Page;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,7 +48,7 @@ public class HomePageService {
 
         int i = homePageContentMapper.insertSelective(pageContent);
 
-        if (i>0){
+        if (i > 0) {
             return new SuccessResponse("Successful!");
         }
 
@@ -65,7 +67,7 @@ public class HomePageService {
 
         int i = homePageContentMapper.updateByPrimaryKeySelective(pageContent);
 
-        if (i>0){
+        if (i > 0) {
             return new SuccessResponse("Successful!");
         }
 
@@ -84,15 +86,11 @@ public class HomePageService {
 
     public ResponseValue getHomePage(HomePageReq homePageReq) {
 
-        PageHelper.startPage(homePageReq.getPageNum(),homePageReq.getPageSize());
+        PageHelper.startPage(homePageReq.getPageNum(), homePageReq.getPageSize());
 
-        HomePageContentExample pageContentExample = new HomePageContentExample();
+        List<HomePageContent> homePageContents = getHomePageContents();
 
-        pageContentExample.setOrderByClause("sort asc");
-
-        List<HomePageContent> homePageContents = homePageContentMapper.selectByExample(pageContentExample);
-
-        return new SuccessResponse(homePageContents);
+        return new SuccessResponse(Page.toPage(homePageContents));
 
 
     }
@@ -102,10 +100,10 @@ public class HomePageService {
         contentExample.setOrderByClause(" sort asc");
         List<HomePageContent> homePageContents = homePageContentMapper.selectByExample(contentExample);
         List<HomePageVo> homePageVos = new ArrayList<>();
-        if (homePageContents!=null&&homePageContents.size()>0){
-            homePageContents.forEach(r->{
+        if (homePageContents != null && homePageContents.size() > 0) {
+            homePageContents.forEach(r -> {
                 HomePageVo homePageVo = new HomePageVo();
-                BeanUtils.copyProperties(r,homePageVo);
+                BeanUtils.copyProperties(r, homePageVo);
                 List<Advertisment> advertisment = getAdvertisment(r.getId());
                 homePageVo.setAdvertisments(advertisment);
                 homePageVos.add(homePageVo);
@@ -121,5 +119,27 @@ public class HomePageService {
         advertismentExample.setOrderByClause(" show_sort asc");
         advertismentExample.createCriteria().andHomePageIdEqualTo(id);
         return advertismentMapper.selectByExample(advertismentExample);
+    }
+
+    public ResponseValue getHomePageId() {
+        List<HomePageContent> pageContents = getHomePageContents();
+        List<HomePageIdVo> homePageIdVos = new ArrayList<>();
+        if (pageContents != null && pageContents.size() > 0) {
+            pageContents.forEach(r -> {
+                HomePageIdVo pageIdVo = new HomePageIdVo();
+                BeanUtils.copyProperties(r, pageIdVo);
+                homePageIdVos.add(pageIdVo);
+            });
+        }
+        return new SuccessResponse(homePageIdVos);
+
+    }
+
+    private List<HomePageContent> getHomePageContents() {
+        HomePageContentExample pageContentExample = new HomePageContentExample();
+
+        pageContentExample.setOrderByClause("sort asc");
+
+        return homePageContentMapper.selectByExample(pageContentExample);
     }
 }

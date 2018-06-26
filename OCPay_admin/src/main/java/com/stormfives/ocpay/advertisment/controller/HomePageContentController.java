@@ -86,6 +86,17 @@ public class HomePageContentController {
         return homePageService.getHomePage(homePageReq);
     }
 
+    /**
+     * 查看类型
+     *
+     * @return
+     */
+    @PostMapping("v1/get-homePageId")
+    public ResponseValue getHomePageId() throws InvalidArgumentException {
+
+        return homePageService.getHomePageId();
+    }
+
 
     /**
      * 查看类型
@@ -96,6 +107,8 @@ public class HomePageContentController {
     public ResponseValue getHomePageAndAdvertisment() throws InvalidArgumentException {
         return homePageService.getHomePageAndAdvertisment();
     }
+
+
 
 
 

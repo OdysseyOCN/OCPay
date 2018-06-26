@@ -307,4 +307,30 @@ public class StringUtil {
         builder.setSpan(buildColor, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return builder;
     }
+
+
+    public static boolean isNumber(String sourceString) {
+        if (isEmpty(sourceString))
+            return false;
+        char[] sourceChar = sourceString.toCharArray();
+        for (int i = 0; i < sourceChar.length; i++)
+            if ((sourceChar[i] < '0') || (sourceChar[i] > '9'))
+                return false;
+        return true;
+    }
+
+    public static boolean isBlank(CharSequence cs) {
+        int strLen;
+        if(cs != null && (strLen = cs.length()) != 0) {
+            for(int i = 0; i < strLen; ++i) {
+                if(!Character.isWhitespace(cs.charAt(i))) {
+                    return false;
+                }
+            }
+
+            return true;
+        } else {
+            return true;
+        }
+    }
 }

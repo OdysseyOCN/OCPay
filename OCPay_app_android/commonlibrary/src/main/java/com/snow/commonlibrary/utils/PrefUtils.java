@@ -321,5 +321,35 @@ public class PrefUtils {
         return obj;
     }
 
+    /**
+     *
+     * @param context
+     * @param key
+     * @param value
+     * @return
+     */
+    public static boolean putByteArray(Context context, String key, byte[] value) {
+        SharedPreferences settings = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        String inputString = new String(Base64.encode(value, Base64.DEFAULT));
+        editor.putString(key, inputString);
+        return editor.commit();
+    }
+
+
+    /**
+     *
+     * @param context
+     * @param key
+     * @return
+     */
+    public static byte[] getByteArray(Context context, String key) {
+        SharedPreferences settings = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        String string = settings.getString(key, "");
+        if(string ==null || "".equals(string)) return  new byte[]{};
+        byte[] b = Base64.decode(string.getBytes(), Base64.DEFAULT);
+        return b;
+    }
+
 
 }

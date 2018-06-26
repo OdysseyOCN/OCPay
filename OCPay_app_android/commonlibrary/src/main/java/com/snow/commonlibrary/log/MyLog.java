@@ -9,9 +9,23 @@ import android.util.Log;
 public class MyLog {
 
     public static final String TAG = "mu_zi";
+    public static boolean DEBUG = false;
+
 
     public static void i(String msg) {
+        if (!DEBUG) return;
         Log.i(TAG, msg);
+    }
+
+    public static void w(String msg) {
+        if (!DEBUG) return;
+        Log.w(TAG, msg);
+    }
+
+
+    public static void e(String msg) {
+        if (!DEBUG) return;
+        Log.e(TAG, msg);
     }
 
 }

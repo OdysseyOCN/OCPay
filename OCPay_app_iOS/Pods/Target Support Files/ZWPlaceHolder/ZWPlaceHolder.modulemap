@@ -1,6 +1,0 @@
-framework module ZWPlaceHolder {
-  umbrella header "ZWPlaceHolder-umbrella.h"
-
-  export *
-  module * { export * }
-}

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="RootViewController">
+            <connections>
+                <outlet property="view" destination="O7v-eS-9es" id="Ydc-Ib-kWI"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="O7v-eS-9es">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Group Copy" translatesAutoresizingMaskIntoConstraints="NO" id="8fo-q5-s2N">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                </imageView>
+                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Group Copy" translatesAutoresizingMaskIntoConstraints="NO" id="EG4-jM-Fdz">
+                    <rect key="frame" x="74.5" y="530" width="225" height="77"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="EG4-jM-Fdz" secondAttribute="height" multiplier="375:128" id="iz6-iG-uyZ"/>
+                    </constraints>
+                </imageView>
+            </subviews>
+            <constraints>
+                <constraint firstItem="EG4-jM-Fdz" firstAttribute="centerX" secondItem="O7v-eS-9es" secondAttribute="centerX" id="MK5-ni-fkV"/>
+                <constraint firstAttribute="bottom" secondItem="EG4-jM-Fdz" secondAttribute="bottom" constant="60" id="NPv-mz-1sU"/>
+                <constraint firstAttribute="bottom" secondItem="8fo-q5-s2N" secondAttribute="bottom" id="RTO-mp-IcJ"/>
+                <constraint firstItem="8fo-q5-s2N" firstAttribute="leading" secondItem="O7v-eS-9es" secondAttribute="leading" id="W9l-we-kC9"/>
+                <constraint firstItem="EG4-jM-Fdz" firstAttribute="width" secondItem="8fo-q5-s2N" secondAttribute="width" multiplier="6:10" id="Xlj-RM-vpS"/>
+                <constraint firstItem="8fo-q5-s2N" firstAttribute="top" secondItem="O7v-eS-9es" secondAttribute="top" id="bdR-1R-i94"/>
+                <constraint firstAttribute="trailing" secondItem="8fo-q5-s2N" secondAttribute="trailing" id="gIg-fe-SWp"/>
+            </constraints>
+        </view>
+    </objects>
+    <resources>
+        <image name="Group Copy" width="360" height="640"/>
+    </resources>
+</document>

@@ -1,6 +1,0 @@
-framework module Pods_OCPay {
-  umbrella header "Pods-OCPay-umbrella.h"
-
-  export *
-  module * { export * }
-}

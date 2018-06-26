@@ -53,7 +53,7 @@ static NetWorkManager *manager;
         if (caches)  responseObject = caches;
         NSLog(@"接口：%@ 返回数据：\n%@\n(%@) 数据类型:%@",URLString,responseObject, caches ? @"缓存数据":@"网路数据",NSStringFromClass([responseObject class]));
         completionHandler(responseObject,error);
-
+        
     }];
     [dataTask resume];
 }
@@ -75,7 +75,7 @@ static NetWorkManager *manager;
 
 #pragma mark - HTTP POST
 + (void)PostWithURL:(NSString *)URLString
-        parameters:(id)parameters
+         parameters:(id)parameters
             success:(Success)success
             failure:(Failure)failure{
     NSLog(@"POST请求：%@ 参数：\n%@",URLString,parameters);

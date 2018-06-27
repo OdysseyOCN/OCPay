@@ -15,19 +15,24 @@
 #import "CreateWalletViewController.h"
 #import "SendTransactionViewController.h"
 #import "TokenIncomeViewController.h"
+#import "BackupWalletViewController.h"
+#import "SignDetailViewController.h"
+#import "BasicWebViewController.h"
 #import "WalletTableView.h"
 #import "HomeCollectionView.h"
 #import "HomeViewModel.h"
 #import "HomeDataModel.h"
 #import "MyPrompt.h"
-#import "BackupWalletViewController.h"
-#import "SignVerifyProcessView.h"
 
 @interface HomeViewController ()
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *myBackgroundViewHeight;
+@property (weak, nonatomic) IBOutlet UIView *myBackgroundView;
 @property (weak, nonatomic) IBOutlet WalletTableView *walletTableView;
 @property (weak, nonatomic) IBOutlet HomeCollectionView *homeCollectionView;
 @property (strong, nonatomic) IBOutlet UIView *myBackupAlertView;
 @property (nonatomic, strong) HomeViewModel *viewData;
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
+@property (nonatomic) CGFloat ratio;
 @end
 
 @implementation HomeViewController
@@ -36,12 +41,35 @@
     [super viewDidLoad];
     [self initWalletTableView];
     [self initHomeColletionView];
+    [self initRefreshControl];
+    [self loadModuleData];
+}
+
+- (void)viewDidLayoutSubviews{
+    [super viewDidLayoutSubviews];
+    [self.myBackgroundView setGradientColor:@[UIColorHex(0x405D68),UIColorHex(0x1A3D4E)] gradientType:GradientTypeUpleftToLowright];
+//    [self.myBackgroundView setGradientColor:@[UIColor.blueColor,UIColor.redColor] gradientType:GradientTypeUpleftToLowright];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [self loadModuleData];
+    [self setRatio:_ratio];
+    [self.homeCollectionView reloadData];
     [self loadAcountData];
+}
+
+- (void)initRefreshControl{
+    _refreshControl = [[UIRefreshControl  alloc] init];
+    _refreshControl.tintColor = UIColorHex(0xffffff);
+    [_refreshControl addTarget:self action:@selector(updateData) forControlEvents:UIControlEventValueChanged];
+    [_homeCollectionView addSubview:_refreshControl];
+}
+
+- (void)updateData{
+    if (self.refreshControl.refreshing) {
+        [self loadModuleData];
+        [self loadAcountData];
+    }
 }
 
 - (HomeViewModel *)viewData{
@@ -53,7 +81,7 @@
 }
 
 - (void)loadModuleData{
-    [NetWorkManager PostWithURL:@"http://ocpay-admin-dev.stormfives.com/api/ocpay/v1/token/get-Advertisment" parameters:nil success:^(__kindof NSDictionary *data) {
+    [NetWorkManager PostWithURL:@"api/ocpay/v1/token/get-Advertisment" parameters:nil success:^(__kindof NSDictionary *data) {
         HomeDataModel *sourceData = [HomeDataModel modelWithJSON:data[@"data"]];
         self.viewData.sourceData = sourceData;
     } failure:^(NSError *error) {
@@ -63,6 +91,7 @@
 - (void)loadAcountData{
     [WalletManager.share.defaultWallet getWalletAllTokenInfo:^() {
         [self.viewData updateData];
+        [self.refreshControl endRefreshing];
     }];
 }
 
@@ -92,13 +121,14 @@
         @strongify(self)
         [self.walletTableView closeWalletViewNoAnimate:NO];
         WalletManager.share.defaultWallet = wallet;
+        [self.homeCollectionView reloadData];
         [self loadAcountData];
     };
 }
 
 - (void)initHomeColletionView{
     self.homeCollectionView.data = self.viewData;
-    [self setScrollViewContentInsetAdjustmentNever:self.homeCollectionView];
+    self.neverAdjustContentInserScrollView = self.homeCollectionView;
     @weakify(self)
     self.homeCollectionView.callback = ^(HomeCellViewModel *data, HomeCollectionCellCallbackType type) {
         @strongify(self)
@@ -106,14 +136,22 @@
                 case HeadCellCallbackType_ScanQRCode:{
                 QRCodeViewController *vc = [[QRCodeViewController alloc] init];
                 vc.reciveResult = ^(NSString *result) {
-                    NSDictionary *dic = [NSString dictionaryWithJsonString:result];
-                    NSString *model = dic[@"mode"];
-                    if ([model isEqualToString:@"mode_data_sign"]) {
-                        NSMutableDictionary *dic = [NSMutableDictionary dictionary];
-                        [dic setValue:@"1" forKey:@"ethereum"];
-                        [dic setValue:@"mode_data_sign" forKey:@"mode"];
-                        NSString *value = [dic jsonStringEncoded];
-                        [SignVerifyProcessView showWithType:WalletType_Cold value:value];
+                    QRCodeDataModel *qrdata = [QRCodeDataModel modelWithJSON:result];
+                    if (qrdata.type == QRCodeType_Observer || qrdata.type == QRCodeType_Transaction) {
+                        SignDetailViewController *vc = [self pushViewControllerWithIdentifier:@"SignDetailViewController" inStoryboard:@"Main"];
+                        vc.data = qrdata;
+                    }else if (qrdata.type == QRCodeType_Receive){
+                        SendTransactionViewController *vc = [SendTransactionViewController instantiateViewControllerWithIdentifier:@"SendTransactionViewController" inStoryboard:@"Main"];
+                        vc.wallet = WalletManager.share.defaultWallet;
+                        vc.QRCodedata = qrdata;
+                        for (TokenModel *token in vc.wallet.tokens) {
+                            if ([token.tokenTypeString isEqualToString:qrdata.transaction.tokenName]) {
+                                vc.tokenData = token;
+                                break;
+                            }
+                        }
+                        [self.navigationController pushViewController:vc animated:YES];
+
                     }
                 };
                 [self QRCodeScanVC:vc];
@@ -146,24 +184,22 @@
             case HeadCellCallbackType_Send:{
                 SendTransactionViewController *vc = [SendTransactionViewController instantiateViewControllerWithIdentifier:@"SendTransactionViewController" inStoryboard:@"Main"];
                 vc.wallet = WalletManager.share.defaultWallet;
-                vc.isContractsTransaction = YES;
+                TokenModel *myToken = nil;
+                for (TokenModel *token in WalletManager.share.defaultWallet.tokens) {
+                    if (token.tokenType == TokenType_ETH) {
+                        myToken = token;
+                    }
+                }
+                vc.tokenData = myToken;
                 [self.navigationController pushViewController:vc animated:YES];
                 break;
             }
-            case HomeCollectionCellCallbackType_choosePage:{
-                break;
-            }
-            case HomeCollectionCellCallbackType_chooseModule:{
-                break;
-            }
+            case HomeCollectionCellCallbackType_choosePage:
+            case HomeCollectionCellCallbackType_chooseModule:
             case HomeCollectionCellCallbackType_chooseAdvert:{
-                NSData *data = [@"hello kitty" dataUsingEncoding:NSUTF8StringEncoding];
-                Account *a = [Account accountWithPrivateKey:[SecureData hexStringToData:WalletManager.share.defaultWallet.privateKey]];
-                Signature *b = [a signMessage:data];
-                
-                Address *c = [Account verifyMessage:data signature:b];
-                NSString *d = c.checksumAddress;
-                NSString *e = d;
+                BasicWebViewController *webVC = [[BasicWebViewController alloc]init];
+                webVC.URLString = data.advertData.directUrl;
+                [self.navigationController pushViewController:webVC animated:YES];
                 break;
             }
             case HomeCollectionCellCallbackType_chooseTokens:{
@@ -180,16 +216,20 @@
     };
     
     self.homeCollectionView.scrollRatioBlock = ^(CGFloat ratio) {
-        [self.navigationController.navigationBar setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithRGB:0xffffff alpha:ratio]] forBarMetrics:UIBarMetricsDefault];
-        if (ratio == 1) {
-            [(BasicNavigationController*)self.navigationController reverseNavigationBar];
-        }else{
-            [(BasicNavigationController*)self.navigationController setNavigationBarTransparent];
-        }
+        self.ratio = ratio;
     };
 }
 
-
+- (void)setRatio:(CGFloat)ratio{
+    _ratio = ratio;
+    self.myBackgroundViewHeight.constant = 260 - self.homeCollectionView.contentOffset.y;
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithWhite:1 alpha:ratio]] forBarMetrics:UIBarMetricsDefault];
+    if (ratio == 1) {
+        [self.navigationController.navigationBar setShadowImage:nil];
+    }else{
+        [self.navigationController.navigationBar setShadowImage:[UIImage imageNamed:@"TransparentPixel"]];
+    }
+}
 
 
 #pragma mark - Navigation

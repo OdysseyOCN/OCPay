@@ -21,7 +21,7 @@ typedef NS_ENUM(NSUInteger, HomeCollectionCellCallbackType) {
     HomeCollectionCellCallbackType_choosePage
 };
 
-typedef void(^HeadCellCallback)(HomeCollectionCellCallbackType type);
+typedef void(^HeadCellCallback)(HomeCollectionCellCallbackType type, HomeCellViewModel *rowData);
 
 
 @interface HomeCollectionViewCell : UICollectionViewCell

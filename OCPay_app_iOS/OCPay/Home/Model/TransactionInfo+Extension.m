@@ -10,4 +10,8 @@
 
 @implementation TransactionInfo (Extension)
 YYSYNTH_DYNAMIC_PROPERTY_OBJECT(packNumber, setPackNumber, COPY_NONATOMIC, NSString *)
+YYSYNTH_DYNAMIC_PROPERTY_OBJECT(pending, setPending, COPY_NONATOMIC, NSString *)
+
+CoderCopyHash
+
 @end

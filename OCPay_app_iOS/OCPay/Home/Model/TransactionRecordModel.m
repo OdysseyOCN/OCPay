@@ -24,43 +24,52 @@
 
 + (void)getRecordDataWithAddress:(WalletModel*)wallet success:(Success)success{
     
-//    dispatch_group_t group = dispatch_group_create();
-//
-//    __block NSInteger blockNumber;
-//    dispatch_group_enter(group);
-//    IntegerPromise *ip = [wallet.api getBlockNumber];
-//    [ip onCompletion:^(IntegerPromise *integerPro) {
-//        blockNumber = integerPro.value;
-//        dispatch_group_leave(group);
-//    }];
     
     __block NSArray *sourceDatas = nil;
     __block NSMutableArray  *showDatas = [NSMutableArray array];
-//    dispatch_group_enter(group);
+
     ArrayPromise *arr = [wallet.api getTransactions:[Address addressWithString:wallet.address] startBlockTag:BLOCK_TAG_LATEST];
     [arr onCompletion:^(ArrayPromise *promise) {
         sourceDatas = promise.value;
         sourceDatas = [[sourceDatas reverseObjectEnumerator] allObjects];
         
+        NSMutableArray *muArr = [NSMutableArray array];
+        if (sourceDatas) {
+            [muArr addObjectsFromArray:sourceDatas];
+        }
+        NSMutableArray *deleteArr = [NSMutableArray array];
+        NSLog(@"缓存记录数量：%ld",wallet.transactionCache.count);
+        [WalletManager.share.defaultWallet.transactionCache enumerateObjectsUsingBlock:^(TransactionInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            BOOL haveSame = NO;
+            for (TransactionInfo *info in sourceDatas) {
+                if ([info.transactionHash isEqualToHash:obj.transactionHash]) {
+                    [deleteArr addObject:obj];
+                    haveSame = YES;
+                    break;
+                }
+            }
+            if (!haveSame) {
+                [muArr insertObject:obj atIndex:0];
+            }
+        }];
+        for (TransactionInfo *info in deleteArr) {
+            [wallet.transactionCache removeObject:info];
+        }
+        [WalletManager synchronize];
+        sourceDatas = muArr;
         
-        NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+        
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
         [dateFormatter setLocale:[NSLocale systemLocale]];
         [dateFormatter setDateFormat:@"YYYY-MM"];
         
         NSMutableArray *dateArr = [NSMutableArray array];
-//        NSMutableArray *hashArr = [NSMutableArray array];
         
         [sourceDatas enumerateObjectsUsingBlock:^(TransactionInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             NSDate *date = [NSDate dateWithTimeIntervalSince1970:obj.timestamp];
             NSString *dateStr = [dateFormatter stringFromDate:date];
             [dateArr addObject:dateStr];
-            
-//            for (NSString *hash in wallet.transactionCache) {
-//                if ([[Hash hashWithHexString:hash] isEqualToHash:obj.transactionHash]) {
-//                    [hashArr addObject:hash];
-//                }
-//            }
         }];
         
         NSSet *set = [NSSet setWithArray:dateArr];
@@ -90,15 +99,10 @@
                 }
             }];
         }];
-//        dispatch_group_leave(group);
         if (success) {
             success(showDatas);
         }
     }];
-
-    
-//    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
-//    });
 
 }
 
@@ -111,8 +115,34 @@
         //逆序反转
         NSArray <TransactionInfo*>*sourceDatas = promise.value;
         sourceDatas = [[sourceDatas reverseObjectEnumerator] allObjects];
-        NSMutableArray *newArr = [NSMutableArray array];
         
+        NSMutableArray *muArr = [NSMutableArray array];
+        if (sourceDatas) {
+            [muArr addObjectsFromArray:sourceDatas];
+        }
+        NSMutableArray *deleteArr = [NSMutableArray array];
+        NSLog(@"缓存记录数量：%ld",wallet.transactionCache.count);
+        [WalletManager.share.defaultWallet.transactionCache enumerateObjectsUsingBlock:^(TransactionInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            BOOL haveSame = NO;
+            for (TransactionInfo *info in sourceDatas) {
+                if ([info.transactionHash isEqualToHash:obj.transactionHash]) {
+                    [deleteArr addObject:obj];
+                    haveSame = YES;
+                    break;
+                }
+            }
+            if (!haveSame) {
+                [muArr insertObject:obj atIndex:0];
+            }
+        }];
+        for (TransactionInfo *info in deleteArr) {
+            [wallet.transactionCache removeObject:info];
+        }
+        [WalletManager synchronize];
+        sourceDatas = muArr;
+
+        
+        NSMutableArray *newArr = [NSMutableArray array];
         for (TransactionInfo *data in sourceDatas) {
             NSString *str = [SecureData dataToHexString:data.data];
             if (tokenType == TokenType_OCN) {
@@ -126,7 +156,7 @@
             }
         }
         sourceDatas = newArr;
-        
+
         
         //日期格式化
         NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
@@ -136,7 +166,7 @@
         
         NSMutableArray *recentydates = [NSMutableArray array];
         NSDate *lastDate =  [NSDate dateWithTimeIntervalSince1970:sourceDatas.firstObject.timestamp];
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < 7; i++) {
             
             NSDate *date1 = [NSDate dateWithTimeInterval:-i*24*60*60 sinceDate:[NSDate date]];
             NSString *dateStr1 = [dateFormatter stringFromDate:date1];

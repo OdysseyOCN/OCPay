@@ -7,8 +7,10 @@
 //
 
 #import "BasicViewController.h"
+#import "QRCodeDataModel.h"
 
 @interface SendTransactionViewController : BasicViewController
 @property (nonatomic, strong) WalletModel *wallet;
-@property (nonatomic) BOOL isContractsTransaction;
+@property (nonatomic, strong) TokenModel *tokenData;
+@property (nonatomic, strong) QRCodeDataModel *QRCodedata;
 @end

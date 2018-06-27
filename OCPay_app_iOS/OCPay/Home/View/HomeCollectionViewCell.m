@@ -22,6 +22,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *toatalLegalCurrencyAmountLabel;
 @property (weak, nonatomic) IBOutlet UILabel *backupTagLabel;
 
+
 //小程序模块
 @property (weak, nonatomic) IBOutlet UILabel *myModuleNameLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *myModuleImageView;
@@ -44,40 +45,40 @@
 
 - (IBAction)showTokensAction:(id)sender {
     if (self.cellCallback) {
-        self.cellCallback(HeadCellCallbackType_showTokens);
+        self.cellCallback(HeadCellCallbackType_showTokens,nil);
     }
 }
 
 - (IBAction)scanQRCodeAction:(id)sender {
     if (self.cellCallback) {
-        self.cellCallback(HeadCellCallbackType_ScanQRCode);
+        self.cellCallback(HeadCellCallbackType_ScanQRCode,nil);
     }
 }
 
 - (IBAction)showAccount:(id)sender{
     if (self.cellCallback) {
-        self.cellCallback(HeadCellCallbackType_ShowAccount);
+        self.cellCallback(HeadCellCallbackType_ShowAccount,nil);
     }
 }
 
 - (IBAction)showTransactionRecord:(id)sender{
     if (self.cellCallback) {
-        self.cellCallback(HeadCellCallbackType_Record);
+        self.cellCallback(HeadCellCallbackType_Record,nil);
     }
 }
 
 - (IBAction)sendTransaction:(id)sender{
     if (self.cellCallback) {
-        self.cellCallback(HeadCellCallbackType_Send);
+        self.cellCallback(HeadCellCallbackType_Send,nil);
     }
 }
 
 - (void)awakeFromNib{
     [super awakeFromNib];
     self.myPageView.delegate = self;
-    self.backupTagLabel.textColor = UIColorHex(#43ADDC);
-    self.backupTagLabel.layer.borderColor = UIColorHex(#43ADDC).CGColor;
+    self.myPageView.openTimer = YES;
     self.backupTagLabel.layer.borderWidth = 1;
+    self.backupTagLabel.hidden = YES;
 }
 
 - (void)layoutSubviews{
@@ -85,7 +86,7 @@
     _myCardView.layer.cornerRadius = 6;
     [_topShadow setCornerRadius:6 rectCorner:UIRectCornerTopLeft | UIRectCornerTopRight];
     [_bottomShadow setCornerRadius:6 rectCorner:UIRectCornerBottomLeft | UIRectCornerBottomRight];
-    [_myCardView setLayerShadow:[UIColor colorWithRGB:0x040000 alpha:0.05f] offset:CGSizeMake(0, 7.5) radius:6];
+    [_myCardView setLayerShadow:[UIColor colorWithRGB:0x040000 alpha:0.25f] offset:CGSizeMake(0, 7.5) radius:6];
     _backupTagLabel.layer.cornerRadius = _backupTagLabel.height*.5;
 }
 
@@ -106,9 +107,21 @@
         {
             self.walletNameLabel.text = WalletManager.share.defaultWallet.name;
             self.walletAddressLabel.text = WalletManager.share.defaultWallet.address;
-            self.totalAssetsLabel.text = [NSString stringWithFormat:@"%.4f", WalletManager.share.defaultWallet.totalAssets.floatValue];
+            self.totalAssetsLabel.text = [NSString stringWithFormat:@"%.4f", WalletManager.share.defaultWallet.totalBaseTokenAmount.floatValue];
             self.toatalLegalCurrencyAmountLabel.text = [NSString stringWithFormat:@"≈ %.2f%@", WalletManager.share.defaultWallet.toatalLegalCurrencyAmount.doubleValue,WalletManager.legalCurrencyTypeSymbol];
-            self.backupTagLabel.hidden = WalletManager.share.defaultWallet.mnemonicPhrase.length > 0 ? NO : YES;
+            if (WalletManager.share.defaultWallet.isObserver) {
+                self.backupTagLabel.hidden = NO;
+                self.backupTagLabel.textColor = UIColorHex(#ffffff);
+                self.backupTagLabel.layer.borderColor = UIColorHex(#ffffff).CGColor;
+                self.backupTagLabel.text = @"  Watching  ";
+            }else if(WalletManager.share.defaultWallet.noBackup){
+                self.backupTagLabel.hidden = NO;
+                self.backupTagLabel.textColor = UIColorHex(#43ADDC);
+                self.backupTagLabel.layer.borderColor = UIColorHex(#43ADDC).CGColor;
+                self.backupTagLabel.text = @"  Please Backup  ";
+            }else{
+                self.backupTagLabel.hidden = YES;
+            }
         }
             break;
             case HomeCollectionViewCellStyle_module:
@@ -122,6 +135,7 @@
             self.accountNameLabel.text = self.rowData.tokenData.tokenTypeString;
             self.accountAmountLabel.text = [NSString stringWithFormat:@"%@",self.rowData.tokenData.tokenAmount];
             self.accountDollarLabel.text = [NSString stringWithFormat:@"≈ %.2f%@",self.rowData.tokenData.baseLegalCurrencyAmount.doubleValue,WalletManager.legalCurrencyTypeSymbol];
+            self.accountImageView.image = [UIImage imageNamed:self.rowData.tokenData.tokenType == TokenType_ETH ? @"ETH logo" : @"OCN logo Copy"];
         }
             break;
             case HomeCollectionViewCellStyle_advert:
@@ -137,7 +151,8 @@
 
 -(void)myPageView:(MyPageView*)myPageView clickedOnIndex:(NSInteger)index image:(UIImage*)image{
     if (self.cellCallback) {
-        self.cellCallback(HomeCollectionCellCallbackType_choosePage);
+        self.rowData.advertData =  self.sectionData.sectionData.advertisments[index];
+        self.cellCallback(HomeCollectionCellCallbackType_choosePage,self.rowData);
     }
 }
 @end

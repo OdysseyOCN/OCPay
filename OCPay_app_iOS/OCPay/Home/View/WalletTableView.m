@@ -10,7 +10,7 @@
 #import "WalletManager.h"
 
 @interface WalletTableView ()<UITableViewDelegate,UITableViewDataSource>
-
+@property (weak, nonatomic) IBOutlet UIView *myTopView;
 @end
 
 @implementation WalletTableView
@@ -27,8 +27,9 @@
     [super awakeFromNib];
     self.delegate = self;
     self.dataSource = self;
-    self.estimatedRowHeight = 60;
-    self.rowHeight = UITableViewAutomaticDimension;
+    self.estimatedRowHeight = 56;
+    self.rowHeight = 56;
+    [self.myTopView setGradientColor:@[UIColorHex(0x405D68),UIColorHex(0x1A3D4E)] gradientType:GradientTypeUpleftToLowright];
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
@@ -61,11 +62,11 @@
     [maskView addTarget:self action:@selector(closeWalletViewNoAnimate:) forControlEvents:UIControlEventTouchUpInside];
     [superView addSubview:maskView];
     [maskView addSubview:self];
-    self.frame = CGRectMake(IPHONE_SCREEN_WIDTH, 0, 210, IPHONE_SCREEN_HEIGHT);
+    self.frame = CGRectMake(DEVICE_SCREEN_WIDTH, 0, 210, DEVICE_SCREEN_HEIGHT);
     [self reloadData];
     [UIView animateWithDuration:.3 animations:^{
         maskView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.5];
-        self.frame = CGRectMake(IPHONE_SCREEN_WIDTH-210, 0, 210, IPHONE_SCREEN_HEIGHT);
+        self.frame = CGRectMake(DEVICE_SCREEN_WIDTH-210, 0, 210, DEVICE_SCREEN_HEIGHT);
     }];
 }
 
@@ -76,7 +77,7 @@
     }
     [UIView animateWithDuration:.3 animations:^{
         self.superview.backgroundColor = [UIColor colorWithWhite:0 alpha:0.f];
-        self.frame = CGRectMake(IPHONE_SCREEN_WIDTH, 0, 210, IPHONE_SCREEN_HEIGHT);
+        self.frame = CGRectMake(DEVICE_SCREEN_WIDTH, 0, 210, DEVICE_SCREEN_HEIGHT);
     }completion:^(BOOL finished) {
         [self.superview removeFromSuperview];
     }];

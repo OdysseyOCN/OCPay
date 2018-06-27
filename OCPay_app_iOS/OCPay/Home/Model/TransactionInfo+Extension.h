@@ -11,5 +11,5 @@
 @interface TransactionInfo (Extension)
 
 @property (nonatomic, copy) NSString *packNumber;
-
+@property (nonatomic, copy) NSString *pending;
 @end

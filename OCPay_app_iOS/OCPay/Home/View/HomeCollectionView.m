@@ -7,8 +7,9 @@
 //
 
 #import "HomeCollectionView.h"
+#import "JHCollectionViewFlowLayout.h"
 
-@interface HomeCollectionView ()<UICollectionViewDelegateFlowLayout,UICollectionViewDataSource>
+@interface HomeCollectionView ()<JHCollectionViewDelegateFlowLayout,UICollectionViewDataSource>
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @end
 
@@ -29,12 +30,12 @@
     self.dataSource = self;
 }
 
-//- (void)setData:(HomeViewModel *)data{
-//    _data = data;
-//    [self reloadData];
-//}
-
 #pragma mark - UICollectionViewDataSource,UICollectionViewDelegateFlowLayout
+- (UIColor *)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout backgroundColorForSection:(NSInteger)section{
+    
+    return section == 0 ? [UIColor clearColor] : UIColorHex(#ffffff);
+}
+
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
     return self.data.sectionDatas.count;
 }
@@ -60,23 +61,23 @@
     return self.data.sectionDatas[section].edgeInsets;
 }
 
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section{
-    return section == 0 ? CGSizeMake(IPHONE_SCREEN_WIDTH, IPHONE_NAVIGATION_BAR_HEIGHT+IPHONE_STATUS_BAR_HEIGHT) : CGSizeZero;
-}
+//- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section{
+//    return CGSizeZero;
+//}
 
-- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath{
-    return [self dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"spaceReusable" forIndexPath:indexPath];
-}
+//- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath{
+//    return [self dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"spaceReusable" forIndexPath:indexPath];
+//}
 
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     HomeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[NSString stringWithFormat:@"cell%ld",self.data.sectionDatas[indexPath.section].cellDatas[indexPath.row].style] forIndexPath:indexPath];
     cell.rowData = self.data.sectionDatas[indexPath.section].cellDatas[indexPath.row];
     cell.sectionData = self.data.sectionDatas[indexPath.section];
     @weakify(self)
-    cell.cellCallback = ^(HomeCollectionCellCallbackType type){
+    cell.cellCallback = ^(HomeCollectionCellCallbackType type,HomeCellViewModel *rowData){
         @strongify(self)
         if (self.callback){
-           self.callback(nil, type);
+           self.callback(rowData, type);
         }
         if (type == HeadCellCallbackType_showTokens) {
             [self showAndClose];
@@ -99,10 +100,10 @@
             self.callback(data, HomeCollectionCellCallbackType_chooseTokens);
             break;
         case HomeCollectionViewCellStyle_advert:
-            self.callback(nil, HomeCollectionCellCallbackType_chooseAdvert);
+            self.callback(data, HomeCollectionCellCallbackType_chooseAdvert);
             break;
         case HomeCollectionViewCellStyle_module:
-            self.callback(nil, HomeCollectionCellCallbackType_chooseModule);
+            self.callback(data, HomeCollectionCellCallbackType_chooseModule);
             break;
         default:
             break;
@@ -117,5 +118,4 @@
         self.scrollRatioBlock(a);
     }
 }
-
 @end

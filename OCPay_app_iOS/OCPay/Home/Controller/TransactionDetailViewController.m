@@ -38,11 +38,15 @@
 }
 
 - (void)initUI{
-    [self setScrollViewContentInsetAdjustmentNever:self.myScrollView];
+    self.neverAdjustContentInserScrollView = self.myScrollView;
     self.topConstraint.constant = IPHONE_NAVIGATION_BAR_HEIGHT+IPHONE_STATUS_BAR_HEIGHT;
     _myCardView.layer.cornerRadius = 6;
+    [_myCardView setLayerShadow:[UIColor colorWithRGB:0x040000 alpha:0.35f] offset:CGSizeMake(0, 7.5) radius:6];
+}
+
+- (void)viewDidLayoutSubviews{
+    [super viewDidLayoutSubviews];
     [_myTopView setCornerRadius:6 rectCorner:UIRectCornerTopLeft | UIRectCornerTopRight];
-    [_myCardView setLayerShadow:[UIColor colorWithRGB:0x040000 alpha:0.05f] offset:CGSizeMake(0, 7.5) radius:6];
 }
 
 - (void)updateUI{

@@ -31,12 +31,18 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initUI];
-    [self setScrollViewContentInsetAdjustmentNever:self.myTableView];
+    [self loadData];
+    [self dispalyLoading:nil];
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     [self loadData];
 }
 
 - (void)initUI{
     self.title = self.tokenData.tokenTypeString;
+    self.neverAdjustContentInserScrollView = self.myTableView;
     self.amountLabel.text = [NSString stringWithFormat:@"%.4f", self.tokenData.tokenAmount.floatValue];
     self.legalCurrencyAmountLabel.text = [NSString stringWithFormat:@"≈ %.2f%@", self.tokenData.baseLegalCurrencyAmount.doubleValue,WalletManager.legalCurrencyTypeSymbol];
     self.myTableView.sectionHeaderHeight = UITableViewAutomaticDimension;
@@ -50,7 +56,6 @@
 }
 
 - (void)loadData{
-    [self dispalyLoading:nil];
     [TransactionRecordModel getIncomeDataWithAddress:self.wallet tokenType:self.tokenData.tokenType success:^(__kindof NSObject *data) {
         NSArray *sourceData = data;
         [self hideLoading:YES];
@@ -109,13 +114,14 @@
 - (IBAction)sendAction:(id)sender {
     SendTransactionViewController *vc = [SendTransactionViewController instantiateViewControllerWithIdentifier:@"SendTransactionViewController" inStoryboard:@"Main"];
     vc.wallet = self.wallet;
-    vc.isContractsTransaction = YES;
+    vc.tokenData = self.tokenData;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (IBAction)receiveAction:(id)sender {
     AccountViewController *accountVC = [UIViewController instantiateViewControllerWithIdentifier:@"AccountViewController" inStoryboard:@"Main"];
     accountVC.wallet = self.wallet;
+    accountVC.tokenData = self.tokenData;
     [self.navigationController pushViewController:accountVC animated:YES];
 }
 

@@ -7,6 +7,8 @@
 //
 
 #import "TransactionRecordTableCell.h"
+#import "TransactionInfo+Extension.h"
+
 @interface TransactionRecordTableCell()
 @property (nonatomic, strong) NSDateFormatter* dateFormatter;
 @property (weak, nonatomic) IBOutlet UIImageView *myIconImageView;
@@ -43,6 +45,8 @@
 - (void)setInfo:(TransactionInfo *)info{
     _info = info;
     
+//    NSDictionary *dic = [info dictionaryRepresentation];
+    
     BOOL isContractTransaction = NO;
     NSString *value = nil;
     NSString *str = [SecureData dataToHexString:info.data];
@@ -66,7 +70,8 @@
     
     _myDateLabel.text = dateStr;
     _myNameLabel.text = info.transactionHash.hexString;
-    _myTransactionStateLabel.hidden = info.txreceiptStatus == 1 ?: NO;
+    _myTransactionStateLabel.hidden = info.txreceiptStatus == 1 ? YES : NO;
+    _myTransactionStateLabel.text = info.pending.length ? info.pending : @"Transation failure";
     _myAmountLabel.textColor = isSend ? [UIColor colorWithRGB:0xD6556D] : [UIColor colorWithRGB:0x2EC424];
     _myAmountLabel.text = [NSString stringWithFormat:@"%@%@ %@",
                            isSend ? @"-" : @"+",

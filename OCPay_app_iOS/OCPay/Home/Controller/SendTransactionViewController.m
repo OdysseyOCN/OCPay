@@ -7,6 +7,12 @@
 //
 
 #import "SendTransactionViewController.h"
+#import "SignDetailViewController.h"
+#import "ContactsListViewController.h"
+#import "BasicWebViewController.h"
+#import "SignVerifyProcessView.h"
+#import "QRCodeDataModel.h"
+#import "TransactionInfo+Extension.h"
 
 @interface SendTransactionViewController ()
 @property (weak, nonatomic) IBOutlet UIButton *helpButton;
@@ -27,9 +33,15 @@
 @property (weak, nonatomic) IBOutlet UILabel *paymentToAddressLabel;
 @property (weak, nonatomic) IBOutlet UILabel *paymentCostLabel;
 @property (weak, nonatomic) IBOutlet UILabel *paymentAmountLabel;
+@property (weak, nonatomic) IBOutlet UIButton *nextButton;
+@property (weak, nonatomic) IBOutlet UILabel *observerHintLabel;
+
+@property (strong, nonatomic) SignVerifyProcessView *signVerifyProcessView;
 
 @property (strong, nonatomic) EtherscanProvider *provieder;
 @property (strong, nonatomic) Transaction *trans;
+@property (strong, nonatomic) QRCodeDataModel *qrdata;
+
 @end
 
 
@@ -39,24 +51,44 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initUI];
-    [self.manager addObserver:self];
+    [self.keyboardmanager addObserver:self];
     [self getTranscationNonceAndGasPrice:^{
         [self updateCost];
     }];
 }
 
 - (void)initUI{
+    self.title = self.tokenData.tokenTypeString;
     self.paymentDetailsView.closeCustomViewAnimations = ^{
-        self.paymentDetailsView.top = IPHONE_SCREEN_HEIGHT;
+        self.paymentDetailsView.top = DEVICE_SCREEN_HEIGHT;
     };
     self.paymentDetailsView.showCustomViewAnimations = ^{
-        self.paymentDetailsView.top = IPHONE_SCREEN_HEIGHT - self.paymentDetailsView.height;
+        self.paymentDetailsView.top = DEVICE_SCREEN_HEIGHT - self.paymentDetailsView.height;
     };
+    
+    if (self.wallet.isObserver) {
+        self.nextButton.backgroundColor = UIColorHex(#43ADDC);
+        self.observerHintLabel.hidden = NO;
+    }else{
+        self.nextButton.backgroundColor = UIColorHex(#1A3D4E);
+        self.observerHintLabel.hidden = YES;
+    }
+    
+    if (self.QRCodedata) {
+        self.amountTextField.text = self.QRCodedata.transaction.amount;
+        self.addressTextField.text = self.QRCodedata.transaction.transactionTo;
+    }
 }
 
 - (IBAction)scanQRCodeAction:(id)sender {
     QRCodeViewController *vc = [[QRCodeViewController alloc] init];
     vc.reciveResult = ^(NSString *result) {
+        self.qrdata = [QRCodeDataModel modelWithJSON:result];
+        if (self.qrdata.type == QRCodeType_Receive) {//获取收款人钱包地址
+            self.addressTextField.text = self.qrdata.ethereum;
+        }else if (self.qrdata.type == QRCodeType_Transaction) {
+            self.signVerifyProcessView.result = self.qrdata.data;
+        }
     };
     [self QRCodeScanVC:vc];
 }
@@ -78,21 +110,25 @@
     if (_easyModelView.hidden) {
         self.trans.gasPrice = [BigNumber bigNumberWithDecimalString:self.GASPriceTextField.text];
         self.trans.gasLimit = [BigNumber bigNumberWithDecimalString:self.GASTextField.text];
-        _costLabel.text = [[self.GASTextField.text decimalNumberByMultiplying:self.GASPriceTextField.text] decimalNumberByDividing:DecimalNumberTenPower18];
+        _costLabel.text = [[self.trans.gasLimit mul:[BigNumber bigNumberWithDecimalString:self.GASPriceTextField.text]].decimalString decimalNumberByDividing:DecimalNumberTenPower18];
     }else{
-        self.trans.gasLimit = [BigNumber bigNumberWithDecimalString:[@"252000" decimalNumberByMultiplying:[NSString stringWithFormat:@"%.1f",self.mySlider.value]]];
+        self.trans.gasLimit = [BigNumber bigNumberWithDecimalString:[GasLimit decimalNumberByMultiplying:[NSString stringWithFormat:@"%.1f",self.mySlider.value]]];
         _costLabel.text = [[self.trans.gasLimit mul:self.trans.gasPrice].decimalString decimalNumberByDividing:DecimalNumberTenPower18];
     }
     NSLog(@"Limit:%@",self.trans.gasLimit.decimalString);
 }
 
 - (void)updateTranscationConfiguration{
-    if (self.isContractsTransaction) {
+    if (self.tokenData.tokenType == TokenType_OCN) {
         self.trans.toAddress = [Address addressWithString:OCNAddress];
         self.trans.value = [BigNumber bigNumberWithDecimalString:@"0"];
         NSString *value = [[NSString alloc] initWithFormat:@"%064llx",[self.amountTextField.text decimalNumberByMultiplying:DecimalNumberTenPower18].longLongValue];
         NSString *dataStr = [NSString stringWithFormat:@"%@%@%@",ContractTransferFunctionPrefix,[self.addressTextField.text stringByReplacingOccurrencesOfString:@"0x" withString:@""],value];
-        self.trans.data = [SecureData hexStringToData:dataStr];
+        if(self.hexDataTextField.text.length == 0){
+            self.trans.data = [SecureData hexStringToData:dataStr];
+        }else{
+            self.trans.data = [SecureData hexStringToData:self.hexDataTextField.text];
+        }
     }else{
         self.trans.toAddress = [Address addressWithString:self.addressTextField.text];
         self.trans.value = [BigNumber bigNumberWithDecimalString:[self.amountTextField.text decimalNumberByMultiplying:DecimalNumberTenPower18]];
@@ -109,8 +145,45 @@
         [self hideLoading:true];
         [self updateCost];
         [self updateTranscationConfiguration];
-        [self showPaymentDetailsView];
+        if (self.wallet.isObserver) {
+            [self showSignVerifyProcessView];
+        }else{
+            [self showPaymentDetailsView];
+        }
     }];
+}
+
+
+- (void)showSignVerifyProcessView{
+    QRCodeDataModel *QRCodedata = [[QRCodeDataModel alloc]init];
+    QRCodedata.ethereum = self.wallet.address;
+    QRCodedata.mode = @"mode_show_eth_tx_sign";
+    QRCodedata.transaction.amount = self.amountTextField.text;
+    QRCodedata.transaction.nonce = [NSString stringWithFormat:@"%lu",(unsigned long)self.trans.nonce];
+    QRCodedata.transaction.data = self.hexDataTextField.text;
+    QRCodedata.transaction.gasLimit = self.trans.gasLimit.decimalString;
+    QRCodedata.transaction.gasPrice = self.trans.gasPrice.decimalString;
+    QRCodedata.transaction.transactionFrom = self.wallet.address;
+    QRCodedata.transaction.transactionTo = self.trans.toAddress.checksumAddress;
+    QRCodedata.transaction.tokenName = self.tokenData.tokenTypeString;
+    QRCodedata.transaction.contractAddress = (self.tokenData.tokenType == TokenType_OCN) ? OCNAddress : nil;
+    NSString *value = [QRCodedata modelToJSONString];
+    self.signVerifyProcessView = [SignVerifyProcessView showWithType:WalletType_Transaction_Hot value:value];
+    @weakify(self);
+    self.signVerifyProcessView.callback = ^(SignVerifyProcessViewCallbackType type) {
+        @strongify(self)
+        switch (type) {
+            case SignVerifyProcessViewCallbackType_ScanQRCode:{
+                [self scanQRCodeAction:nil];
+                break;
+            }
+            case SignVerifyProcessViewCallbackType_Finish:{
+                NSData *data = [SecureData hexStringToData:self.qrdata.data];
+                [self send:data];
+                break;
+            }
+        }
+    };
 }
 
 - (BOOL)checkPass{
@@ -131,7 +204,6 @@
     }
     return true;
 }
-
 
 - (void)getTranscationNonceAndGasPrice:(dispatch_block_t)finish{
     
@@ -165,104 +237,93 @@
     self.paymentCostLabel.text = [NSString stringWithFormat:@"%@ETH\nGas(%@)*Gas Price(%@wei)",self.costLabel.text,self.trans.gasLimit.decimalString,self.trans.gasPrice.decimalString];
     self.paymentAmountLabel.text = self.amountTextField.text;
     self.paymentDetailsView.height = IPHONE_HOME_INDICATOR_HEIGHT + 284;
-    self.paymentDetailsView.width = IPHONE_SCREEN_WIDTH;
-    self.paymentDetailsView.top = IPHONE_SCREEN_HEIGHT;
+    self.paymentDetailsView.width = DEVICE_SCREEN_WIDTH;
+    self.paymentDetailsView.top = DEVICE_SCREEN_HEIGHT;
     [self dispalyCustomView:self.paymentDetailsView];
 }
 
 - (IBAction)pamentDetailViewNextAction:(id)sender {
     [self closePaymentDetailsView];
-    [self checkPassWithPassword:self.wallet.password completion:^(BOOL pass) {
+    [self checkPassWithWallet:self.wallet completion:^(BOOL pass, Account *account) {
         if (pass) {
-            [self send:self.trans];
-        }else{
-            [self dispalyConfirmText:@"Wrong password"];
+            [account sign:self.trans];
+            [self send:[self.trans serialize]];
         }
     }];
 }
 
-- (void)send:(Transaction *)trans{
-    Account *a = [Account accountWithPrivateKey:[SecureData hexStringToData:self.wallet.privateKey]];
-    [a sign:trans];
-    HashPromise *sendCallback = [self.provieder sendTransaction:[trans serialize]];
+- (void)send:(NSData *)transData{
+    HashPromise *sendCallback = [self.provieder sendTransaction:transData];
     [self dispalyLoading:@"转帐中..."];
     [sendCallback onCompletion:^(HashPromise *hash) {
         [self hideLoading:NO];
         if (hash.value.hexString.length > 0) {
             [self dispalyText:@"已转帐"];
-            [self.wallet.transactionCache addObject:hash.value.hexString];
+            NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+            [dic setValue:[NSString stringWithFormat:@"%f",[NSDate date].timeIntervalSince1970] forKey:@"timestamp"];
+            [dic setValue:hash.value.hexString forKey:@"hash"];
+            [dic setValue:self.trans.fromAddress.checksumAddress forKey:@"from"];
+            [dic setValue:self.trans.toAddress.checksumAddress forKey:@"to"];
+            [dic setValue:self.trans.gasLimit.decimalString forKey:@"gasLimit"];
+            [dic setValue:self.trans.gasPrice forKey:@"gasPrice"];
+            [dic setValue:[NSString stringWithFormat:@"%ld",self.trans.nonce] forKey:@"nonce"];
+            [dic setValue:(self.tokenData.tokenType == TokenType_OCN) ? OCNAddress : nil forKey:@"contractAddress"];
+            [dic setValue:[SecureData dataToHexString:self.trans.data] forKey:@"data"];
+            [dic setValue:self.trans.value.decimalString forKey:@"value"];
+            [dic setValue:[self.costLabel.text decimalNumberByMultiplying:DecimalNumberTenPower18] forKey:@"gasUsed"];
+            
+            TransactionInfo *info = [TransactionInfo transactionInfoFromDictionary:dic];
+            info.pending = @"Pendding";
+            [self.wallet.transactionCache addObject:info];
+            [WalletManager synchronize];
+
         }else{
             [self dispalyText:@"转帐失败"];
         }
         NSLog(@"transctionResult:%@",hash.value.hexString);
         [self closePaymentDetailsView];
+        [self.navigationController popViewControllerAnimated:YES];
     }];
 }
 
 - (IBAction)contactAction:(id)sender {
-    
+    ContactsListViewController *vc = [self pushViewControllerWithIdentifier:@"ContactsListViewController" inStoryboard:@"Main"];
+    @weakify(self)
+    vc.selectContactsCallback = ^(ContactsModel *contacts) {
+        @strongify(self)
+        self.addressTextField.text = contacts.walletAddress;
+    };
 }
 
 - (IBAction)closePaymentDetailsView{
     [self closeCustomView:self.paymentDetailsView];
 }
 
+- (IBAction)signHelpAction:(id)sender {
+    BasicWebViewController *webVC = [[BasicWebViewController alloc]init];
+    webVC.URLString = [NSString stringWithFormat:@"%@Howdoesofflinesigningwork.html",H5BaseURLPrefix];;
+    [self.navigationController pushViewController:webVC animated:YES];
+}
+
 - (IBAction)helpAction:(id)sender {
-    //    NSString *b = [[NSString alloc] initWithFormat:@"%064x",131415];
-    
-//        Transaction *trans = [Transaction transaction];
-//        trans.toAddress = [Address addressWithString:OCNAddress];
-//        trans.gasLimit = [BigNumber bigNumberWithDecimalString:@"252000"];
-//        trans.value = [BigNumber bigNumberWithDecimalString:@"0"];
-//        NSString *dataStr = [NSString stringWithFormat:@"%@%@%@",ContractTransferFunctionPrefix,@"F7e39822C2faFA4DB665b02A542318410e72C511",[[NSString alloc] initWithFormat:@"%064lx",249000000000000000]];
-//        trans.data = [SecureData hexStringToData:dataStr];
-//
-//        EtherscanProvider *provieder = [[EtherscanProvider alloc]initWithChainId:ChainType];
-//        BigNumberPromise *price = [provieder getGasPrice];
-//        IntegerPromise *iter = [provieder getTransactionCount:[Address addressWithString:self.wallet.address]];
-//        [iter onCompletion:^(IntegerPromise *itp) {
-//            trans.nonce = itp.value;
-//            [price onCompletion:^(BigNumberPromise *p) {
-//                trans.gasPrice = p.value;
-//                Account *a = [Account accountWithPrivateKey:[SecureData hexStringToData:self.wallet.privateKey]];
-//                [a sign:trans];
-//                HashPromise *hp = [provieder sendTransaction:[trans serialize]];
-//                [hp onCompletion:^(HashPromise *hhh) {
-//                    NSLog(@"%@",hhh.value.hexString);
-//                }];
-//            }];
-//        }];
-    
-    
-    
-    //    Transaction *trans = [Transaction transaction];
-    //    trans.toAddress = [Address addressWithString:@"0xF7e39822C2faFA4DB665b02A542318410e72C511"];
-    //    trans.gasLimit = [BigNumber bigNumberWithDecimalString:@"252000"];
-    //    trans.value = [BigNumber bigNumberWithDecimalString:@"1"];
-    //    EtherscanProvider *provieder = [[EtherscanProvider alloc]initWithChainId:ChainType];
-    //    BigNumberPromise *price = [provieder getGasPrice];
-    //    IntegerPromise *iter = [provieder getTransactionCount:[Address addressWithString:self.wallet.address]];
-    //    [iter onCompletion:^(IntegerPromise *itp) {
-    //        trans.nonce = itp.value;
-    //        [price onCompletion:^(BigNumberPromise *p) {
-    //            trans.gasPrice = p.value;
-    //            Account *a = [Account accountWithPrivateKey:[SecureData hexStringToData:self.wallet.privateKey]];
-    //            [a sign:trans];
-    //            HashPromise *hp = [provieder sendTransaction:[trans serialize]];
-    //            [hp onCompletion:^(HashPromise *hhh) {
-    //                NSLog(@"%@",hhh.value.hexString);
-    //            }];
-    //        }];
-    //    }];
+    BasicWebViewController *webVC = [[BasicWebViewController alloc]init];
+    webVC.URLString = [NSString stringWithFormat:@"%@Howtouseadvancetransfermode.html",H5BaseURLPrefix];;
+    [self.navigationController pushViewController:webVC animated:YES];
+}
+
+- (IBAction)minerCostHelpAction:(id)sender {
+    BasicWebViewController *webVC = [[BasicWebViewController alloc]init];
+    webVC.URLString = [NSString stringWithFormat:@"%@WhatistheGasinEthereum.html",H5BaseURLPrefix];;
+    [self.navigationController pushViewController:webVC animated:YES];
 }
 
 - (IBAction)textFieldEditingChanged:(UITextField *)sender {
-    
 }
+
 
 #pragma mark - 键盘处理
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
-    [textField setInputAccessoryView:self.textFieldAccessoryView];
+    [textField setInputAccessoryView:self.keyboardAccessoryView];
     return YES;
 }
 
@@ -276,11 +337,11 @@
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
-    if (!self.manager.keyboardVisible) {
+    if (!self.keyboardmanager.keyboardVisible) {
         return;
     }
-    CGRect frame = self.manager.keyboardFrame;
-    frame = [self.manager convertRect:frame toView:self.myContentView];
+    CGRect frame = self.keyboardmanager.keyboardFrame;
+    frame = [self.keyboardmanager convertRect:frame toView:self.myContentView];
     [self calculateOffsetForScrollViewWithTextField:textField keyboardFrame:frame];
 }
 
@@ -305,7 +366,7 @@
 }
 
 - (void)keyboardChangedWithTransition:(YYTextKeyboardTransition)transition {
-    CGRect toFrame =  [self.manager convertRect:transition.toFrame toView:self.myContentView];
+    CGRect toFrame = [self.keyboardmanager convertRect:transition.toFrame toView:self.myContentView];
     UITextField *textfield = [self getFirstResponderForTextField];
     if (!textfield) {
         return;

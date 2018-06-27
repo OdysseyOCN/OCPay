@@ -26,16 +26,21 @@
     [super viewDidLoad];
     self.myTableView.rowHeight = UITableViewAutomaticDimension;
     self.myTableView.estimatedRowHeight = 56;
+//    if (@available(iOS 11.0, *)) {
+//        [self.myTableView setContentInsetAdjustmentBehavior:UIScrollViewContentInsetAdjustmentNever];
+//    }
+    [self dispalyLoading:nil];
     [self loadData];
-    if (@available(iOS 11.0, *)) {
-        [self.myTableView setContentInsetAdjustmentBehavior:UIScrollViewContentInsetAdjustmentNever];
-    }
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self loadData];
 }
 
 - (void)loadData{
-    [self dispalyLoading:nil];
     [TransactionRecordModel getRecordDataWithAddress:self.wallet success:^(__kindof NSObject *data) {
-        [self hideLoading:YES];
+        [self hideLoading:NO];
         self.showDatas = data;
         [self.myTableView reloadData];
     }];

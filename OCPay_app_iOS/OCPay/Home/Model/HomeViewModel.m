@@ -25,7 +25,6 @@
     [self updateData];
 }
 
-
 - (void)updateData{
     [self initData];
     [self setHiddenAccountSection:_hiddenAccountSection];
@@ -107,7 +106,7 @@
                 }
             }
                 break;
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////
                 case HomeCollectionViewCellStyle_module:
             {
                 self.minimumLineSpacing = 1;
@@ -120,6 +119,7 @@
                 break;
                 case HomeCollectionViewCellStyle_page:
             {
+                self.edgeInsets= UIEdgeInsetsMake(10, 10, 0, 10);
                 HomeCellViewModel *data = [[HomeCellViewModel alloc] initWithStyle:self.style];
                 data.sectionData = self.sectionData;
                 [self.cellDatas addObject:data];
@@ -127,6 +127,8 @@
                 break;
                 case HomeCollectionViewCellStyle_advert:
             {
+                self.minimumLineSpacing = 10;
+                self.edgeInsets= UIEdgeInsetsMake(10, 10, 0, 10);
                 for (int i = 0; i < self.sectionData.advertisments.count; i++) {
                     HomeCellViewModel *data = [[HomeCellViewModel alloc] initWithStyle:self.style];
                     data.advertData = self.sectionData.advertisments[i];
@@ -150,27 +152,27 @@
         switch (self.style) {
                 case HomeCollectionViewCellStyle_header:
             {
-                self.size = CGSizeMake(IPHONE_SCREEN_WIDTH, 300);
+                self.size = CGSizeMake(DEVICE_SCREEN_WIDTH, 260);
             }
                 break;
                 case HomeCollectionViewCellStyle_module:
             {
-                self.size = CGSizeMake((IPHONE_SCREEN_WIDTH-2)/3, (IPHONE_SCREEN_WIDTH-2)/3);
+                self.size = CGSizeMake((DEVICE_SCREEN_WIDTH-2)/3, (DEVICE_SCREEN_WIDTH-2)/3);
             }
                 break;
                 case HomeCollectionViewCellStyle_token:
             {
-                self.size = CGSizeMake(IPHONE_SCREEN_WIDTH - 22 * 2, 64);
+                self.size = CGSizeMake(DEVICE_SCREEN_WIDTH - 22 * 2, 64);
             }
                 break;
                 case HomeCollectionViewCellStyle_page:
             {
-                self.size = CGSizeMake(IPHONE_SCREEN_WIDTH, 130);
+                self.size = CGSizeMake(DEVICE_SCREEN_WIDTH-20, 130);
             }
                 break;
                 case HomeCollectionViewCellStyle_advert:
             {
-                self.size = CGSizeMake((IPHONE_SCREEN_WIDTH)*.5, 130);
+                self.size = CGSizeMake((DEVICE_SCREEN_WIDTH-30)*.5,80);
             }
                 break;
         }

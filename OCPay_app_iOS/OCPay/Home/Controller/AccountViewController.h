@@ -10,4 +10,5 @@
 
 @interface AccountViewController : BasicViewController
 @property (nonatomic, strong) WalletModel *wallet;
+@property (nonatomic, strong) TokenModel *tokenData;
 @end

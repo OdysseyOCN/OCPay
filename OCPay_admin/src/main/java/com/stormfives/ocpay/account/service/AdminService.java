@@ -1,9 +1,14 @@
 package com.stormfives.ocpay.account.service;
 
+import com.github.pagehelper.PageHelper;
+import com.stormfives.ocpay.account.controller.req.AdminReq;
+import com.stormfives.ocpay.account.controller.resp.AdminUserResp;
 import com.stormfives.ocpay.account.dao.AdminMapper;
 import com.stormfives.ocpay.account.dao.entity.Admin;
 import com.stormfives.ocpay.account.dao.entity.AdminExample;
+import com.stormfives.ocpay.common.constant.Constants;
 import com.stormfives.ocpay.common.exception.InvalidArgumentException;
+import com.stormfives.ocpay.token.domain.Page;
 import com.stormfives.ocpay.token.domain.Token;
 import com.stormfives.ocpay.token.service.OauthService;
 import com.stormfives.ocpay.token.vo.TokenVo;
@@ -15,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -190,5 +196,26 @@ public class AdminService {
             return adminList.get(0);
 
         return null;
+    }
+
+    /**
+     * @param admin
+     * @return
+     */
+    public Page getUsers(AdminReq admin) {
+        PageHelper.startPage(admin.getPageNum(), Constants.PAGE_SIZE);
+        AdminExample adminExample = new AdminExample();
+        adminExample.setOrderByClause("id desc");
+        List<Admin> admins = adminMapper.selectByExample(adminExample);
+        List<AdminUserResp> adminUsers = new ArrayList<>();
+        if (admins != null && admins.size() > 0) {
+            for (Admin a : admins) {
+                AdminUserResp adminUserResp = new AdminUserResp();
+                BeanUtils.copyProperties(a, adminUserResp);
+                adminUsers.add(adminUserResp);
+            }
+        }
+        return Page.toPage(adminUsers);
+
     }
 }

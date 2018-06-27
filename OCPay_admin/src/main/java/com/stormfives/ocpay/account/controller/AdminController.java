@@ -7,6 +7,7 @@ import com.stormfives.ocpay.common.response.FailResponse;
 import com.stormfives.ocpay.common.response.ResponseValue;
 import com.stormfives.ocpay.common.response.SuccessResponse;
 import com.stormfives.ocpay.common.util.MessageSourceUtil;
+import com.stormfives.ocpay.token.domain.Page;
 import com.stormfives.ocpay.token.vo.TokenVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -108,6 +109,14 @@ public class AdminController {
 
         return new FailResponse("修改密码失败!");
     }
+
+
+    @GetMapping("v1/user/users")
+        public Page getUsers(@ModelAttribute AdminReq adminReq) {
+        return adminService.getUsers(adminReq);
+    }
+
+
 
 
 }

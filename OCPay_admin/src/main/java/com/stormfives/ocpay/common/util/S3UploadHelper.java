@@ -1,6 +1,8 @@
 package com.stormfives.ocpay.common.util;
 
 import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.ClasspathPropertiesFileCredentialsProvider;
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
@@ -20,9 +22,9 @@ import java.util.UUID;
 @Component
 public class S3UploadHelper {
 
-    private String url = "https://image.o.bike";
-    private String bucketName = "image.o.bike";
-    private String dir = "image/";
+    private String url = "https://s3-ap-southeast-1.amazonaws.com/stormfives";
+    private String bucketName = "stormfives";
+    private String dir = "img/";
 
     public String uploadFile(MultipartFile multipartFile) throws IOException {
 

@@ -45,7 +45,7 @@ public class DaoManager {
      */
     public DaoMaster getDaoMaster() {
         if (mDaoMaster == null) {
-            DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(context, DB_NAME, null);
+            CustomOpenHelper helper = new CustomOpenHelper(context, DB_NAME, null);
             mDaoMaster = new DaoMaster(helper.getWritableDatabase());
         }
         return mDaoMaster;
@@ -55,37 +55,38 @@ public class DaoManager {
 
     /**
      * 获得session执行增删改查
+     *
      * @return
      */
     public DaoSession getDaoSeesion() {
         if (mDaoSession == null) {
-            if(mDaoMaster ==null){
-                mDaoMaster =getDaoMaster();
+            if (mDaoMaster == null) {
+                mDaoMaster = getDaoMaster();
             }
             mDaoSession = mDaoMaster.newSession();
         }
-        return  mDaoSession;
+        return mDaoSession;
     }
 
 
     /**
      * 打开输出日志，默认关闭
      */
-    public void setDebug(){
+    public void setDebug() {
         QueryBuilder.LOG_SQL = true;
         QueryBuilder.LOG_VALUES = true;
     }
 
 
-    public void closeConnection(){
+    public void closeConnection() {
         closeHelper();
         closeDaoSession();
     }
 
     private void closeDaoSession() {
-        if(mDaoSession!=null){
+        if (mDaoSession != null) {
             mDaoSession.clear();
-            mDaoSession =null;
+            mDaoSession = null;
         }
     }
 
@@ -93,8 +94,6 @@ public class DaoManager {
 
 
     }
-
-
 
 
 }

@@ -21,6 +21,7 @@ public class WalletInfoDaoUtils {
 
     /**
      * 增
+     * `
      *
      * @param foolBean
      * @return
@@ -35,7 +36,7 @@ public class WalletInfoDaoUtils {
      *
      * @param foolBean
      */
-    public static void dealWalletInfo(WalletInfo foolBean, Context mContext) {
+    public static void dealWalletInfo(Context mContext, WalletInfo foolBean) {
         getInstance(mContext).getDaoSeesion().delete(foolBean);
     }
 
@@ -44,7 +45,7 @@ public class WalletInfoDaoUtils {
      *
      * @param foolBean
      */
-    public static void update(WalletInfo foolBean, Context mContext) {
+    public static void update(Context mContext, WalletInfo foolBean) {
         getInstance(mContext).getDaoSeesion().update(foolBean);
     }
 
@@ -68,6 +69,9 @@ public class WalletInfoDaoUtils {
      * @return
      */
     public static WalletInfo sqlByAddress(Context mContext, String walletAddress) {
+        if (!walletAddress.startsWith("0x")) {
+            walletAddress = "0x" + walletAddress;
+        }
         Query<WalletInfo> query = getInstance(mContext)
                 .getInstance(mContext)
                 .getDaoSeesion()
@@ -75,7 +79,26 @@ public class WalletInfoDaoUtils {
                 .where(WalletInfoDao.Properties.WalletAddress.eq(walletAddress))
                 .build();
 
-        if (query.list() != null && query.list().size() >= 0) {
+        if (query.list() != null && query.list().size() >= 1) {
+            return query.list().get(0);
+        }
+        return null;
+    }
+
+
+    /**
+     * @param mContext
+     * @return
+     */
+    public static WalletInfo sqlByWalletName(Context mContext, String walletName) {
+        Query<WalletInfo> query = getInstance(mContext)
+                .getInstance(mContext)
+                .getDaoSeesion()
+                .queryBuilder(WalletInfo.class)
+                .where(WalletInfoDao.Properties.WalletName.eq(walletName))
+                .build();
+
+        if (query.list() != null && query.list().size() > 0) {
             return query.list().get(0);
         }
         return null;

@@ -25,8 +25,8 @@ public class UploadFileController {
     private S3UploadHelper s3UploadHelper;
     protected Logger logger = LoggerFactory.getLogger(UploadFileController.class);
 
-    @PostMapping("/v1/file")
-    public BaseMessage uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
+    @PostMapping("/token/v1/file")
+    public BaseMessage uploadFile(@RequestParam("file") MultipartFile file) throws Exception {
         String url = null;
         try {
             url = s3UploadHelper.uploadFile(file);

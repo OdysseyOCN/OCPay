@@ -2,6 +2,7 @@ package com.stormfives.ocpay.advertisment.service;
 
 import com.github.pagehelper.PageHelper;
 import com.stormfives.ocpay.advertisment.controller.req.AdvertismentReq;
+import com.stormfives.ocpay.advertisment.dao.AdvertismentDAO;
 import com.stormfives.ocpay.advertisment.dao.AdvertismentMapper;
 import com.stormfives.ocpay.advertisment.dao.HomePageContentMapper;
 import com.stormfives.ocpay.advertisment.dao.entity.Advertisment;
@@ -26,6 +27,9 @@ public class AdvertismentService {
 
     @Autowired
     private AdvertismentMapper advertismentMapper;
+
+    @Autowired
+    private AdvertismentDAO advertismentDAO;
 
     @Autowired
     private HomePageContentMapper homePageContentMapper;
@@ -57,6 +61,12 @@ public class AdvertismentService {
     public ResponseValue editAdvertisment(Integer adminId, AdvertismentReq advertismentReq) {
         Advertisment advertisment = new Advertisment();
 
+        HomePageContent homePageContent = homePageContentMapper.selectByPrimaryKey(advertismentReq.getHomePageId());
+
+        if (homePageContent==null){
+            return new FailResponse("homePage error!");
+        }
+
         BeanUtils.copyProperties(advertismentReq, advertisment);
 
         advertisment.setUpdateBy(adminId);
@@ -85,14 +95,9 @@ public class AdvertismentService {
 
         PageHelper.startPage(advertismentReq.getPageNum(),advertismentReq.getPageSize());
 
-        AdvertismentExample advertismentExample = new AdvertismentExample();
 
-        advertismentExample.setOrderByClause("show_sort asc");
+        List<Advertisment> advertisments = advertismentDAO.selectByHomePageType(advertismentReq.getType());
 
-        advertismentExample.createCriteria().andHomePageIdEqualTo(advertismentReq.getHomePageId());
-
-        List<Advertisment> advertisments = advertismentMapper.selectByExample(advertismentExample);
-
-        return new SuccessResponse(advertisments);
+        return new SuccessResponse(Page.toPage(advertisments));
     }
 }

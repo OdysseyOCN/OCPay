@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.stormfives.ocpay.feedback.dao.FeedBackMapper" >
+  <resultMap id="BaseResultMap" type="com.stormfives.ocpay.feedback.dao.entity.FeedBack" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="theme" property="theme" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="img1" property="img1" jdbcType="VARCHAR" />
+    <result column="img2" property="img2" jdbcType="VARCHAR" />
+    <result column="img3" property="img3" jdbcType="VARCHAR" />
+    <result column="img4" property="img4" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, email, theme, description, img1, img2, img3, img4, create_time, update_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.stormfives.ocpay.feedback.dao.entity.FeedBackExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from feed_back
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from feed_back
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from feed_back
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.stormfives.ocpay.feedback.dao.entity.FeedBackExample" >
+    delete from feed_back
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.stormfives.ocpay.feedback.dao.entity.FeedBack" >
+    insert into feed_back (id, email, theme, 
+      description, img1, img2, 
+      img3, img4, create_time, 
+      update_time)
+    values (#{id,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR}, #{theme,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{img1,jdbcType=VARCHAR}, #{img2,jdbcType=VARCHAR}, 
+      #{img3,jdbcType=VARCHAR}, #{img4,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.stormfives.ocpay.feedback.dao.entity.FeedBack" >
+    insert into feed_back
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="theme != null" >
+        theme,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="img1 != null" >
+        img1,
+      </if>
+      <if test="img2 != null" >
+        img2,
+      </if>
+      <if test="img3 != null" >
+        img3,
+      </if>
+      <if test="img4 != null" >
+        img4,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="theme != null" >
+        #{theme,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="img1 != null" >
+        #{img1,jdbcType=VARCHAR},
+      </if>
+      <if test="img2 != null" >
+        #{img2,jdbcType=VARCHAR},
+      </if>
+      <if test="img3 != null" >
+        #{img3,jdbcType=VARCHAR},
+      </if>
+      <if test="img4 != null" >
+        #{img4,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.stormfives.ocpay.feedback.dao.entity.FeedBackExample" resultType="java.lang.Integer" >
+    select count(*) from feed_back
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update feed_back
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.email != null" >
+        email = #{record.email,jdbcType=VARCHAR},
+      </if>
+      <if test="record.theme != null" >
+        theme = #{record.theme,jdbcType=VARCHAR},
+      </if>
+      <if test="record.description != null" >
+        description = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.img1 != null" >
+        img1 = #{record.img1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.img2 != null" >
+        img2 = #{record.img2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.img3 != null" >
+        img3 = #{record.img3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.img4 != null" >
+        img4 = #{record.img4,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update feed_back
+    set id = #{record.id,jdbcType=INTEGER},
+      email = #{record.email,jdbcType=VARCHAR},
+      theme = #{record.theme,jdbcType=VARCHAR},
+      description = #{record.description,jdbcType=VARCHAR},
+      img1 = #{record.img1,jdbcType=VARCHAR},
+      img2 = #{record.img2,jdbcType=VARCHAR},
+      img3 = #{record.img3,jdbcType=VARCHAR},
+      img4 = #{record.img4,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.stormfives.ocpay.feedback.dao.entity.FeedBack" >
+    update feed_back
+    <set >
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="theme != null" >
+        theme = #{theme,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="img1 != null" >
+        img1 = #{img1,jdbcType=VARCHAR},
+      </if>
+      <if test="img2 != null" >
+        img2 = #{img2,jdbcType=VARCHAR},
+      </if>
+      <if test="img3 != null" >
+        img3 = #{img3,jdbcType=VARCHAR},
+      </if>
+      <if test="img4 != null" >
+        img4 = #{img4,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.stormfives.ocpay.feedback.dao.entity.FeedBack" >
+    update feed_back
+    set email = #{email,jdbcType=VARCHAR},
+      theme = #{theme,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      img1 = #{img1,jdbcType=VARCHAR},
+      img2 = #{img2,jdbcType=VARCHAR},
+      img3 = #{img3,jdbcType=VARCHAR},
+      img4 = #{img4,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

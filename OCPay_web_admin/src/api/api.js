@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { version } from 'core-js';
-
-let base =''+'/api/ocpay/v1/';
-let baseUrl=''+'/api/ocpay/upload/token/v1/';
+let get='get'
+let base =get+'/api/ocpay/v1/';
+let baseUrl=get+'/api/ocpay/upload/token/v1/';
 // 登陆
 export const requestLogin = params => { return axios.post(`${base}/login`, params).then(res => res.data); };
 // 创建用户

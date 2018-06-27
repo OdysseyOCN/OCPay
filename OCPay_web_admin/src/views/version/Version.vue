@@ -109,8 +109,8 @@
          title=""
         :visible.sync="dialogVisible"
         class="Veradd"
-         width="30%">
-         <el-form ref="form" :model="form" label-width="80px">
+         width="40%">
+         <el-form ref="form" :model="form" label-width="100px">
            <el-form-item label="版本ID：">
                <el-input v-model="form.versionId"></el-input>
            </el-form-item>
@@ -118,25 +118,26 @@
                <el-input v-model="form.versionName"></el-input>
            </el-form-item>
          
-           <el-form-item label="发布状态：">
-               <el-select v-model="form.region" placeholder="发布状态">
+           <el-form-item class="banbe"  label="发布状态：">
+               <el-select class="banben" v-model="form.region" placeholder="发布状态">
                      <el-option label="未发布" value="1"></el-option>
                      <el-option label="已发布" value="2"></el-option>
                 </el-select>
             </el-form-item>
-           <el-form-item label="版本内容">
+           <el-form-item label="版本内容：">
                <el-input v-model="form.content"></el-input>
            </el-form-item>
              <div class="button"><el-button type="primary" @click="submitadd">添加</el-button></div>                 
            </el-form>
 </el-dialog>
 <!-- 编辑 -->
+
 <el-dialog
          title=""
         :visible.sync="dialogVisible1"
         class="Veradd"
-         width="40%">
-         <el-form ref="form" :model="form1" label-width="80px">
+         width="30%">
+         <el-form ref="form" :model="form1" label-width="100px">
            <!-- <el-form-item label="id">
                <el-input v-model="form1.id"></el-input>
            </el-form-item> -->
@@ -147,8 +148,12 @@
                <el-input v-model="form1.versionName"></el-input>
            </el-form-item>
              
-           <el-form-item label="发布状态：">
-               <el-select v-model="form.status" placeholder="发布状态">
+           <el-form-item  label="发布状态：">
+               <el-select  class="banben" v-model="form1.status1" v-if="form1.status==1" placeholder="未发布">
+                     <el-option label="未发布" value="1"></el-option>
+                     <el-option label="已发布" value="2"></el-option>
+                </el-select>
+                   <el-select v-model="form1.status1" v-if="form1.status==2" placeholder="已发布">
                      <el-option label="未发布" value="1"></el-option>
                      <el-option label="已发布" value="2"></el-option>
                 </el-select>
@@ -156,7 +161,7 @@
            <!-- <el-form-item label="发布状态：">
                <el-input v-model="form1.status"></el-input>
            </el-form-item> -->
-           <el-form-item label="版本内容">
+           <el-form-item label="版本内容：">
                <el-input v-model="form1.content"></el-input>
            </el-form-item>
              <div class="button"><el-button type="primary" @click="submitedit">编辑</el-button></div>
@@ -254,7 +259,7 @@ import { versionList,versionAdd,versionEdit,versionDelete } from '../../api/api'
               "versionId":this.form1.versionId,
               "versionName":this.form1.versionName,
               "content":this.form1.content,  
-               "status":this.form1.status, 
+               "status":this.form1.status1, 
          }
              versionEdit(para).then(data=>{
                 // console.log(data)
@@ -301,14 +306,12 @@ import { versionList,versionAdd,versionEdit,versionDelete } from '../../api/api'
   }
 </script>
 <style>
-.conetnt .el-textarea__inner{
-  height:200px ;
-}
-.edcontent .el-textarea__inner{
-  height:200px ;
-}
+
 .Veradd .el-dialog--small{
 width: 500px;
 }
 
+.banben{
+  width: 300px;
+}
 </style>

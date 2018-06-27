@@ -28,7 +28,7 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/get': {
+      '/get': {  
         target: 'http://ocpay-admin-dev.stormfives.com/',
         changeOrigin: true,
         pathRewrite: {

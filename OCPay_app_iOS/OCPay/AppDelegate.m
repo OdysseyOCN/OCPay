@@ -19,7 +19,10 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-
+    // Override point for customization after application launch.
+//    if (@available(iOS 11.0, *)) {
+//        [[UIScrollView appearance] setContentInsetAdjustmentBehavior:UIScrollViewContentInsetAdjustmentNever];
+//    }
     
     [[AFNetworkReachabilityManager sharedManager] startMonitoring];
 

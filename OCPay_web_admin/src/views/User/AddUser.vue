@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { addLogin } from '../../api/api';
+import { versionList } from '../../api/api';
   export default {
     data() {
       return {

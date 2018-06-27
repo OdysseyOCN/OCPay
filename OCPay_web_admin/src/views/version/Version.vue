@@ -1,7 +1,23 @@
 <template>
 <div>
   <h3>Version</h3>
-   <hr/>
+     <hr/>
+  <el-form  :inline="true" :model="formInline" class="demo-form-inline wallet">
+        <el-col class="username" :span="22">
+            <el-form-item  label="查询">
+                <el-input v-model="formInline.id" placeholder="请输入查询ID"  @change="onSubmit"></el-input>
+            </el-form-item>
+        </el-col>
+        <el-col :span="2">
+            <el-button type="primary" @click="onSubmit" style="display:none;">查询</el-button>
+             <el-button type="primary" @click="onSubmitForm">清空</el-button>
+        </el-col>
+        <div style="clear:both;"></div>
+    </el-form>  
+   <el-form  class="demo-form-inline wallet">
+        <el-button type="primary" @click="add">ADD</el-button>
+    </el-form>  
+  <hr/>
   <el-table
     :data="tableData"
     border
@@ -9,257 +25,293 @@
     <el-table-column
       prop="No"
       label="No."
-      width="">
+      width="150">
+      <template slot-scope="scope1">             
+					{{scope1.$index+1+10*(currentPage-1)}}
+				</template>  
     </el-table-column>
     <el-table-column
-      prop="ID"
-      label="Version ID"
-      width="">
+      prop="id"
+      label="ID"
+      width="150">
     </el-table-column>
     <el-table-column
-      prop="Name"
-      label="Version Name"
-      width="">
+      prop="versionId"
+      label="版本ID"
+      width="150">
     </el-table-column>
     <el-table-column
-      prop="Time"
-      label="Intention Release Time"
-      width="">
+      prop="versionName"
+      label="版本名"
+      width="150">
+    </el-table-column>
+     <el-table-column
+      prop="content"
+      label="版本内容"
+      width="150">
+    </el-table-column>
+    
+    <el-table-column
+      prop="status"
+      label="status"
+      width="120">
+        <template slot-scope="scope">
+                    <span v-if="scope.row.status==1">未发布</span>
+                     <span v-if="scope.row.status==2">已发布</span>
+		  	</template>
     </el-table-column>
     <el-table-column
-      prop="Booking "
-      label="Booking Release"
-      width="">
+      prop="createBy"
+      label="创建者"
+      width="150">
+    </el-table-column>
+    <el-table-column
+      prop="updateBy"
+      label="更新者"
+      width="150">
     </el-table-column>
      <el-table-column
-      prop="Operator"
-      label="Operator"
-      width="">
+      prop="createTime"
+      label="创建时间"
+      width="180">
+        <template slot-scope="scope">
+                     {{scope.row.createTime | time}}
+		  	</template>
     </el-table-column>
-     <el-table-column
-      prop="Content"
-      label="Content"
-      width="">
+    <el-table-column
+      prop="updateTime"
+      label="更新时间"
+      width="180">
+         <template slot-scope="scope">
+                     {{scope.row.updateTime | time}}
+		  	</template>
     </el-table-column>
-     <el-table-column
-      prop="Release"
-      label="Release"
-      width="">
-    </el-table-column>
-     <el-table-column
-      prop="Operation"
-      label="Operation"
-      width="">
-    </el-table-column>
-    <el-table-column label="Operation" >
-				<template slot-scope="scope">
-                 <el-button size="small" @click="Versionview(scope.$index, scope.row)">VIEW</el-button>
-                 <el-button size="small" @click="Versionadd(scope.$index, scope.row)">ADD</el-button>
-                 <el-button size="small" @click="Versionedit(scope.$index, scope.row)">EDIT</el-button>
+    <el-table-column label="Operation"  width="180"  >
+				<template slot-scope="scope"
+        >
+                 <el-button size="small" @click="edit(scope.$index, scope.row)">EDIT</el-button>
+                 <el-button size="small" @click="Delete( scope.row)">Delete</el-button>     
 				</template>
 		</el-table-column>   
   </el-table>
-  <!-- 创建Versionview表单 -->
-    <el-dialog
-        title=""
-        :visible.sync="dialogVisible"
-        width="30%">
-       <el-form ref="form" :model="form" label-width="80px"> 
-             <el-form-item label="No.">
-             <span>112</span>
-             </el-form-item>
-             <el-form-item label="Version ID.">
-             <span>0.20</span>
-             </el-form-item>
-             <el-form-item label="Version Name">
-             <span>0.20</span>
-             </el-form-item>
-             <el-form-item label="Intention Release Time">
-             <span>2014.09.01 12:00:00</span>
-             </el-form-item>
-             <el-form-item label="Content">
-            <el-input type="textarea" v-model="form.desc">Content</el-input>
-           </el-form-item>
-            <hr/>
-            <el-form-item label="Update record">
-           </el-form-item>
-           <template>
-             <el-table
-             :data="tablesonData"
-              border
-              style="width:100%">
-              <el-table-column
-               prop="Time"
-               label="Update Time"
-              width="180">
-              </el-table-column>
-              <el-table-column
-              prop="Operator"
-             label="Operator"
-             width="180">
-            </el-table-column>
-             <el-table-column
-             prop="Actions"
-             label="Actions">
-            </el-table-column>
-    </el-table>
-  </template>
-        </el-form>                
-</el-dialog>
-<!-- 创建Versionadd表单 -->
+     <div class="block" style="text-align:center;margin-top:20px;">
+        <el-pagination
+          background
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          :page-size="pagesize"
+          layout=" prev, pager, next"
+          :total="totalCount">
+        </el-pagination>
+      </div>
+<!-- 添加 -->
   <el-dialog
          title=""
-        :visible.sync="dialogAdd"
-        class="dig"
-         width="30%">
-         <el-form ref="form" :model="form" label-width="80px">
-           <el-form-item label="Version ID">
-               <el-input v-model="form.name">0.20</el-input>
+        :visible.sync="dialogVisible"
+        class="Veradd"
+         width="40%">
+         <el-form ref="form" :model="form" label-width="100px">
+           <el-form-item label="版本ID：">
+               <el-input v-model="form.versionId"></el-input>
            </el-form-item>
-           <el-form-item label="Version Name">
-               <el-input v-model="form.name">0.20</el-input>
+           <el-form-item label="版本名：">
+               <el-input v-model="form.versionName"></el-input>
            </el-form-item>
-           <el-form-item label="Intention Release Time">
-               <el-input v-model="form.name">2014.09.01 12:00:00</el-input>
+         
+           <el-form-item class="banbe"  label="发布状态：">
+               <el-select class="banben" v-model="form.region" placeholder="发布状态">
+                     <el-option label="未发布" value="1"></el-option>
+                     <el-option label="已发布" value="2"></el-option>
+                </el-select>
+            </el-form-item>
+           <el-form-item label="版本内容：">
+               <el-input v-model="form.content"></el-input>
            </el-form-item>
-           <el-form-item label="Content" class="conetnt">
-               <el-input type="textarea" v-model="form.desc"></el-input>
-           </el-form-item>
-
-
+             <div class="button"><el-button type="primary" @click="submitadd">添加</el-button></div>                 
            </el-form>
-        
 </el-dialog>
-<!-- 创建Versionedit表单 -->
+<!-- 编辑 -->
+
 <el-dialog
          title=""
-        :visible.sync="dialogEdit"
-        class="dig"
-         width="40%">
-         <el-form ref="form" :model="form" label-width="80px">
-           <el-form-item label="Version ID">
-               <el-input v-model="form.name">0.20</el-input>
+        :visible.sync="dialogVisible1"
+        class="Veradd"
+         width="30%">
+         <el-form ref="form" :model="form1" label-width="100px">
+           <!-- <el-form-item label="id">
+               <el-input v-model="form1.id"></el-input>
+           </el-form-item> -->
+          <el-form-item label="版本ID：">
+               <el-input v-model="form1.versionId"></el-input>
            </el-form-item>
-           <el-form-item label="Version Name">
-               <el-input v-model="form.name">0.20</el-input>
+           <el-form-item label="版本名：">
+               <el-input v-model="form1.versionName"></el-input>
            </el-form-item>
-           <el-form-item label="Intention Release Time">
-               <el-input v-model="form.name">2014.09.01 12:00:00</el-input>
+             
+           <el-form-item  label="发布状态：">
+               <el-select  class="banben" v-model="form1.status1" v-if="form1.status==1" placeholder="未发布">
+                     <el-option label="未发布" value="1"></el-option>
+                     <el-option label="已发布" value="2"></el-option>
+                </el-select>
+                   <el-select v-model="form1.status1" v-if="form1.status==2" placeholder="已发布">
+                     <el-option label="未发布" value="1"></el-option>
+                     <el-option label="已发布" value="2"></el-option>
+                </el-select>
+            </el-form-item>
+           <!-- <el-form-item label="发布状态：">
+               <el-input v-model="form1.status"></el-input>
+           </el-form-item> -->
+           <el-form-item label="版本内容：">
+               <el-input v-model="form1.content"></el-input>
            </el-form-item>
-           <el-form-item label="Content" class="edcontent">
-               <el-input type="textarea" v-model="form.desc"></el-input>
-           </el-form-item>
-
-
+             <div class="button"><el-button type="primary" @click="submitedit">编辑</el-button></div>
            </el-form>
         
 </el-dialog>
-
-   
 </div>
   
 </template>
 
 <script>
+import { versionList,versionAdd,versionEdit,versionDelete } from '../../api/api';
   export default {
     data() {
       return {
-        tablesonData:[{
-            Time	:'',
-           Operator:'',
-           Actions:'',
-        }],
-        tableData: [{
-          No: '1',
-          ID: '',
-          Name: '',
-          Time: '',
-          Booking : '',
-          Operator: '',
-          Content: '',
-          Release: '',
-          Operation: '',
-        },
-        {
-          No: '2',
-          ID: '',
-          Name: '',
-          Time: '',
-          Booking : '',
-          Operator: '',
-          Content: '',
-          Release: '',
-          Operation: '',
-        },
-        {
-          No: '3',
-          ID: '',
-          Name: '',
-          Time: '',
-          Booking : '',
-          Operator: '',
-          Content: '',
-          Release: '',
-          Operation: '',
-        },
-        {
-          No: '4',
-          ID: '',
-          Name: '',
-          Time: '',
-          Booking : '',
-          Operator: '',
-          Content: '',
-          Release: '',
-          Operation: '',
-        },
-        {
-          No: '5',
-          ID: '',
-          Name: '',
-          Time: '',
-          Booking : '',
-          Operator: '',
-          Content: '',
-          Release: '',
-          Operation: '',
-        }
-        ],
+        tablesonData:[],
+        tableData: [],
          dialogVisible: false ,
-         dialogAdd: false ,
-         dialogEdit:false,
-         form:{
-           name:"",
-           region:""
-         }
+         dialogVisible1: false ,
+        //  dialogVisible:false,
+         form:{},
+          formInline:{},
+           
+          form1:{},
+          pagesize: 10,
+        //当前页码 
+        currentPage: 1,
+        //默认数据总数
+        totalCount: 20,
       }
-  
+    },
+     mounted(){
+        
+        this.getcoin(this.currentPage);
     },
      methods:{
-       Versionview(index,row){
-            this.dialogVisible=true;
-            this.form=row;
+       getcoin(num){
+           
+            let para={
+                // "id":"4",
+               "pageNum":"1",
+              "pageSize":"10" }
+               if(this.formInline.id!=''){
+                 para={
+                     "id":this.formInline.id,    
+                     "pageNum":"1",
+                     "pageSize":"10"
+                            }
+                     }     
+            versionList(para).then(data=>{
+                // console.log(data.data.list)
+                this.tableData=data.data.list;
+                this.pagesize=data.data.per;
+                this.totalCount=data.data.per*data.data.pages;
+            })
+        },
+
+
+        // 添加
+        add(index,row){
+                this.dialogVisible=true;      
+        },
+         submitadd(){
+          
+           let para={
+           "versionId":this.form.versionId,
+           "versionName":this.form.versionName,
+           "content":this.form.content,  
+           "status":this.form.status,
+         }
+             versionAdd(para).then(data=>{
+                // console.log(data)
+                this.dialogVisible=false;
+                this.getcoin(this.currentPage);
+                  // this.$message({
+                  //   message: data.data.message,
+                  //   type: 'success'
+                  // });        
+            })
+        },
+
+
+
+      
+        // 编辑
+        edit(index,row){
+            this.dialogVisible1=true;
+            this.form1=row;
         //    this.$store.state.count=row;
         },
-        Versionadd(index,row){
-            this.dialogAdd=true;
-            this.form=row;
-        //    this.$store.state.count=row;
+
+        submitedit(){    
+           let para={
+              "id":this.form1.id,
+              "versionId":this.form1.versionId,
+              "versionName":this.form1.versionName,
+              "content":this.form1.content,  
+               "status":this.form1.status1, 
+         }
+             versionEdit(para).then(data=>{
+                // console.log(data)
+                this.dialogVisible1=false;
+                this.getcoin(this.currentPage);
+                  // this.$message({
+                  //   message: data.data.message,
+                  //   type: 'success'
+                  // });        
+            })
         },
-        Versionedit(index,row){
-            this.dialogEdit=true;
-            this.form=row;
-        //    this.$store.state.count=row;
+         // 删除数据
+        Delete(row){
+         
+           let para={
+             "id":row.id,      
+            }
+          versionDelete(para).then(data=>{
+                // console.log(data)
+                this.getcoin(this.currentPage);    
+            })     
+
         },
+         // 查询
+        onSubmit(){
+           this.getcoin(this.currentPage);
+        },
+        // 清空
+        onSubmitForm(){
+            this.formInline.id=''
+           
+            this.getcoin(this.currentPage);
+        },
+
+
+
+       handleCurrentChange(val){
+            // console.log(val)
+            this.currentPage=val;
+            this.getcoin(this.currentPage);
+        },
+       
     }
   }
 </script>
 <style>
-.conetnt .el-textarea__inner{
-  height:200px ;
-}
-.edcontent .el-textarea__inner{
-  height:200px ;
+
+.Veradd .el-dialog--small{
+width: 500px;
 }
 
+.banben{
+  width: 300px;
+}
 </style>

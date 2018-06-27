@@ -59,22 +59,22 @@
         </el-pagination>
       </div>
 
-   <!-- 创建Sequentia下编辑开关 -->
+
    <el-dialog
          title=""
         :visible.sync="dialogVisible"
         class="dig"
          width="30%">
         <el-form ref="form" :model="form" label-width="120px">
-              <el-form-item label="Module Name ID">
+              <el-form-item label="Module Name ID：">
                     <!-- <el-input v-model="form.id"></el-input> -->
                     <span>{{form.id}}</span>
               </el-form-item>
-              <el-form-item label="Content">
+              <el-form-item label="Content：">
                     <el-input v-model="form.content"></el-input>
               </el-form-item>
 
-              <el-form-item label="Module Type">
+              <el-form-item label="Module Type：">
                   <el-select v-model="form.region" v-if="form.type==1" placeholder="小程序">
                     <el-option label="小程序" value="1"></el-option>
                     <el-option label="横屏广告" value="2"></el-option>
@@ -91,7 +91,7 @@
                     <el-option label="侧栏广告" value="3"></el-option>          
                   </el-select>
               </el-form-item>
-              <el-form-item label="sort">
+              <el-form-item label="sort：">
                     <el-input v-model="form.sort"></el-input>
               </el-form-item>
               <div class="button"><el-button type="primary" @click="edit">提交</el-button></div>
@@ -106,11 +106,11 @@
          width="30%">
         <el-form ref="form" :model="form1" label-width="120px">
               
-              <el-form-item label="Content">
+              <el-form-item label="Content：">
                     <el-input v-model="form1.content"></el-input>
               </el-form-item>
 
-             <el-form-item label="Module Type">
+             <el-form-item label="Module Type：">
                 <el-select v-model="form1.type" placeholder="Module Type">
                    <el-option label="小程序" value="1"></el-option>
                     <el-option label="横屏广告" value="2"></el-option>
@@ -118,7 +118,7 @@
                </el-select>
              </el-form-item>
 
-              <el-form-item label="sort">
+              <el-form-item label="sort：">
                     <el-input v-model="form1.sort"></el-input>
               </el-form-item>
               <div class="button"><el-button type="primary" @click="submitadd">提交</el-button></div>

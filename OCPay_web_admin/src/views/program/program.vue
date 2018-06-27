@@ -72,28 +72,31 @@
         title=""
         :visible.sync="dialogVisible"
         width="30%">
-       <el-form ref="form" :model="form" label-width="80px"> 
-             <el-form-item label="ID">
+       <el-form ref="form" :model="form" label-width="100px"> 
+             <el-form-item label="ID：">
                  <span>{{form.id}}</span>
              </el-form-item>
-             <el-form-item label="title">
+             <el-form-item label="title：">
              <el-input v-model="form.title"></el-input>
              </el-form-item>
-              <el-form-item label="Content">
+             <el-form-item label="homePageId：">
+             <el-input v-model="form.homePageId"></el-input>
+             </el-form-item>
+              <el-form-item label="Content：">
              <el-input v-model="form.content"></el-input>
              </el-form-item>
-             <el-form-item label="Access type">
+             <el-form-item label="Access type：">
                 <el-select v-model="form.directType" placeholder="internal Link">
-                     <el-option label="internal Link" value="internal Link"></el-option>
-                     <el-option label="inbound Link" value="inbound Link"></el-option>
-                     <el-option label="3TH MIRC" value="3TH MIRC"></el-option>
-                    <el-option label="SHOP Link" value="SHOP Link"></el-option>
+                     <el-option label="跳入第三方APP" value="1"></el-option>
+                     <el-option label="调转APP内页" value="2"></el-option>
+                     <el-option label="跳转到新网址" value="3"></el-option>
+                    <!-- <el-option label="SHOP Link" value="SHOP Link"></el-option> -->
                  </el-select>    
            </el-form-item>
-           <el-form-item label="LINK">
+           <el-form-item label="LINK：">
              <el-input v-model="form.directUrl"></el-input>
              </el-form-item>
-           <el-form-item label="Pic">
+           <el-form-item label="Pic：">
               <el-col :span="18">
                  <el-input v-model="form.showImg" disabled=""></el-input>
              </el-col>
@@ -102,7 +105,7 @@
                <input class="img1" @change="uploadImg()" ref="img" type="file">
              </el-col>
            </el-form-item>
-            <el-form-item label="showSort">
+            <el-form-item label="showSort：">
              <el-input v-model="form.showSort"></el-input>
            </el-form-item>
          <div class="button">
@@ -115,33 +118,33 @@
         title=""
         :visible.sync="dialogVisible2"
         width="30%">
-       <el-form ref="form" :model="form1" label-width="80px"> 
-             <el-form-item label="homePageId">
+       <el-form ref="form" :model="form1" label-width="100px"> 
+             <el-form-item label="homePageId：">
                <el-select v-model="form1.homePageId" placeholder="">
                      <el-option v-for="(item,index) in idArr" :key="index" :label="item.content" :value="item.id"></el-option>                   
               </el-select>   
              </el-form-item>
-             <el-form-item label="title">
+             <el-form-item label="title：">
              <el-input v-model="form1.title"></el-input>
              </el-form-item>
-              <el-form-item label="Content">
+              <el-form-item label="Content：">
              <el-input v-model="form1.content"></el-input>
              </el-form-item>
 <!-- 下拉菜单 -->
-             <el-form-item label="directType">
+             <el-form-item label="directType：">
                    <el-select v-model="form1.directType" placeholder="internal Link">
                      <el-option label="跳入第三方APP" value="1"></el-option>
                      <el-option label="调转APP内页" value="2"></el-option>
                      <el-option label="跳转到新网址" value="3"></el-option>
                  </el-select>
           </el-form-item>
-           <el-form-item label="LINK">
+           <el-form-item label="LINK：">
              <el-input v-model="form1.directUrl"></el-input>
              </el-form-item>
            <!-- <el-form-item label="Pic">
              <el-input v-model="form1.showImg"></el-input>
            </el-form-item> -->
-            <el-form-item label="Pic">
+            <el-form-item label="Pic：">
               <el-col :span="18">
                  <el-input v-model="form1.showImg" disabled=""></el-input>
              </el-col>
@@ -150,7 +153,7 @@
                <input class="img1" @change="uploadImg1()" ref="img2" type="file">
              </el-col>
            </el-form-item>
-            <el-form-item label="showSort">
+            <el-form-item label="showSort：">
              <el-input v-model="form1.showSort"></el-input>
            </el-form-item>            
             <div class="button">
@@ -253,7 +256,14 @@ import {Banner,BannerEdit,BannerDelete,BannerAdd,BannerGet,upload} from '../../a
               title:this.form.rank
             }
           BannerEdit(para).then(data=>{
-                // console.log(data)
+                if(data.success){
+                    this.$message({
+                      message: '恭喜你，修改成功',
+                      type: 'success'
+                    });
+                }else{
+                  this.$message.error(data.data.message)
+                }
                 this.getcoin(this.currentPage);
                 this.dialogVisible=false;
             })

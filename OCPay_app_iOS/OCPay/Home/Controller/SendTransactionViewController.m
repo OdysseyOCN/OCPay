@@ -38,21 +38,20 @@
 
 @property (strong, nonatomic) SignVerifyProcessView *signVerifyProcessView;
 
-@property (strong, nonatomic) EtherscanProvider *provieder;
 @property (strong, nonatomic) Transaction *trans;
 @property (strong, nonatomic) QRCodeDataModel *qrdata;
+@property (nonatomic, strong) BigNumber *gasPrice;
 
 @end
 
 
 @implementation SendTransactionViewController
 
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initUI];
     [self.keyboardmanager addObserver:self];
-    [self getTranscationNonceAndGasPrice:^{
+    [self getTranscationPrice:^{
         [self updateCost];
     }];
 }
@@ -80,41 +79,78 @@
     }
 }
 
-- (IBAction)scanQRCodeAction:(id)sender {
-    QRCodeViewController *vc = [[QRCodeViewController alloc] init];
-    vc.reciveResult = ^(NSString *result) {
-        self.qrdata = [QRCodeDataModel modelWithJSON:result];
-        if (self.qrdata.type == QRCodeType_Receive) {//获取收款人钱包地址
-            self.addressTextField.text = self.qrdata.ethereum;
-        }else if (self.qrdata.type == QRCodeType_Transaction) {
-            self.signVerifyProcessView.result = self.qrdata.data;
-        }
-    };
-    [self QRCodeScanVC:vc];
+- (void)getTranscationNonceAndGasPrice:(dispatch_block_t)finish{
+    
+    BigNumberPromise *priceCallback = [self.wallet.api getGasPrice];
+    IntegerPromise *nonceCallback = [self.wallet.api getTransactionCount:[Address addressWithString:self.wallet.address]];
+    
+    if (_easyModelView.hidden) {
+        finish();
+    }else{
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+        dispatch_group_t group = dispatch_group_create();
+        dispatch_group_enter(group);
+        [nonceCallback onCompletion:^(IntegerPromise *itp) {
+            self.trans.nonce = itp.value;
+            dispatch_group_leave(group);
+        }];
+        dispatch_group_enter(group);
+        [priceCallback onCompletion:^(BigNumberPromise *p) {
+            self.gasPrice = p.value;
+            dispatch_group_leave(group);
+        }];
+        dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+            if (finish) finish();
+        });
+    }
 }
 
-- (IBAction)exchageAction:(UIButton*)sender {
-    _easyModelView.hidden = !_easyModelView.hidden;
-    _helpButton.hidden = !_helpButton.hidden;
-    [self getTranscationNonceAndGasPrice:^{
-        [self updateCost];
+- (void)getTranscationPrice:(dispatch_block_t)finish{
+    if (self.gasPrice == nil) {
+        BigNumberPromise *priceCallback = [self.wallet.api getGasPrice];
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+        [priceCallback onCompletion:^(BigNumberPromise *p) {
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+            self.gasPrice = p.value;
+            if (finish) finish();
+        }];
+    }else{
+        if (finish) finish();
+    }
+}
+
+- (void)getTranscationNonce:(dispatch_block_t)finish{
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    IntegerPromise *nonceCallback = [self.wallet.api getTransactionCount:[Address addressWithString:self.wallet.address]];
+    [nonceCallback onCompletion:^(IntegerPromise *itp) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        self.trans.nonce = itp.value;
+        if (finish) finish();
     }];
 }
 
-- (IBAction)sliderAction:(UISlider *)sender {
-    NSLog(@"Value:%f",sender.value);
-    [self updateCost];
+
+- (void)showPaymentDetailsView{
+    self.paymentFromAddressLabel.text = self.wallet.address;
+    self.paymentToAddressLabel.text = self.addressTextField.text;
+    self.paymentCostLabel.text = [NSString stringWithFormat:@"%@ETH\nGas(%@)*Gas Price(%@wei)",self.costLabel.text,self.trans.gasLimit.decimalString,self.trans.gasPrice.decimalString];
+    self.paymentAmountLabel.text = self.amountTextField.text;
+    self.paymentDetailsView.height = IPHONE_HOME_INDICATOR_HEIGHT + 284;
+    self.paymentDetailsView.width = DEVICE_SCREEN_WIDTH;
+    self.paymentDetailsView.top = DEVICE_SCREEN_HEIGHT;
+    [self dispalyCustomView:self.paymentDetailsView];
 }
 
 - (void)updateCost{
-    if (_easyModelView.hidden) {
+    if (_easyModelView.hidden) {//高级模式
         self.trans.gasPrice = [BigNumber bigNumberWithDecimalString:self.GASPriceTextField.text];
         self.trans.gasLimit = [BigNumber bigNumberWithDecimalString:self.GASTextField.text];
-        _costLabel.text = [[self.trans.gasLimit mul:[BigNumber bigNumberWithDecimalString:self.GASPriceTextField.text]].decimalString decimalNumberByDividing:DecimalNumberTenPower18];
-    }else{
+    }else{//简易模式
+        self.trans.gasPrice = self.gasPrice;
         self.trans.gasLimit = [BigNumber bigNumberWithDecimalString:[GasLimit decimalNumberByMultiplying:[NSString stringWithFormat:@"%.1f",self.mySlider.value]]];
-        _costLabel.text = [[self.trans.gasLimit mul:self.trans.gasPrice].decimalString decimalNumberByDividing:DecimalNumberTenPower18];
     }
+    _costLabel.text = [[self.trans.gasLimit mul:self.trans.gasPrice].decimalString decimalNumberByDividing:DecimalNumberTenPower18];
     NSLog(@"Limit:%@",self.trans.gasLimit.decimalString);
 }
 
@@ -134,25 +170,6 @@
         self.trans.value = [BigNumber bigNumberWithDecimalString:[self.amountTextField.text decimalNumberByMultiplying:DecimalNumberTenPower18]];
     }
 }
-
-- (IBAction)nextStepAction:(id)sender {
-    [self keyboardFinishAction];
-    if (![self checkPass]) {
-        return;
-    }
-    [self dispalyLoading:@"准备中..."];
-    [self getTranscationNonceAndGasPrice:^{
-        [self hideLoading:true];
-        [self updateCost];
-        [self updateTranscationConfiguration];
-        if (self.wallet.isObserver) {
-            [self showSignVerifyProcessView];
-        }else{
-            [self showPaymentDetailsView];
-        }
-    }];
-}
-
 
 - (void)showSignVerifyProcessView{
     QRCodeDataModel *QRCodedata = [[QRCodeDataModel alloc]init];
@@ -188,77 +205,32 @@
 
 - (BOOL)checkPass{
     if (self.addressTextField.text.length == 0) {
-        [self dispalyText:@"请输入地址"];
+        [self dispalyText:@"Please enter your address"];
         return false;
     }else if (self.amountTextField.text.length == 0){
-        [self dispalyText:@"请输入转账金额"];
+        [self dispalyText:@"Please enter your amount"];
         return false;
     }else if (self.easyModelView.hidden){
         if (self.GASPriceTextField.text.length == 0) {
-            [self dispalyText:@"请输入GAS价格"];
+            [self dispalyText:@"Please enter your GAS price"];
             return false;
         }else if (self.GASTextField.text.length == 0){
-            [self dispalyText:@"请输入GAS数量"];
+            [self dispalyText:@"Please enter your GAS"];
             return false;
         }
     }
     return true;
 }
 
-- (void)getTranscationNonceAndGasPrice:(dispatch_block_t)finish{
-    
-    BigNumberPromise *priceCallback = [self.provieder getGasPrice];
-    IntegerPromise *nonceCallback = [self.provieder getTransactionCount:[Address addressWithString:self.wallet.address]];
-    
-    if (_easyModelView.hidden) {
-        finish();
-    }else{
-        
-        dispatch_group_t group = dispatch_group_create();
-        dispatch_group_enter(group);
-        [nonceCallback onCompletion:^(IntegerPromise *itp) {
-            self.trans.nonce = itp.value;
-            dispatch_group_leave(group);
-        }];
-        dispatch_group_enter(group);
-        [priceCallback onCompletion:^(BigNumberPromise *p) {
-            self.trans.gasPrice = p.value;
-            dispatch_group_leave(group);
-        }];
-        dispatch_group_notify(group, dispatch_get_main_queue(), ^{
-            if (finish) finish();
-        });
-    }
-}
-
-- (void)showPaymentDetailsView{
-    self.paymentFromAddressLabel.text = self.wallet.address;
-    self.paymentToAddressLabel.text = self.addressTextField.text;
-    self.paymentCostLabel.text = [NSString stringWithFormat:@"%@ETH\nGas(%@)*Gas Price(%@wei)",self.costLabel.text,self.trans.gasLimit.decimalString,self.trans.gasPrice.decimalString];
-    self.paymentAmountLabel.text = self.amountTextField.text;
-    self.paymentDetailsView.height = IPHONE_HOME_INDICATOR_HEIGHT + 284;
-    self.paymentDetailsView.width = DEVICE_SCREEN_WIDTH;
-    self.paymentDetailsView.top = DEVICE_SCREEN_HEIGHT;
-    [self dispalyCustomView:self.paymentDetailsView];
-}
-
-- (IBAction)pamentDetailViewNextAction:(id)sender {
-    [self closePaymentDetailsView];
-    [self checkPassWithWallet:self.wallet completion:^(BOOL pass, Account *account) {
-        if (pass) {
-            [account sign:self.trans];
-            [self send:[self.trans serialize]];
-        }
-    }];
-}
-
 - (void)send:(NSData *)transData{
-    HashPromise *sendCallback = [self.provieder sendTransaction:transData];
-    [self dispalyLoading:@"转帐中..."];
+    HashPromise *sendCallback = [self.wallet.api sendTransaction:transData];
+    [self dispalyLoading:@"Transfer..."];
     [sendCallback onCompletion:^(HashPromise *hash) {
+        NSLog(@"transctionResult:%@",hash.value.hexString);
         [self hideLoading:NO];
+        [self closePaymentDetailsView];
         if (hash.value.hexString.length > 0) {
-            [self dispalyText:@"已转帐"];
+            [self.navigationController dispalyText:@"Transfer success!"];
             NSMutableDictionary *dic = [NSMutableDictionary dictionary];
             [dic setValue:[NSString stringWithFormat:@"%f",[NSDate date].timeIntervalSince1970] forKey:@"timestamp"];
             [dic setValue:hash.value.hexString forKey:@"hash"];
@@ -271,19 +243,85 @@
             [dic setValue:[SecureData dataToHexString:self.trans.data] forKey:@"data"];
             [dic setValue:self.trans.value.decimalString forKey:@"value"];
             [dic setValue:[self.costLabel.text decimalNumberByMultiplying:DecimalNumberTenPower18] forKey:@"gasUsed"];
-            
             TransactionInfo *info = [TransactionInfo transactionInfoFromDictionary:dic];
-            info.pending = @"Pendding";
-            [self.wallet.transactionCache addObject:info];
-            [WalletManager synchronize];
-
+            
+#if DEBUG
+            if (info.transactionHash == nil) {
+                [self dispalyConfirmText:[NSString stringWithFormat:@"交易信息缓存数据生成失败:%@",info]];
+            }
+#endif
+            if (info.transactionHash) {
+                info.pending = @"Pendding";
+                [self.wallet.transactionCache addObject:info];
+                [WalletManager synchronize];
+            }
+            [self.navigationController popViewControllerAnimated:YES];
         }else{
-            [self dispalyText:@"转帐失败"];
+            [self.navigationController dispalyText:@"Transfer fail!"];
         }
-        NSLog(@"transctionResult:%@",hash.value.hexString);
-        [self closePaymentDetailsView];
-        [self.navigationController popViewControllerAnimated:YES];
     }];
+}
+
+
+- (IBAction)exchageAction:(UIButton*)sender {
+    _easyModelView.hidden = !_easyModelView.hidden;
+    _helpButton.hidden = !_helpButton.hidden;
+    if (_easyModelView.hidden == NO) {
+        [self getTranscationPrice:^{
+            [self updateCost];
+        }];
+    }
+}
+
+- (IBAction)sliderAction:(UISlider *)sender {
+    NSLog(@"Value:%f",sender.value);
+    [self updateCost];
+}
+
+
+- (IBAction)nextStepAction:(id)sender {
+    [self keyboardFinishAction];
+    if (![self checkPass]) {
+        return;
+    }
+    [self dispalyLoading:@"Preparing..."];
+    [self getTranscationNonceAndGasPrice:^{
+        [self hideLoading:true];
+        [self updateCost];
+        [self updateTranscationConfiguration];
+        if (self.wallet.isObserver) {
+            [self showSignVerifyProcessView];
+        }else{
+            [self showPaymentDetailsView];
+        }
+    }];
+}
+
+- (IBAction)closePaymentDetailsView{
+    [self closeCustomView:self.paymentDetailsView];
+}
+
+- (IBAction)pamentDetailViewNextAction:(id)sender {
+    [self closePaymentDetailsView];
+    [self checkPassWithWallet:self.wallet completion:^(BOOL pass, Account *account) {
+        if (pass) {
+            [account sign:self.trans];
+            [self send:[self.trans serialize]];
+        }
+    }];
+}
+
+- (IBAction)scanQRCodeAction:(id)sender {
+    QRCodeViewController *vc = [[QRCodeViewController alloc] init];
+    vc.reciveResult = ^(NSString *result) {
+        self.qrdata = [QRCodeDataModel modelWithJSON:result];
+        if (self.qrdata.type == QRCodeType_Receive) {//获取收款人钱包地址
+            self.addressTextField.text = self.qrdata.ethereum;
+        }else if (self.qrdata.type == QRCodeType_Transaction) {
+            self.signVerifyProcessView.result = self.qrdata.data;
+        }
+    };
+    [self QRCodeScanVC:vc];
 }
 
 - (IBAction)contactAction:(id)sender {
@@ -293,10 +331,6 @@
         @strongify(self)
         self.addressTextField.text = contacts.walletAddress;
     };
-}
-
-- (IBAction)closePaymentDetailsView{
-    [self closeCustomView:self.paymentDetailsView];
 }
 
 - (IBAction)signHelpAction:(id)sender {
@@ -319,7 +353,6 @@
 
 - (IBAction)textFieldEditingChanged:(UITextField *)sender {
 }
-
 
 #pragma mark - 键盘处理
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
@@ -351,7 +384,6 @@
 
 - (void)closeKeyboard{
     [self.view endEditing:YES];
-//    NSLog(@"%f\n%f",self.contentScrollView.contentSize.height,self.contentScrollView.bounds.size.height);
     BOOL offestOutOfContenSize = (self.contentScrollView.contentOffset.y > (self.contentScrollView.contentSize.height - self.contentScrollView.bounds.size.height));
     if (offestOutOfContenSize) {
         [self.contentScrollView scrollToBottom];
@@ -392,21 +424,12 @@
     return textfield;
 }
 
-
 - (Transaction *)trans{
     if (!_trans) {
-        _trans = [Transaction transaction];
+        _trans = [Transaction transactionWithFromAddress:[Address addressWithString:self.wallet.address]];
     }
     return _trans;
 }
-
-- (EtherscanProvider *)provieder{
-    if (!_provieder) {
-        _provieder = [[EtherscanProvider alloc]initWithChainId:ChainType];
-    }
-    return _provieder;
-}
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

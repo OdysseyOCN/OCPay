@@ -9,6 +9,13 @@
 #import "MeViewController.h"
 #import "CreateWalletViewController.h"
 #import "ImportWalletViewController.h"
+#import "SystemSettingsViewController.h"
+
+@interface MeTableViewCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UILabel *badgeLabel;
+@end
+@implementation MeTableViewCell
+@end
 
 @interface MeViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) NSArray *icons;
@@ -18,16 +25,17 @@
 
 @implementation MeViewController
 
-//- (void)viewWillAppear:(BOOL)animated{
-//    [super viewWillAppear:animated];
-//    [self.navigationController setNavigationBarHidden:YES animated:YES];
-//}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"Me";
-    self.icons = @[@"消息中心",@"联系人",@"系统设置",@"个人中心",@"帮助中心",@"关于我们"];
-    self.titles = @[@"Message Center",@"Contacts",@"System Settings",@"Personal Center",@"Help Center",@"About Us"];
+    self.icons = @[@"消息中心",@"联系人",@"系统设置",@"cantact us",@"关于我们"];
+    self.titles = @[@"Message Center",@"Contacts",@"System Settings",@"Contact Us",@"About Us"];
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self.myTableView reloadData];
 }
 
 - (IBAction)manageWalletAction:(UIControl *)sender {
@@ -35,12 +43,7 @@
 }
 
 - (IBAction)importWalletAction:(UIControl *)sender {
-//    CreateWalletViewController *vc = [self pushViewControllerWithIdentifier:@"CreateWalletViewController" inStoryboard:@"Wallet"];
     [self pushViewControllerWithIdentifier:@"ImportWalletViewController" inStoryboard:@"Wallet"];
-}
-
-- (IBAction)shareAction:(id)sender {
-    
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -48,18 +51,41 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    if (section) {
+        return 2;
+    }
     return 3;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"myCell" forIndexPath:indexPath];
+    MeTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"myCell" forIndexPath:indexPath];
     cell.imageView.image = [UIImage imageNamed:self.icons[indexPath.section ? 3 + indexPath.row : indexPath.row]];
     cell.textLabel.text = self.titles[indexPath.section ? 3 + indexPath.row : indexPath.row];
+    cell.badgeLabel.hidden = !(indexPath.row == 0 && indexPath.section == 0 && WalletManager.share.unreadMessageCount > 0);
+    cell.badgeLabel.text = [NSString stringWithFormat:@"%ld",WalletManager.share.unreadMessageCount];
     return cell;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 10;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    return 0.01;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
+    if (indexPath.section == 0 && indexPath.row == 0) {
+        [self pushViewControllerWithIdentifier:@"MessageCenterViewController" inStoryboard:@"Main"];
+    }else if (indexPath.section == 0 && indexPath.row == 1) {
+        [self pushViewControllerWithIdentifier:@"ContactsListViewController" inStoryboard:@"Main"];
+    }else if (indexPath.section == 0 && indexPath.row == 2) {
+        [self pushViewControllerWithIdentifier:@"SystemSettingsViewController" inStoryboard:@"Main"];
+    }else if (indexPath.section == 1 && indexPath.row == 0){
+        [self pushViewControllerWithIdentifier:@"ContactUsViewController" inStoryboard:@"Main"];
+    }else if (indexPath.section == 1 && indexPath.row == 1){
+        [self pushViewControllerWithIdentifier:@"AboutUsViewController" inStoryboard:@"Main"];
+    }
 }
 
 - (void)didReceiveMemoryWarning {

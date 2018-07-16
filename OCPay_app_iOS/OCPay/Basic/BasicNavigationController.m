@@ -40,7 +40,7 @@
 
 -(void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated{
     if (self.childViewControllers.count > 0) {
-        UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc]initWithImage:[[UIImage imageNamed:@"back_black"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(popViewControllerWhenHaveChildVC)];
+        UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc]initWithImage:[[UIImage imageNamed:@"返回-黑"] imageWithRenderingMode:UIImageRenderingModeAutomatic] style:UIBarButtonItemStylePlain target:self action:@selector(popViewControllerWhenHaveChildVC)];
         viewController.navigationItem.leftBarButtonItem = barButtonItem;
         viewController.hidesBottomBarWhenPushed = YES;
         self.interactivePopGestureRecognizer.delegate = self;

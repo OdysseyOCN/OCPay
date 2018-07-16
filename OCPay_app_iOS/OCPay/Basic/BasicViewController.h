@@ -8,11 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface BasicViewController : UIViewController <YYTextKeyboardObserver>
-@property (nonatomic, strong) YYTextKeyboardManager *manager;
-@property (nonatomic, strong) UIToolbar *textFieldAccessoryView;
+@interface BasicViewController : UIViewController 
+@property (nonatomic, strong) YYTextKeyboardManager *keyboardmanager;
 @property (nonatomic) BOOL isFromFirstCreate;
 @property (nonatomic) NSString *QRCodeResultString;
-- (void)keyboardFinishAction;
-- (void)setScrollViewContentInsetAdjustmentNever:(UIScrollView*)scrollView;
+@property (nonatomic, strong) UIScrollView *neverAdjustContentInserScrollView;
 @end

@@ -266,6 +266,13 @@ public class DateUtils {
         }
     }
 
+    public static Date getDateByDistenceSeconds(Date date, int seconds) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(13, seconds);
+        return calendar.getTime();
+    }
+
 
 
 

@@ -583,4 +583,37 @@ public class HttpRequestUtil {
         String versionStr = version.replace(".", "");
         return Integer.parseInt(versionStr);
     }
+
+
+    //调用接收方式是RequestBody形式的POST请求
+    public static String doPostRequestBody(String urlStr, Object object) {
+        String result = "";
+        String postData = JSON.toJSONString(object);
+        CloseableHttpResponse response = null;
+        CloseableHttpClient httpclient = null;
+        try {
+            httpclient =  HttpClients.createDefault();
+            HttpPost httpPost = new HttpPost(urlStr);
+            httpPost.setHeader("Accept", "application/json");
+            httpPost.setHeader("Content-Type", "application/json");
+            HttpEntity entity = new ByteArrayEntity(postData.getBytes(UTF8));
+            httpPost.setEntity(entity);
+            response = httpclient.execute(httpPost);
+            result = EntityUtils.toString(response.getEntity());
+        } catch (Exception e) {
+            logger.error("请求失败,url:"+urlStr+"params:"+postData,e);
+        } finally {
+            try {
+                if(response!=null){
+                    response.close();
+                }
+                if(httpclient!=null){
+                    httpclient.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
 }

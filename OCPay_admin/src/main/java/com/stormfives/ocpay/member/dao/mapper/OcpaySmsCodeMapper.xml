@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.stormfives.ocpay.member.dao.OcpaySmsCodeMapper" >
+  <resultMap id="BaseResultMap" type="com.stormfives.ocpay.member.dao.entity.OcpaySmsCode" >
+    <id column="escid" property="escid" jdbcType="INTEGER" />
+    <result column="esccode" property="esccode" jdbcType="VARCHAR" />
+    <result column="escphone" property="escphone" jdbcType="VARCHAR" />
+    <result column="esccreatedate" property="esccreatedate" jdbcType="TIMESTAMP" />
+    <result column="escexpiredate" property="escexpiredate" jdbcType="TIMESTAMP" />
+    <result column="escvalid" property="escvalid" jdbcType="INTEGER" />
+    <result column="escphonepre" property="escphonepre" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    escid, esccode, escphone, esccreatedate, escexpiredate, escvalid, escphonepre
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.stormfives.ocpay.member.dao.entity.OcpaySmsCodeExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from ocpay_sms_code
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from ocpay_sms_code
+    where escid = #{escid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ocpay_sms_code
+    where escid = #{escid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.stormfives.ocpay.member.dao.entity.OcpaySmsCodeExample" >
+    delete from ocpay_sms_code
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.stormfives.ocpay.member.dao.entity.OcpaySmsCode" >
+    insert into ocpay_sms_code (escid, esccode, escphone, 
+      esccreatedate, escexpiredate, escvalid, 
+      escphonepre)
+    values (#{escid,jdbcType=INTEGER}, #{esccode,jdbcType=VARCHAR}, #{escphone,jdbcType=VARCHAR}, 
+      #{esccreatedate,jdbcType=TIMESTAMP}, #{escexpiredate,jdbcType=TIMESTAMP}, #{escvalid,jdbcType=INTEGER}, 
+      #{escphonepre,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.stormfives.ocpay.member.dao.entity.OcpaySmsCode" >
+    insert into ocpay_sms_code
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="escid != null" >
+        escid,
+      </if>
+      <if test="esccode != null" >
+        esccode,
+      </if>
+      <if test="escphone != null" >
+        escphone,
+      </if>
+      <if test="esccreatedate != null" >
+        esccreatedate,
+      </if>
+      <if test="escexpiredate != null" >
+        escexpiredate,
+      </if>
+      <if test="escvalid != null" >
+        escvalid,
+      </if>
+      <if test="escphonepre != null" >
+        escphonepre,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="escid != null" >
+        #{escid,jdbcType=INTEGER},
+      </if>
+      <if test="esccode != null" >
+        #{esccode,jdbcType=VARCHAR},
+      </if>
+      <if test="escphone != null" >
+        #{escphone,jdbcType=VARCHAR},
+      </if>
+      <if test="esccreatedate != null" >
+        #{esccreatedate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="escexpiredate != null" >
+        #{escexpiredate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="escvalid != null" >
+        #{escvalid,jdbcType=INTEGER},
+      </if>
+      <if test="escphonepre != null" >
+        #{escphonepre,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.stormfives.ocpay.member.dao.entity.OcpaySmsCodeExample" resultType="java.lang.Integer" >
+    select count(*) from ocpay_sms_code
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update ocpay_sms_code
+    <set >
+      <if test="record.escid != null" >
+        escid = #{record.escid,jdbcType=INTEGER},
+      </if>
+      <if test="record.esccode != null" >
+        esccode = #{record.esccode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.escphone != null" >
+        escphone = #{record.escphone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.esccreatedate != null" >
+        esccreatedate = #{record.esccreatedate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.escexpiredate != null" >
+        escexpiredate = #{record.escexpiredate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.escvalid != null" >
+        escvalid = #{record.escvalid,jdbcType=INTEGER},
+      </if>
+      <if test="record.escphonepre != null" >
+        escphonepre = #{record.escphonepre,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update ocpay_sms_code
+    set escid = #{record.escid,jdbcType=INTEGER},
+      esccode = #{record.esccode,jdbcType=VARCHAR},
+      escphone = #{record.escphone,jdbcType=VARCHAR},
+      esccreatedate = #{record.esccreatedate,jdbcType=TIMESTAMP},
+      escexpiredate = #{record.escexpiredate,jdbcType=TIMESTAMP},
+      escvalid = #{record.escvalid,jdbcType=INTEGER},
+      escphonepre = #{record.escphonepre,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.stormfives.ocpay.member.dao.entity.OcpaySmsCode" >
+    update ocpay_sms_code
+    <set >
+      <if test="esccode != null" >
+        esccode = #{esccode,jdbcType=VARCHAR},
+      </if>
+      <if test="escphone != null" >
+        escphone = #{escphone,jdbcType=VARCHAR},
+      </if>
+      <if test="esccreatedate != null" >
+        esccreatedate = #{esccreatedate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="escexpiredate != null" >
+        escexpiredate = #{escexpiredate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="escvalid != null" >
+        escvalid = #{escvalid,jdbcType=INTEGER},
+      </if>
+      <if test="escphonepre != null" >
+        escphonepre = #{escphonepre,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where escid = #{escid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.stormfives.ocpay.member.dao.entity.OcpaySmsCode" >
+    update ocpay_sms_code
+    set esccode = #{esccode,jdbcType=VARCHAR},
+      escphone = #{escphone,jdbcType=VARCHAR},
+      esccreatedate = #{esccreatedate,jdbcType=TIMESTAMP},
+      escexpiredate = #{escexpiredate,jdbcType=TIMESTAMP},
+      escvalid = #{escvalid,jdbcType=INTEGER},
+      escphonepre = #{escphonepre,jdbcType=VARCHAR}
+    where escid = #{escid,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -3,13 +3,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.stormfives.admin</groupId>
-	<artifactId>admin_wallet</artifactId>
+	<groupId>com.stormfives.ocpay</groupId>
+	<artifactId>admin_ocpay</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>admin_wallet</name>
-	<description>admin_wallet System</description>
+	<name>admin_ocpay</name>
+	<description>admin_ocpay System</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -140,12 +140,6 @@
 			</exclusions>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>4.5.4</version>
-		</dependency>
 
 		<!-- JSON解析 -->
 		<dependency>
@@ -231,7 +225,16 @@
 			<artifactId>aws-java-sdk-s3</artifactId>
 			<version>1.11.63</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.4</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>3.1</version>
+		</dependency>
 		<!--Bean properties copy util -->
 		<dependency>
 			<groupId>commons-beanutils</groupId>
@@ -243,6 +246,14 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>3.4</version>
 		</dependency>
+
+		<!--google短信格式校验 -->
+		<dependency>
+			<groupId>com.googlecode.libphonenumber</groupId>
+			<artifactId>libphonenumber</artifactId>
+			<version>8.8.8</version>
+		</dependency>
+
 
 		<!-- poi -->
 		<dependency>

@@ -19,7 +19,7 @@
     // Do any additional setup after loading the view.
     [self.childViewControllers enumerateObjectsUsingBlock:^(__kindof UIViewController * _Nonnull childController, NSUInteger idx, BOOL * _Nonnull stop) {
         [childController.tabBarItem setImage:[childController.tabBarItem.image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-        [childController.tabBarItem setSelectedImage:[childController.tabBarItem.image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+        [childController.tabBarItem setSelectedImage:[childController.tabBarItem.selectedImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
         [childController.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName:UIColorHex(0x282828)} forState:UIControlStateNormal];
         [childController.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName:UIColorHex(0x282828)} forState:UIControlStateSelected];
     }];

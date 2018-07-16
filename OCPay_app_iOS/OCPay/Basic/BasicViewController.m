@@ -8,8 +8,7 @@
 
 #import "BasicViewController.h"
 
-@interface BasicViewController ()
-@property (nonatomic, strong) UIScrollView *myScrollView;
+@interface BasicViewController() <YYTextKeyboardObserver>
 @end
 
 @implementation BasicViewController
@@ -20,53 +19,36 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
 }
 
-- (void)setScrollViewContentInsetAdjustmentNever:(UIScrollView*)scrollView{
-    self.myScrollView = scrollView;
+- (void)setNeverAdjustContentInserScrollView:(UIScrollView *)neverAdjustContentInserScrollView{
+    _neverAdjustContentInserScrollView = neverAdjustContentInserScrollView;
     if (@available(iOS 11.0, *)) {
-        [scrollView setContentInsetAdjustmentBehavior:UIScrollViewContentInsetAdjustmentNever];
+        [neverAdjustContentInserScrollView setContentInsetAdjustmentBehavior:UIScrollViewContentInsetAdjustmentNever];
     }
 }
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    if (self.myScrollView) {
+    if (self.neverAdjustContentInserScrollView) {
         [(BasicNavigationController*)self.navigationController setNavigationBarTransparent];
     }
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    if (self.myScrollView) {
+    if (self.neverAdjustContentInserScrollView) {
         [(BasicNavigationController*)self.navigationController reverseNavigationBar];
     }
 }
 
-- (YYTextKeyboardManager *)manager{
-    if (!_manager) {
-        _manager = [YYTextKeyboardManager defaultManager];
+- (YYTextKeyboardManager *)keyboardmanager{
+    if (!_keyboardmanager) {
+        _keyboardmanager = [YYTextKeyboardManager defaultManager];
     }
-    return _manager;
-}
-
-- (UIToolbar *)textFieldAccessoryView{
-    if (!_textFieldAccessoryView) {
-        _textFieldAccessoryView = [[UIToolbar alloc]init];
-        [_textFieldAccessoryView sizeToFit];
-        [_textFieldAccessoryView setBarStyle:UIBarStyleDefault];
-        UIBarButtonItem *btnSpace =[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
-        UIBarButtonItem * completeButton =[[UIBarButtonItem alloc] initWithTitle:@"完成" style:UIBarButtonItemStyleDone target:self action:@selector(keyboardFinishAction)];
-        NSArray *buttonsArray = [NSArray arrayWithObjects:btnSpace,completeButton,nil];
-        [_textFieldAccessoryView setItems:buttonsArray];
-    }
-    return _textFieldAccessoryView;
-}
-
-- (void)keyboardFinishAction{
-    [self.view endEditing:YES];
+    return _keyboardmanager;
 }
 
 - (void)dealloc{
-    [_manager removeObserver:self];
+    [_keyboardmanager removeObserver:self];
     NSLog(@"%@ 已释放",NSStringFromClass(self.class));
 }
 

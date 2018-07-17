@@ -39,6 +39,7 @@ static NetWorkManager *manager;
                    uploadProgress:(nullable void (^)(NSProgress *uploadProgress)) uploadProgressBlock
                  downloadProgress:(nullable void (^)(NSProgress *downloadProgress)) downloadProgressBlock
                 completionHandler:(nullable void (^)(id _Nullable responseObject,  NSError * _Nullable error))completionHandler {
+    NSLog(@"%@请求：%@ 参数：\n%@",method,URLString,parameters);
     NSError *error = nil;
     NSMutableDictionary *par = [NSMutableDictionary dictionaryWithDictionary:parameters];
     NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] requestWithMethod:method URLString:URLString parameters:par error:&error];
@@ -63,7 +64,6 @@ static NetWorkManager *manager;
         parameters:(NSDictionary *)parameters
            success:(Success)success
            failure:(Failure)failure{
-    NSLog(@"GET请求：%@ 参数：\n%@",URLString,parameters);
     [self sendRequestWithHTTPMethod:@"GET" URLString:URLString parameters:parameters uploadProgress:nil downloadProgress:nil completionHandler:^(id  _Nullable responseObject, NSError * _Nullable error) {
         if (responseObject) {
             success(responseObject);
@@ -78,7 +78,6 @@ static NetWorkManager *manager;
          parameters:(id)parameters
             success:(Success)success
             failure:(Failure)failure{
-    NSLog(@"POST请求：%@ 参数：\n%@",URLString,parameters);
     [self sendRequestWithHTTPMethod:@"POST" URLString:URLString parameters:parameters uploadProgress:nil downloadProgress:nil completionHandler:^(id  _Nullable responseObject, NSError * _Nullable error) {
         if (responseObject) {
             success(responseObject);

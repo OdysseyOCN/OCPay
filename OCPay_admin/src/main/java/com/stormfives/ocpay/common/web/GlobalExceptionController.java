@@ -3,7 +3,6 @@ package com.stormfives.ocpay.common.web;
 
 import com.stormfives.ocpay.common.util.EnumerationUtils;
 import com.stormfives.ocpay.common.response.FailResponse;
-import com.stormfives.ocpay.common.util.MessageSourceUtil;
 import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,9 +40,9 @@ public class GlobalExceptionController {
      * 日志记录类.
      */
     private Logger logger = LoggerFactory.getLogger(GlobalExceptionController.class);
-
-    @Autowired
-    private MessageSourceUtil messageSource;
+//
+//    @Autowired
+//    private MessageSourceUtil messageSource;
 
     /**
      * 异常处理类.
@@ -54,7 +53,7 @@ public class GlobalExceptionController {
     @ResponseBody
     public final FailResponse handleException(HttpServletRequest request, Exception e) {
         int code = HttpStatus.SC_INTERNAL_SERVER_ERROR;
-        String message = messageSource.getMessage("error");    //默认消息
+        String message = "Server is busy,please try later";    //默认消息
         ResponseStatus status = e.getClass().getAnnotation(ResponseStatus.class);
         if (status != null) {
             code = status.value().value();

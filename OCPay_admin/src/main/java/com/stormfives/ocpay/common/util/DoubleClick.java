@@ -16,8 +16,8 @@ public class DoubleClick {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
-    @Autowired
-    private MessageSourceUtil messageSourceUtil;
+//    @Autowired
+//    private MessageSourceUtil messageSourceUtil;
 
     /**
      * 所有参数是为英文    默认超时时间是30秒
@@ -47,7 +47,7 @@ public class DoubleClick {
         long value = redisTemplate.opsForValue().increment(key, 1);
 
         if (value > 1) {
-            throw new InvalidArgumentException(messageSourceUtil.getMessage("pinfan"));
+            throw new InvalidArgumentException("Can’t submit again. please try later");
         } else {
             redisTemplate.expire(key, time, TimeUnit.SECONDS);
             return true;

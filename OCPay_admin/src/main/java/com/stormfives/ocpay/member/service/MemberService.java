@@ -1,8 +1,14 @@
-package com.stormfives.ocpay.member;
+package com.stormfives.ocpay.member.service;
 
+import com.alibaba.fastjson.JSON;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 import com.stormfives.ocpay.common.Constants;
+import com.stormfives.ocpay.common.config.InitConfig;
+import com.stormfives.ocpay.common.email.EmailAddress;
+import com.stormfives.ocpay.common.email.EmailConfig;
+import com.stormfives.ocpay.common.email.EmailInfo;
+import com.stormfives.ocpay.common.email.SendEmailService;
 import com.stormfives.ocpay.common.exception.InvalidArgumentException;
 import com.stormfives.ocpay.common.response.FailResponse;
 import com.stormfives.ocpay.common.response.ResponseValue;
@@ -19,7 +25,7 @@ import com.stormfives.ocpay.member.dao.EmailWalletAddressMapper;
 import com.stormfives.ocpay.member.dao.MemberMapper;
 import com.stormfives.ocpay.member.dao.OcpaySmsCodeDao;
 import com.stormfives.ocpay.member.dao.entity.*;
-import com.stormfives.ocpay.token.common.BCrypt;
+import com.stormfives.ocpay.member.rabbit.RabbitConfig;
 import com.stormfives.ocpay.token.domain.Token;
 import com.stormfives.ocpay.token.service.OauthService;
 import com.stormfives.ocpay.token.vo.TokenVo;
@@ -28,13 +34,16 @@ import org.apache.oltu.oauth2.as.issuer.MD5Generator;
 import org.apache.oltu.oauth2.as.issuer.OAuthIssuerImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.web3j.crypto.WalletUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
@@ -61,6 +70,13 @@ public class MemberService {
     @Autowired
     private OcpaySmsCodeDao ocpaySmsCodeDao;
 
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    private InitConfig initConfig;
+
     private static PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
 
 
@@ -79,8 +95,7 @@ public class MemberService {
         //1. 创建用户
         member = new Member();
         member.setPhone(saveUserReq.getPhone());
-        String passwordDigest = BCrypt.hashpw(saveUserReq.getPassword(), BCrypt.gensalt());
-        member.setPassword(passwordDigest);
+        member.setPassword(saveUserReq.getPassword());
         if (StringUtils.isNotBlank(saveUserReq.getWalletAddress())) {
             boolean validAddress = WalletUtils.isValidAddress(saveUserReq.getWalletAddress());
             if (!validAddress) {
@@ -231,23 +246,23 @@ public class MemberService {
 
     public ResponseValue login(SaveUserReq userLoginReq) throws InvalidArgumentException {
         if (StringUtils.isBlank(userLoginReq.getPhone())) {
-            return new FailResponse("phone is null");
+            return new FailResponse("Account or password error");
         }
         if (userLoginReq.getCountryCode() == null) {
-            return new FailResponse("countryId is null");
+            return new FailResponse("Account or password error");
         }
         Member member = getMember(userLoginReq.getPhone(), userLoginReq.getCountryCode());
         if (member == null) {
-            return new FailResponse("The member is not exist");
+            return new FailResponse("Account or password error");
         }
-        boolean flag = BCrypt.checkpw(userLoginReq.getPassword(), member.getPassword());
+        boolean flag = confirmPassword(member, userLoginReq.getPassword());
         if (flag) {
             TokenVo tokenVo = new TokenVo();
             Token token = oauthService.generateToken(member.getId(), "member");
             BeanUtils.copyProperties(token, tokenVo);
             return new SuccessResponse(tokenVo);
         }
-        return new FailResponse("phone or password error!");
+        return new FailResponse("Account or password error");
     }
 
     //获取一个随机token
@@ -294,7 +309,7 @@ public class MemberService {
             return new FailResponse("token is null");
         }
         String phone = redisTemplate.opsForValue().get(req.getAccesstoken());
-        if (StringUtils.isBlank(phone) || !req.getPhone().equals(phone)) {
+        if (StringUtils.isBlank(phone) || !phone.equals(req.getPhone())) {
             return new FailResponse("token is error");
         }
         redisTemplate.delete(req.getAccesstoken());
@@ -303,8 +318,7 @@ public class MemberService {
         if (member != null) {
             Member update = new Member();
             update.setId(member.getId());
-            String passwordDigest = BCrypt.hashpw(req.getNewPassword(), BCrypt.gensalt());
-            update.setPassword(passwordDigest);
+            update.setPassword(req.getNewPassword());
             update.setUpdateTime(new Date());
             int i = memberMapper.updateByPrimaryKeySelective(update);
             if (i > 0) {
@@ -314,23 +328,70 @@ public class MemberService {
         return new FailResponse("reset password error");
     }
 
-    public ResponseValue saveMailWallet(MailWalletReq mailWalletReq) {
-        if (!StringUtil.isEmail(mailWalletReq.getEmail())) {
-            return new FailResponse("email format error!");
+    public ResponseValue saveMailWallet(String email,String walletAddress) {
+        if (StringUtils.isBlank(email)) {
+            return new FailResponse("Your E-mail is null");
         }
-        boolean validAddress = WalletUtils.isValidAddress(mailWalletReq.getWalletAddress());
+        if (!StringUtil.isEmail(email)) {
+            return new FailResponse("E-mail format error!");
+        }
+        boolean validAddress = WalletUtils.isValidAddress(walletAddress);
         if (!validAddress) {
             return new FailResponse("Your wallet address is error");
         }
+        EmailWalletAddressExample emailWalletAddressExample = new EmailWalletAddressExample();
+        emailWalletAddressExample.or().andEmailEqualTo(email);
+        EmailWalletAddress eamilWallet = getEmailWalletAddress(emailWalletAddressExample);
+        if (eamilWallet != null) {
+            return new FailResponse("Your E-mail is used");
+        }
+        emailWalletAddressExample.clear();
+        emailWalletAddressExample.or().andWalletAddressEqualTo(walletAddress);
+        eamilWallet = getEmailWalletAddress(emailWalletAddressExample);
+        if (eamilWallet != null) {
+            return new FailResponse("Your wallet address is used");
+        }
+
         EmailWalletAddress emailWalletAddress = new EmailWalletAddress();
-        emailWalletAddress.setEamil(mailWalletReq.getEmail());
+        emailWalletAddress.setEmail(email);
         emailWalletAddress.setCreateTime(new Date());
-        emailWalletAddress.setWalletAddress(mailWalletReq.getWalletAddress());
+        emailWalletAddress.setWalletAddress(walletAddress);
         int i = emailWalletAddressMapper.insertSelective(emailWalletAddress);
         if (i > 0) {
+            MailWalletReq mailWalletReq = new MailWalletReq();
+            mailWalletReq.setEmail(email);
+            mailWalletReq.setWalletAddress(walletAddress);
+            rabbitTemplate.convertAndSend(RabbitConfig.SEND_ADDRESS_MAIL, JSON.toJSONString(mailWalletReq));
+
             return new SuccessResponse("Success");
+
         }
         return new FailResponse("Faild");
+    }
+
+    private EmailWalletAddress getEmailWalletAddress(EmailWalletAddressExample emailWalletAddressExample) {
+        return emailWalletAddressMapper.selectByExample(emailWalletAddressExample).stream().findFirst().orElse(null);
+    }
+
+    public void sendMail(MailWalletReq mailWalletReq) {
+        EmailInfo info = new EmailInfo();
+        EmailAddress sender = new EmailAddress(initConfig.emailaddress, initConfig.emailnickname);
+        List<EmailAddress> receivelist = new ArrayList<>();
+        receivelist.add(new EmailAddress(mailWalletReq.getEmail()));
+        String content = "You have successfully participated in the delivery of OCP airdrop.<br/>" +
+                "<br/>" +
+                "Your wallet address is:<br/>" +
+                "<br/>" +
+                "&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; " + mailWalletReq.getWalletAddress() + "<br/>" +
+                "<br/>" +
+                " &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Odyssey Team";
+        info.setSubject("OCPay Email confirmation");
+        info.setSender(sender);
+        info.setToPeople(receivelist);
+        info.setUserPwd(initConfig.emailpassword);
+        info.setContent(content);
+        EmailConfig config = new EmailConfig(initConfig.emailsmtphost, initConfig.emailsmtpport);
+        SendEmailService.sendTextEmail(info, config);
     }
 
     public ResponseValue updateWalletAddress(SaveUserReq walletReq, Integer memberId) {
@@ -370,6 +431,7 @@ public class MemberService {
         MemberVo memberVo = new MemberVo();
         memberVo.setPhone(member.getPhone());
         memberVo.setWalletAddress(member.getWalletAddress());
+        memberVo.setCountryCode(member.getPhonepreid());
         return new SuccessResponse(memberVo);
     }
 
@@ -381,10 +443,18 @@ public class MemberService {
         if (member == null) {
             return new FailResponse("member is null");
         }
-        boolean flag = BCrypt.checkpw(saveUserReq.getPassword(), member.getPassword());
-        if (flag){
+        boolean flag =confirmPassword(member,saveUserReq.getPassword());
+        if (flag) {
             return new SuccessResponse("successful");
         }
         return new FailResponse("failed");
     }
+
+    private boolean confirmPassword(Member member, String password) {
+        if (member.getPassword().equals(password)){
+            return true;
+        }
+        return false;
+    }
+
 }

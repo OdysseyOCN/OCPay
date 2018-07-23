@@ -2,13 +2,12 @@
     <string name="app_name">OCPay</string>
 
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="send">SEND</string>
 
 
     <string name="address_copied_to_clipboard">Copied to Clipboard</string>
-    <string name="copy_qr_code_address">Copy QR code payment address</string>
+    <string name="copy_qr_code_address">Copy Wallet Address</string>
 
 
     <string name="activity_qr_code">Receipt QR code</string>
@@ -40,7 +39,7 @@
     <string name="backup_wallet_tip_content_p1">Block chain wallet is different from traditional website account. It is a de centralized accounting system for cryptography. </string>
     <string name="backup_wallet_tip_content_p2"> You must keep your wallet\'s private key and transaction password, any thought that it will lead to loss of assets.</string>
     <string name="backup_wallet_tip_content_p3"> We suggest that we do double backup first, then enter the small test, and finally start to use it happily.</string>
-    <string name="backup_wallet_mnemonic">Backup payment platform</string>
+    <string name="backup_wallet_mnemonic">Backup OCPay</string>
     <string name="wallet_detail">Wallet Detail</string>
     <string name="modify_current_password">Current Password</string>
     <string name="modify_new_password">New Password</string>
@@ -147,9 +146,9 @@
     <string name="tip_copyright">Copyright 2018 Odyssey \nAll right reserved</string>
 
     <!--notification -->
-    <string name="tip_notification_received_successfully">received successfully</string>
-    <string name="tip_notification_sent_successfully">sent successfully</string>
-    <string name="tip_notification_sent_failed_Sender">sent Failed</string>
+    <string name="tip_notification_received_successfully">Received Successfully</string>
+    <string name="tip_notification_sent_successfully">Sent Successfully</string>
+    <string name="tip_notification_sent_failed_Sender">Sent Failed</string>
     <string name="notification_sender">Sender</string>
     <string name="notification_receiver">Receiver</string>
     <string name="ocp_official">OCPay</string>
@@ -185,7 +184,7 @@
     <string name="settings_message_center">Message Center</string>
     <string name="settings_contacts">Contacts</string>
     <string name="settings_system">System Settings</string>
-    <string name="settings_user">Personal Center</string>
+    <string name="settings_user">My Account</string>
     <string name="settings_help">Help Center</string>
     <string name="settings_about_us">About Us</string>
     <string name="fragment_title_me">Me</string>
@@ -233,12 +232,43 @@
     <string name="tip_scanlog_watch_title">complete sign</string>
     <string name="tip_scanlog_watch_hint">Input signature</string>
     <string name="tip_scanlog_watch_action">Complete Sign</string>
-    <string name="tip_scanlog_transaction_title">import signature</string>
+    <string name="tip_scanlog_transaction_title">Import signature</string>
     <string name="tip_scanlog_transaction_hint">Signature</string>
     <string name="tip_scanlog_transaction_action">Sending Transaction</string>
+    <string name="tip_pending">PENDING...</string>
 
 
-    <!--other-->
+    <!--sign up-->
+    <string name="tip_country">Country</string>
+    <string name="tip_phone_number">Phone Number</string>
+    <string name="tip_code">Code</string>
+    <string name="tip_phone">Phone</string>
+    <string name="tip_sign_up">Sign up</string>
+    <string name="activity_title_sign_up">Sign Up</string>
+    <string name="activity_title_reset_pwd">Reset Password</string>
+    <string name="tip_sign_in">Sign in</string>
+    <string name="activity_title_sign_in">Sign In</string>
+    <string name="tip_change_wallet">Change Wallet Address</string>
+    <string name="tip_ocn_wallet">OCN Wallet</string>
+
+
+    <!--select country-->
+    <string name="activity_title_select_country">Select Country</string>
+    <string name="tip_get_code">Get Code</string>
+    <string name="tip_log_out">Log out</string>
+    <string name="tip_sign_up_success">Sign Up Successful !</string>
+    <string name="tip_reset_success">Reset Successful !</string>
+    <string name="response_code_failed">Failed !</string>
+    <string name="tip_invalid_phone_number">Invalid Phone Number !</string>
+    <string name="tip_send_successful">Send Successful !</string>
+    <string name="title_ocn_wallet">OCN Wallet</string>
+    <string name="tip_enter_pwd">Please Enter Your password</string>
+    <string name="tip_enter_wallet">Please Enter Your Wallet Address</string>
+    <string name="tip_invalid_address">Invalid Address</string>
+    <string name="tip_modify_address_successful">The wallet address was submitted successfully. </string>
+    <string name="tip_sign_in_success">Sign In Successful !</string>
+    <string name="tip_account_pwd_error">Account or password error</string>
+    <string name="tip_ensure_particippation">Please submit your wallet address to ensure participation.</string>
 
 
 </resources>

@@ -10,7 +10,7 @@ public class SuccessResponse extends ResponseValue {
 
     public SuccessResponse(Object data) {
         this.setSuccess(true);
-        this.setData(data);
+        setData(data);
     }
 
     public SuccessResponse(String key, Object data) {

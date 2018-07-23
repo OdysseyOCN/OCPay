@@ -27,8 +27,8 @@ public class PictureCodeService {
     @Autowired
     private RedisTemplate<String,String> redisTemplate;
 
-    @Autowired
-    private MessageSourceUtil messageSourceUtil;
+//    @Autowired
+//    private MessageSourceUtil messageSourceUtil;
 
     /**
      * 添加图片验证码
@@ -69,7 +69,7 @@ public class PictureCodeService {
             return responseMap;
         } catch (Exception e) {
             logger.error("获取图片验证码出错,exception={}", e);
-            throw new InvalidArgumentException(messageSourceUtil.getMessage("error"));
+            throw new InvalidArgumentException("Server is busy,please try later");
         }
     }
 

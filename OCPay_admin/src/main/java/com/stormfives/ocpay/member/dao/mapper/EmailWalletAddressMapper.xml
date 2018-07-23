@@ -3,7 +3,7 @@
 <mapper namespace="com.stormfives.ocpay.member.dao.EmailWalletAddressMapper" >
   <resultMap id="BaseResultMap" type="com.stormfives.ocpay.member.dao.entity.EmailWalletAddress" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="eamil" property="eamil" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
     <result column="wallet_address" property="walletAddress" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
   </resultMap>
@@ -66,7 +66,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, eamil, wallet_address, create_time
+    id, email, wallet_address, create_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.stormfives.ocpay.member.dao.entity.EmailWalletAddressExample" >
     select
@@ -100,9 +100,9 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.stormfives.ocpay.member.dao.entity.EmailWalletAddress" >
-    insert into email_wallet_address (id, eamil, wallet_address, 
+    insert into email_wallet_address (id, email, wallet_address, 
       create_time)
-    values (#{id,jdbcType=INTEGER}, #{eamil,jdbcType=VARCHAR}, #{walletAddress,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR}, #{walletAddress,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.stormfives.ocpay.member.dao.entity.EmailWalletAddress" >
@@ -111,8 +111,8 @@
       <if test="id != null" >
         id,
       </if>
-      <if test="eamil != null" >
-        eamil,
+      <if test="email != null" >
+        email,
       </if>
       <if test="walletAddress != null" >
         wallet_address,
@@ -125,8 +125,8 @@
       <if test="id != null" >
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="eamil != null" >
-        #{eamil,jdbcType=VARCHAR},
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
       </if>
       <if test="walletAddress != null" >
         #{walletAddress,jdbcType=VARCHAR},
@@ -148,8 +148,8 @@
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.eamil != null" >
-        eamil = #{record.eamil,jdbcType=VARCHAR},
+      <if test="record.email != null" >
+        email = #{record.email,jdbcType=VARCHAR},
       </if>
       <if test="record.walletAddress != null" >
         wallet_address = #{record.walletAddress,jdbcType=VARCHAR},
@@ -165,7 +165,7 @@
   <update id="updateByExample" parameterType="map" >
     update email_wallet_address
     set id = #{record.id,jdbcType=INTEGER},
-      eamil = #{record.eamil,jdbcType=VARCHAR},
+      email = #{record.email,jdbcType=VARCHAR},
       wallet_address = #{record.walletAddress,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
@@ -175,8 +175,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.stormfives.ocpay.member.dao.entity.EmailWalletAddress" >
     update email_wallet_address
     <set >
-      <if test="eamil != null" >
-        eamil = #{eamil,jdbcType=VARCHAR},
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
       </if>
       <if test="walletAddress != null" >
         wallet_address = #{walletAddress,jdbcType=VARCHAR},
@@ -189,7 +189,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.stormfives.ocpay.member.dao.entity.EmailWalletAddress" >
     update email_wallet_address
-    set eamil = #{eamil,jdbcType=VARCHAR},
+    set email = #{email,jdbcType=VARCHAR},
       wallet_address = #{walletAddress,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}

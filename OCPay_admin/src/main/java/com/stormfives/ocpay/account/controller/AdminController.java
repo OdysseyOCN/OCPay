@@ -6,7 +6,6 @@ import com.stormfives.ocpay.common.exception.InvalidArgumentException;
 import com.stormfives.ocpay.common.response.FailResponse;
 import com.stormfives.ocpay.common.response.ResponseValue;
 import com.stormfives.ocpay.common.response.SuccessResponse;
-import com.stormfives.ocpay.common.util.MessageSourceUtil;
 import com.stormfives.ocpay.token.domain.Page;
 import com.stormfives.ocpay.token.vo.TokenVo;
 import org.slf4j.Logger;
@@ -27,9 +26,9 @@ import javax.servlet.http.HttpServletRequest;
 public class AdminController {
 
     private Logger logger = LoggerFactory.getLogger(AdminController.class);
-
-    @Autowired
-    private MessageSourceUtil messageSourceUtil;
+//
+//    @Autowired
+//    private MessageSourceUtil messageSourceUtil;
 
     @Autowired
     private AdminService adminService;
@@ -74,7 +73,7 @@ public class AdminController {
         }
 
         if (success)
-            return new SuccessResponse("message", messageSourceUtil.getMessage("success"));
+            return new SuccessResponse("message", "Successful");
 
         return new FailResponse("新增账户失败");
     }
@@ -105,7 +104,7 @@ public class AdminController {
         }
 
         if (success)
-            return new SuccessResponse("message", messageSourceUtil.getMessage("success"));
+            return new SuccessResponse("message", "Successful");
 
         return new FailResponse("修改密码失败!");
     }

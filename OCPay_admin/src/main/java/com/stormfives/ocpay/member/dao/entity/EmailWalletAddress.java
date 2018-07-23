@@ -5,7 +5,7 @@ import java.util.Date;
 public class EmailWalletAddress {
     private Integer id;
 
-    private String eamil;
+    private String email;
 
     private String walletAddress;
 
@@ -19,12 +19,12 @@ public class EmailWalletAddress {
         this.id = id;
     }
 
-    public String getEamil() {
-        return eamil;
+    public String getEmail() {
+        return email;
     }
 
-    public void setEamil(String eamil) {
-        this.eamil = eamil;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getWalletAddress() {

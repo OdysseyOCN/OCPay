@@ -20,8 +20,9 @@
     [self.childViewControllers enumerateObjectsUsingBlock:^(__kindof UIViewController * _Nonnull childController, NSUInteger idx, BOOL * _Nonnull stop) {
         [childController.tabBarItem setImage:[childController.tabBarItem.image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
         [childController.tabBarItem setSelectedImage:[childController.tabBarItem.selectedImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-        [childController.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName:UIColorHex(0x282828)} forState:UIControlStateNormal];
-        [childController.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName:UIColorHex(0x282828)} forState:UIControlStateSelected];
+        [childController.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName:UIColorHex(0xdddddd)} forState:UIControlStateNormal];
+        [childController.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName:TintColor} forState:UIControlStateSelected];
+        [childController.tabBarItem setTitlePositionAdjustment:UIOffsetMake(0, -3)];
     }];
 }
 

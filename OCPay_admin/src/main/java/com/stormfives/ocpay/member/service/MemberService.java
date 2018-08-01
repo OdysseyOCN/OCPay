@@ -21,8 +21,10 @@ import com.stormfives.ocpay.member.controller.req.ForgetSetPasswordReq;
 import com.stormfives.ocpay.member.controller.req.MailWalletReq;
 import com.stormfives.ocpay.member.controller.req.SaveUserReq;
 import com.stormfives.ocpay.member.controller.resp.MemberVo;
+import com.stormfives.ocpay.member.controller.resp.OcpayAddressBalanceResp;
 import com.stormfives.ocpay.member.dao.EmailWalletAddressMapper;
 import com.stormfives.ocpay.member.dao.MemberMapper;
+import com.stormfives.ocpay.member.dao.OcpayAddressBalanceMapper;
 import com.stormfives.ocpay.member.dao.OcpaySmsCodeDao;
 import com.stormfives.ocpay.member.dao.entity.*;
 import com.stormfives.ocpay.member.rabbit.RabbitConfig;
@@ -41,11 +43,10 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.web3j.crypto.WalletUtils;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
+
 
 /**
  * Created by liuhuan on 2018/7/13.
@@ -69,6 +70,9 @@ public class MemberService {
 
     @Autowired
     private OcpaySmsCodeDao ocpaySmsCodeDao;
+
+    @Autowired
+    private OcpayAddressBalanceMapper ocpayAddressBalanceMapper;
 
 
     @Autowired
@@ -120,33 +124,42 @@ public class MemberService {
         if (saveUserReq.getCountryCode() == null) {
             return new FailResponse("countryId is null");
         }
+        Member member = getMember(saveUserReq.getPhone(), saveUserReq.getCountryCode());
+        if (member != null) {
+            return new FailResponse("Your phone number is exist, please log in");
+        }
         String countryCode = saveUserReq.getCountryCode().toString().replace("+", "");
         String phone = handlePhone(saveUserReq.getPhone(), Integer.valueOf(countryCode));
-        sendSmsToPhone(phone, countryCode);
+        String phonepre = "+" + countryCode;
+        //限制：2分钟以内发送过短信，不能再次发送
+        OcpaySmsCode latestCode = ocpaySmsCodeDao.getLatestCodeByPhone(phone, phonepre);
+        if (latestCode != null) {
+            Date lastCreate = latestCode.getEsccreatedate();
+            //验证当前时间与创建时间差，5分钟以内 并且没有被验证的，不再发送
+            if (latestCode.getEscvalid() == 0 && DateUtils.addMinute(lastCreate, 5).compareTo(new Date()) >= 0) {
+                long remainSecond = (latestCode.getEscexpiredate().getTime() - new Date().getTime()) / 1000;
+                return new FailResponse("Please send it again after", String.valueOf(remainSecond));
+            }
+        }
+        sendSmsToPhone(phone, phonepre);
         return new SuccessResponse("successful");
     }
 
 
     public void sendSmsToPhone(String phone, String phonepre) throws InvalidArgumentException {
 
-        phonepre = "+" + phonepre;
-        //限制：2分钟以内发送过短信，不能再次发送
-        OcpaySmsCode latestCode = ocpaySmsCodeDao.getLatestCodeByPhone(phone, phonepre);
-        if (latestCode != null) {
-            Date lastCreate = latestCode.getEsccreatedate();
-            //验证当前时间与创建时间差，2分钟以内 并且没有被验证的，不再发送
-            if (latestCode.getEscvalid() == 0 && DateUtils.addMinute(lastCreate, 2).compareTo(new Date()) >= 0) {
-                throw new InvalidArgumentException("Please send it again after 2 minutes");
-            }
-        }
-
         String code = Rand.getRandomInt(6);
 
         //通用保存短信验证码功能
         saveSmsCodeToDb(phone, phonepre, code);
 
-        //发送给用户
-        CL253SMSUtil.sendVerifyCode(phonepre + phone, code);
+        if (Constants.SMS_PRE.equals(phonepre)) {
+            //发送给用户
+            CL253SMSUtil.sendVerifyCode(phonepre + phone, code);
+        } else {
+            //发送给用户
+            CL253SMSUtil.sendForeignVerifyCode(phonepre + phone, code);
+        }
     }
 
     public void checkSmsCode(String phone, String code, String phonepre) throws InvalidArgumentException {
@@ -288,7 +301,18 @@ public class MemberService {
         String countryCode = forgetPwd.getCountryCode().toString();
         countryCode = countryCode.replace("+", "");
         String phone = handlePhone(forgetPwd.getPhone(), Integer.valueOf(countryCode));
-        sendSmsToPhone(phone, countryCode);
+        String phonepre = "+" + countryCode;
+        //限制：2分钟以内发送过短信，不能再次发送
+        OcpaySmsCode latestCode = ocpaySmsCodeDao.getLatestCodeByPhone(phone, phonepre);
+        if (latestCode != null) {
+            Date lastCreate = latestCode.getEsccreatedate();
+            //验证当前时间与创建时间差，2分钟以内 并且没有被验证的，不再发送
+            if (latestCode.getEscvalid() == 0 && DateUtils.addMinute(lastCreate, 5).compareTo(new Date()) >= 0) {
+                long remainSecond = (latestCode.getEscexpiredate().getTime() - new Date().getTime()) / 1000;
+                return new FailResponse("Please send it again after", String.valueOf(remainSecond));
+            }
+        }
+        sendSmsToPhone(phone, phonepre);
         //生成token保存到redis，再返回给前端
         String accessToken = getToken();
         redisTemplate.opsForValue().set(accessToken, phone, 5, TimeUnit.MINUTES);
@@ -328,7 +352,7 @@ public class MemberService {
         return new FailResponse("reset password error");
     }
 
-    public ResponseValue saveMailWallet(String email,String walletAddress) {
+    public ResponseValue saveMailWallet(String email, String walletAddress) {
         if (StringUtils.isBlank(email)) {
             return new FailResponse("Your E-mail is null");
         }
@@ -345,13 +369,6 @@ public class MemberService {
         if (eamilWallet != null) {
             return new FailResponse("Your E-mail is used");
         }
-        emailWalletAddressExample.clear();
-        emailWalletAddressExample.or().andWalletAddressEqualTo(walletAddress);
-        eamilWallet = getEmailWalletAddress(emailWalletAddressExample);
-        if (eamilWallet != null) {
-            return new FailResponse("Your wallet address is used");
-        }
-
         EmailWalletAddress emailWalletAddress = new EmailWalletAddress();
         emailWalletAddress.setEmail(email);
         emailWalletAddress.setCreateTime(new Date());
@@ -378,13 +395,44 @@ public class MemberService {
         EmailAddress sender = new EmailAddress(initConfig.emailaddress, initConfig.emailnickname);
         List<EmailAddress> receivelist = new ArrayList<>();
         receivelist.add(new EmailAddress(mailWalletReq.getEmail()));
-        String content = "You have successfully participated in the delivery of OCP airdrop.<br/>" +
-                "<br/>" +
-                "Your wallet address is:<br/>" +
-                "<br/>" +
-                "&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; " + mailWalletReq.getWalletAddress() + "<br/>" +
-                "<br/>" +
-                " &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Odyssey Team";
+        String content = "Dear friend,<br/>\n" +
+                "<br/>\n" +
+                "We appreciate your support and contribution to our Odyssey community.<br/><br/>\n" +
+                "<strong>You have just successfully participated in the OCP airdrop carnival. And your wallet address is "+mailWalletReq.getWalletAddress()+". Please take care of it.</strong> <br/><br/>\n" +
+                "We are also writing to share some exciting news with you--OCN has been selected as one the first batch of ecological partners of the OKEx exchange, and the two parties will cooperate to establish the OCNEx exchange. OCNex is a critical development in the Odyssey project lifecycle, and Odyssey will be able to leverage OKEx’s leading technical and customer service infrastructure for OCNEx’s launch. OKEx is a globally leading leading crypto exchange, founded in 2014, and boasts the #1 or #2 position for highest trading volume worldwide on a daily basis. OCNEx will bring great liquidity and adoption to the OCN platform and its related tokens such as OCP. <br/><br/>\n" +
+                "\n" +
+                "We look forward to announcing further details on OCNEx soon. Please stay updated on OCNEx trends and keep supporting us.<br/><br/>\n" +
+                "\n" +
+                "Thank you again for spending days with Odyssey! <br/><br/>\n" +
+                "\n" +
+                "Best wishes,<br/><br/>\n" +
+                "\n" +
+                "Sent from Odyssey Team with LOVE<br/>\n" +
+                "\n" +
+                "Official Website:<br/>\n" +
+                "<a href='http://ocnex.net' >\n" +
+                "http://ocnex.net </a><br/>\n" +
+                "\n" +
+                "Twitter:<br/>\n" +
+                "<a href='https://twitter.com/OdysseyOCN'>\n" +
+                "https://twitter.com/OdysseyOCN</a>\n" +
+                "<br/>\n" +
+                "\n" +
+                "Telegram:<br/>\n" +
+                "<a href='https://t.me/OdysseyOfficial'>\n" +
+                "\n" +
+                "https://t.me/OdysseyOfficial</a>\n" +
+                "<br/>\n" +
+                "\n" +
+                "Medium:<br/>\n" +
+                "<a href='https://medium.com/@OdysseyProtocol/'>\n" +
+                "https://medium.com/@OdysseyProtocol/</a>\n" +
+                "<br/>\n" +
+                "\n" +
+                "Youtube Tutorials:<br/>\n" +
+                "<a href='https://m.youtube.com/channel/UC9mCpaOU-4ZkvDPoDXpLx7g?from=singlemessage&isappinstalled=0#'>\n" +
+                "https://m.youtube.com/channel/UC9mCpaOU-4ZkvDPoDXpLx7g?from=singlemessage&isappinstalled=0#</a>\n" +
+                "<br/>";
         info.setSubject("OCPay Email confirmation");
         info.setSender(sender);
         info.setToPeople(receivelist);
@@ -443,7 +491,7 @@ public class MemberService {
         if (member == null) {
             return new FailResponse("member is null");
         }
-        boolean flag =confirmPassword(member,saveUserReq.getPassword());
+        boolean flag = confirmPassword(member, saveUserReq.getPassword());
         if (flag) {
             return new SuccessResponse("successful");
         }
@@ -451,10 +499,62 @@ public class MemberService {
     }
 
     private boolean confirmPassword(Member member, String password) {
-        if (member.getPassword().equals(password)){
+        if (member.getPassword().equals(password)) {
             return true;
         }
         return false;
     }
 
+    public ResponseValue getWalletBalance() throws Exception {
+        List<OcpDetail> list = new ArrayList();
+        OcpayAddressBalanceResp addressBalanceResp = new OcpayAddressBalanceResp();
+        OcpayAddressBalanceExample ocpayAddressBalanceExample = new OcpayAddressBalanceExample();
+        List<OcpayAddressBalance> ocpayAddressBalances = ocpayAddressBalanceMapper.selectByExample(ocpayAddressBalanceExample);
+        Date lastRecordDate = ocpayAddressBalances.get(ocpayAddressBalances.size() - 1).getCreateTime();
+        Date ocpDate = DateUtils.getFirstDate();
+        int period = 0;
+        for (int i = 0; i < ocpayAddressBalances.size(); i++) {
+            OcpDetail ocpDetail = new OcpDetail();
+            OcpayAddressBalance ocpayAddressBalance = ocpayAddressBalances.get(i);
+            if (ocpayAddressBalance.getCreateTime().after(ocpDate)) {
+                ocpDetail.setPeriod(String.valueOf(period));
+                ocpDetail.setAddressNum(ocpayAddressBalance.getAddressNum().toString());
+                ocpDetail.setOcnRegistered(ocpayAddressBalance.getTotalBalance().toString());
+                ocpDetail.setScreenTime(ocpayAddressBalance.getCreateTime());
+                period++;
+            } else {
+                ocpDetail.setPeriod(Constants.SYMBOL);
+                ocpDetail.setAddressNum(ocpayAddressBalance.getAddressNum().toString());
+                ocpDetail.setOcnRegistered(ocpayAddressBalance.getTotalBalance().toString());
+                ocpDetail.setScreenTime(ocpayAddressBalance.getCreateTime());
+            }
+            list.add(ocpDetail);
+            if (i == (ocpayAddressBalances.size() - 1)) {
+                addressBalanceResp.setLastDetail(ocpDetail);
+            }
+        }
+
+        int size = ocpayAddressBalances.size();
+        int futureDay = 1;
+        while (size < Constants.FUTURE_DAY) {
+            OcpDetail ocpDetail = new OcpDetail();
+            Date date = DateUtils.addDay(lastRecordDate, futureDay);
+            if (date.after(ocpDate)) {
+                ocpDetail.setPeriod(String.valueOf(period));
+                period++;
+            } else {
+                ocpDetail.setPeriod(Constants.SYMBOL);
+            }
+            ocpDetail.setAddressNum(Constants.SYMBOL);
+            ocpDetail.setOcnRegistered(Constants.SYMBOL);
+            ocpDetail.setScreenTime(date);
+            futureDay++;
+            size++;
+            list.add(ocpDetail);
+        }
+
+
+        addressBalanceResp.setOcpDetails(list);
+        return new SuccessResponse(addressBalanceResp);
+    }
 }

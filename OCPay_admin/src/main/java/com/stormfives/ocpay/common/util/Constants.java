@@ -10,7 +10,9 @@ public class Constants {
 
    // public static final String BLOCK_NODE_URL = "http://h.stormfives.com:34378";
 
-    public static final String BLOCK_NODE_URL = "http://172.31.1.75:34378";
+//    public static final String BLOCK_NODE_URL = "http://172.31.1.75:34378";
+//    public static final String BLOCK_NODE_URL = "https://mainnet.infura.io/metamask";
+    public static final String BLOCK_NODE_URL = "https://mainnet.infura.io/PomdUXVXIJ8N5JrMdadF";
 
     //user_coin_log表类型
     public static final int USER_COIN_RECHARGE = 1;//用户充值

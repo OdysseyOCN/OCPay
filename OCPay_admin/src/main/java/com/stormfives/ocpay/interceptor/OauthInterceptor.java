@@ -166,6 +166,9 @@ public class OauthInterceptor extends HandlerInterceptorAdapter {
             if (request.getAttribute("param") != null) {
                 param = request.getAttribute("param").toString();
             }
+            if("uploadI18nExcel".equals(actionName) || "uploadFile".equals(actionName)){
+                param = "file";  //上传excel文件，参数太长，直接保存“file”
+            }
             LogOperateAdmin logOperation = WalletUtil.initCustomerLog(userId, actionName, consumeTime, ip, param);
             logOperateAdminMapper.insertSelective(logOperation);
         } catch (Exception e) {

@@ -127,6 +127,19 @@ public class MemberController {
         return memberService.saveMailWallet(email,walletAddress);
     }
 
+    /**
+     * 地址、余额统计
+     *
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "token/v1/get-wallet-balance", method = RequestMethod.GET)
+    public @ResponseBody
+    ResponseValue getWalletBalance() throws Exception {
+        doubleClick.compareAndSetRequest("getWalletBalance", "getWalletBalance","getWalletBalance", 3);
+        return memberService.getWalletBalance();
+    }
+
 
 
         /**
@@ -143,7 +156,7 @@ public class MemberController {
             doubleClick.compareAndSetRequest("forgetPwd", "forgetPwd", forgetPwd.getPhone(), 3);
             responseValue = memberService.forgetPasswordRequest(forgetPwd);
         } catch (InvalidArgumentException e) {
-            e.printStackTrace();
+            return new FailResponse(e.getMessage());
         }
         return responseValue;
     }

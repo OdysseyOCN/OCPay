@@ -38,4 +38,12 @@ public class FailResponse extends ResponseValue implements Serializable{
         setData(map);
     }
 
+    public FailResponse(String message,String remainSecond) {
+        setSuccess(false);
+        Map map = new HashMap<>();
+        map.put("message",message);
+        map.put("remainSecond",remainSecond);
+        setData(map);
+    }
+
 }

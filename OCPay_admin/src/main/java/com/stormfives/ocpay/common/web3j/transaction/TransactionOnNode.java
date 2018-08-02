@@ -24,12 +24,15 @@ import org.web3j.crypto.TransactionEncoder;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.DefaultBlockParameterNumber;
+import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.*;
 import org.web3j.tx.TransactionManager;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -76,12 +79,11 @@ public class TransactionOnNode {
                             transactionManager.getFromAddress(), contractAddress, encodedFunction),
                     DefaultBlockParameterName.LATEST)
                     .send();
-            return (ethCall == null) ? null : new BigDecimal(CommonUtils.Hex2Decimal(ethCall.getValue()));
+            return (ethCall == null) ? null : new BigDecimal(CommonUtils.Hex2Decimal(ethCall.getValue())).divide(new BigDecimal(1000000000000000000d));
         }catch (Exception e){
             logger.warn(e.getMessage());
+            return null;
         }
-
-        return  null;
 
     }
 
@@ -102,6 +104,22 @@ public class TransactionOnNode {
             e.printStackTrace();
         }
         return  null;
+
+
+
+    }
+
+    public static void main(String[] args) {
+        List<String> arrays = new ArrayList<>();
+        arrays.add("0x4092678e4e78230f46a1534c0fbc8fa39780892b");
+        EthFilter filter = new EthFilter(new DefaultBlockParameterNumber(new BigInteger("6049000")) ,
+                DefaultBlockParameterName.LATEST, arrays)
+                .addSingleTopic("0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef");
+        Web3j client = Web3JClient.getClient();
+        client.ethLogObservable(filter).subscribe(log -> {
+            System.out.println(JSON.toJSONString(log));
+        });
+
 
 
 

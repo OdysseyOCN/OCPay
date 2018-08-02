@@ -20,11 +20,22 @@ public class DateUtils {
 
     private static String yMdHmsDatePattern = "yyyy-MM-dd HH:mm:ss";
 
+    private static String yMdHmPattern = "yyyy-MM-dd-HH:mm";
+
+
+
     /**
      * 获得默认的 date pattern
      */
     public static String getDatePattern() {
         return defaultDatePattern;
+    }
+
+    /**
+     * 获得默认的 date pattern
+     */
+    public static String getYMdHmPattern() {
+        return yMdHmPattern;
     }
 
     /**
@@ -271,6 +282,17 @@ public class DateUtils {
         calendar.setTime(date);
         calendar.add(13, seconds);
         return calendar.getTime();
+    }
+
+    public static Date getFirstDate() throws Exception {
+        try {
+            Date date = DateUtils.parse("2018-07-31-00:00", DateUtils.yMdHmPattern);
+            return date;
+        } catch (ParseException e) {
+            e.printStackTrace();
+            throw new Exception("parse err");
+        }
+
     }
 
 

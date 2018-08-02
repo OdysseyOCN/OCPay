@@ -8,6 +8,7 @@
 //
 
 #import "HomeViewController.h"
+#import "WalletDetailViewController.h"
 #import "ManageWalletViewController.h"
 #import "AccountViewController.h"
 #import "TransactionRecordViewController.h"
@@ -23,6 +24,7 @@
 #import "HomeViewModel.h"
 #import "HomeDataModel.h"
 #import "MyPrompt.h"
+@import Firebase;
 
 @interface HomeViewController ()
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *myBackgroundViewHeight;
@@ -30,8 +32,10 @@
 @property (weak, nonatomic) IBOutlet WalletTableView *walletTableView;
 @property (weak, nonatomic) IBOutlet HomeCollectionView *homeCollectionView;
 @property (strong, nonatomic) IBOutlet UIView *myBackupAlertView;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (nonatomic, strong) HomeViewModel *viewData;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
+@property (weak, nonatomic) IBOutlet UIImageView *headImageView;
 @property (nonatomic) CGFloat ratio;
 @end
 
@@ -42,34 +46,45 @@
     [self initWalletTableView];
     [self initHomeColletionView];
     [self initRefreshControl];
-    [self loadModuleData];
+    [self launchRefresh];
 }
 
 - (void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
     [self.myBackgroundView setGradientColor:@[UIColorHex(0x405D68),UIColorHex(0x1A3D4E)] gradientType:GradientTypeUpleftToLowright];
-//    [self.myBackgroundView setGradientColor:@[UIColor.blueColor,UIColor.redColor] gradientType:GradientTypeUpleftToLowright];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self setRatio:_ratio];
-    [self.homeCollectionView reloadData];
     [self loadAcountData];
+    self.titleLabel.text = WalletManager.share.defaultWallet.name;
+    self.headImageView.image = [UIImage imageNamed:WalletManager.share.defaultWallet.headImage];
+    [self.homeCollectionView reloadData];
+}
+
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [self.refreshControl endRefreshing];
+}
+
+-(void)launchRefresh{
+    [self.homeCollectionView setContentOffset:CGPointMake(0, self.homeCollectionView.contentOffset.y - self.refreshControl.frame.size.height) animated:YES];
+    [self.refreshControl beginRefreshing];
+    [self.refreshControl sendActionsForControlEvents:UIControlEventValueChanged];
 }
 
 - (void)initRefreshControl{
     _refreshControl = [[UIRefreshControl  alloc] init];
+    [_homeCollectionView addSubview:_refreshControl];
+    _refreshControl.center = CGPointMake(DEVICE_SCREEN_WIDTH*.5, 0);
     _refreshControl.tintColor = UIColorHex(0xffffff);
     [_refreshControl addTarget:self action:@selector(updateData) forControlEvents:UIControlEventValueChanged];
-    [_homeCollectionView addSubview:_refreshControl];
 }
 
 - (void)updateData{
-    if (self.refreshControl.refreshing) {
-        [self loadModuleData];
-        [self loadAcountData];
-    }
+    [self loadModuleData];
+    [self loadAcountData];
 }
 
 - (HomeViewModel *)viewData{
@@ -85,6 +100,7 @@
         HomeDataModel *sourceData = [HomeDataModel modelWithJSON:data[@"data"]];
         self.viewData.sourceData = sourceData;
     } failure:^(NSError *error) {
+        
     }];
 }
 
@@ -95,8 +111,14 @@
     }];
 }
 
-- (IBAction)leftBarButtonItemAction:(UIBarButtonItem *)sender {
+- (IBAction)leftBarButtonItemAction:(id)sender {
+    WalletDetailViewController *vc = [self pushViewControllerWithIdentifier:@"WalletDetailViewController" inStoryboard:@"Wallet"];
+    vc.wallet = WalletManager.share.defaultWallet;
+}
+
+- (IBAction)rightBarButtonItemAction:(id)sender {
     [self.walletTableView show];
+    [FIRAnalytics logEventWithName:@"home_button_Walletmanagement" parameters:nil];
 }
 
 - (IBAction)createWalletAction:(id)sender {
@@ -113,6 +135,7 @@
     [MyPrompt closePromptView];
     BackupWalletViewController *vc = [self pushViewControllerWithIdentifier:@"BackupWalletViewController" inStoryboard:@"Wallet"];
     vc.wallet = WalletManager.share.defaultWallet;
+    [FIRAnalytics logEventWithName:@"Youneedtobackupfirst_button_BackupNow" parameters:nil];
 }
 
 - (void)initWalletTableView{
@@ -121,6 +144,8 @@
         @strongify(self)
         [self.walletTableView closeWalletViewNoAnimate:NO];
         WalletManager.share.defaultWallet = wallet;
+        self.headImageView.image = [UIImage imageNamed:WalletManager.share.defaultWallet.headImage];
+        self.titleLabel.text = WalletManager.share.defaultWallet.name;
         [self.homeCollectionView reloadData];
         [self loadAcountData];
     };
@@ -128,37 +153,23 @@
 
 - (void)initHomeColletionView{
     self.homeCollectionView.data = self.viewData;
-    self.neverAdjustContentInserScrollView = self.homeCollectionView;
+    self.neverAdjustContentInsetScrollView = self.homeCollectionView;
     @weakify(self)
     self.homeCollectionView.callback = ^(HomeCellViewModel *data, HomeCollectionCellCallbackType type) {
         @strongify(self)
         switch (type) {
-                case HeadCellCallbackType_ScanQRCode:{
+            case HeadCellCallbackType_ScanQRCode:{
+                [FIRAnalytics logEventWithName:@"home_button_QRcode" parameters:nil];
                 QRCodeViewController *vc = [[QRCodeViewController alloc] init];
                 vc.reciveResult = ^(NSString *result) {
-                    QRCodeDataModel *qrdata = [QRCodeDataModel modelWithJSON:result];
-                    if (qrdata.type == QRCodeType_Observer || qrdata.type == QRCodeType_Transaction) {
-                        SignDetailViewController *vc = [self pushViewControllerWithIdentifier:@"SignDetailViewController" inStoryboard:@"Main"];
-                        vc.data = qrdata;
-                    }else if (qrdata.type == QRCodeType_Receive){
-                        SendTransactionViewController *vc = [SendTransactionViewController instantiateViewControllerWithIdentifier:@"SendTransactionViewController" inStoryboard:@"Main"];
-                        vc.wallet = WalletManager.share.defaultWallet;
-                        vc.QRCodedata = qrdata;
-                        for (TokenModel *token in vc.wallet.tokens) {
-                            if ([token.tokenTypeString isEqualToString:qrdata.transaction.tokenName]) {
-                                vc.tokenData = token;
-                                break;
-                            }
-                        }
-                        [self.navigationController pushViewController:vc animated:YES];
-
-                    }
+                    [self dealQRCodeResult:result];
                 };
                 [self QRCodeScanVC:vc];
                 break;
             }
             case HeadCellCallbackType_ShowAccount:{
-                
+                [FIRAnalytics logEventWithName:@"home_button_Switch" parameters:nil];
+
                 if (WalletManager.share.defaultWallet.mnemonicPhrase.length > 0) {
                     [MyPrompt showPromptView:^(MyPrompt *view) {
                         view.canClose = NO;
@@ -176,12 +187,16 @@
                 break;
             }
             case HeadCellCallbackType_Record:{
+                [FIRAnalytics logEventWithName:@"home_button_Record" parameters:nil];
+
                 TransactionRecordViewController *vc = [TransactionRecordViewController instantiateViewControllerWithIdentifier:@"TransactionRecordViewController" inStoryboard:@"Main"];
                 vc.wallet = WalletManager.share.defaultWallet;
                 [self.navigationController pushViewController:vc animated:YES];
                 break;
             }
             case HeadCellCallbackType_Send:{
+                [FIRAnalytics logEventWithName:@"home_button_Send" parameters:nil];
+
                 SendTransactionViewController *vc = [SendTransactionViewController instantiateViewControllerWithIdentifier:@"SendTransactionViewController" inStoryboard:@"Main"];
                 vc.wallet = WalletManager.share.defaultWallet;
                 TokenModel *myToken = nil;
@@ -207,7 +222,7 @@
                 vc.wallet = WalletManager.share.defaultWallet;
                 vc.tokenData = data.tokenData;
                 [self.navigationController pushViewController:vc animated:YES];
-
+                
                 break;
             }
             default:
@@ -220,14 +235,43 @@
     };
 }
 
+- (void)dealQRCodeResult:(NSString*)result{
+    QRCodeDataModel *qrdata = [QRCodeDataModel modelWithJSON:result];
+    if (qrdata.type == QRCodeType_Observer || qrdata.type == QRCodeType_Transaction) {
+        SignDetailViewController *vc = [self pushViewControllerWithIdentifier:@"SignDetailViewController" inStoryboard:@"Main"];
+        vc.data = qrdata;
+    }else if (qrdata.type == QRCodeType_Receive){
+        SendTransactionViewController *vc = [SendTransactionViewController instantiateViewControllerWithIdentifier:@"SendTransactionViewController" inStoryboard:@"Main"];
+        vc.wallet = WalletManager.share.defaultWallet;
+        if (qrdata.transaction == nil) {//处理安卓数据的特殊情况
+            NSDictionary *dic = [NSString dictionaryWithJsonString:result];
+            TransactionDataModel *transData = [TransactionDataModel modelWithJSON:dic[@"data"]];
+            qrdata.transaction = transData;
+        }
+        vc.QRCodedata = qrdata;
+        for (TokenModel *token in vc.wallet.tokens) {
+            if ([token.tokenTypeString isEqualToString:qrdata.transaction.tokenName]) {
+                vc.tokenData = token;
+                break;
+            }
+        }
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+}
+
 - (void)setRatio:(CGFloat)ratio{
     _ratio = ratio;
+    if (self.navigationController.topViewController != self) {
+        return;
+    }
     self.myBackgroundViewHeight.constant = 260 - self.homeCollectionView.contentOffset.y;
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithWhite:1 alpha:ratio]] forBarMetrics:UIBarMetricsDefault];
     if (ratio == 1) {
         [self.navigationController.navigationBar setShadowImage:nil];
+        [self.navigationController.navigationBar setTintColor:UIColorHex(0x38525F)];
     }else{
         [self.navigationController.navigationBar setShadowImage:[UIImage imageNamed:@"TransparentPixel"]];
+        [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     }
 }
 

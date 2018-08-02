@@ -13,9 +13,13 @@
 #import "SendTransactionViewController.h"
 #import "AccountViewController.h"
 
+
 @interface TokenIncomeViewController ()
+
 @property (weak, nonatomic) IBOutlet UITableView *myTableView;
 @property (weak, nonatomic) IBOutlet UIView *myGraph;
+@property (weak, nonatomic) IBOutlet UIView *myCardView;
+@property (weak, nonatomic) IBOutlet UIView *topShadow;
 
 @property (strong, nonatomic) NSMutableArray <TransactionInfo*>*showDatas;
 @property (strong, nonatomic) AAChartView *aaChartView;
@@ -31,18 +35,18 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initUI];
-    [self loadData];
     [self dispalyLoading:nil];
+    [self loadData:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [self loadData];
+    [self loadData:NO];
 }
 
 - (void)initUI{
     self.title = self.tokenData.tokenTypeString;
-    self.neverAdjustContentInserScrollView = self.myTableView;
+    self.neverAdjustContentInsetScrollView = self.myTableView;
     self.amountLabel.text = [NSString stringWithFormat:@"%.4f", self.tokenData.tokenAmount.floatValue];
     self.legalCurrencyAmountLabel.text = [NSString stringWithFormat:@"≈ %.2f%@", self.tokenData.baseLegalCurrencyAmount.doubleValue,WalletManager.legalCurrencyTypeSymbol];
     self.myTableView.sectionHeaderHeight = UITableViewAutomaticDimension;
@@ -53,15 +57,22 @@
 - (void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
     self.aaChartView.frame = self.myGraph.bounds;
+    self.myCardView.layer.cornerRadius = 6;
+    [self.topShadow setCornerRadius:6 rectCorner:UIRectCornerTopLeft | UIRectCornerTopRight];
+    [self.aaChartView setCornerRadius:6 rectCorner:UIRectCornerBottomLeft | UIRectCornerBottomRight];
+    [self.myCardView setLayerShadow:[UIColor colorWithRGB:0x040000 alpha:0.25f] offset:CGSizeMake(0, 7.5) radius:6];
 }
 
-- (void)loadData{
+- (void)loadData:(BOOL)updateChart{
     [TransactionRecordModel getIncomeDataWithAddress:self.wallet tokenType:self.tokenData.tokenType success:^(__kindof NSObject *data) {
         NSArray *sourceData = data;
         [self hideLoading:YES];
         self.showDatas = sourceData.firstObject;
         [self.myTableView reloadData];
 
+        if (!updateChart) {
+            return ;
+        }
         NSMutableArray *dates = [NSMutableArray array];
         NSMutableArray *values = [NSMutableArray array];
         for (TransactionRecordDateModel *recordData in sourceData.lastObject) {
@@ -112,6 +123,7 @@
 }
 
 - (IBAction)sendAction:(id)sender {
+    [FIRAnalytics logEventWithName:self.tokenData.tokenType == TokenType_ETH ? @"ETH_button_Send" : @"OCN_button_Send" parameters:nil];
     SendTransactionViewController *vc = [SendTransactionViewController instantiateViewControllerWithIdentifier:@"SendTransactionViewController" inStoryboard:@"Main"];
     vc.wallet = self.wallet;
     vc.tokenData = self.tokenData;
@@ -119,6 +131,7 @@
 }
 
 - (IBAction)receiveAction:(id)sender {
+    [FIRAnalytics logEventWithName:self.tokenData.tokenType == TokenType_ETH ? @"ETH_button_Receive" : @"OCN_button_Receive" parameters:nil];
     AccountViewController *accountVC = [UIViewController instantiateViewControllerWithIdentifier:@"AccountViewController" inStoryboard:@"Main"];
     accountVC.wallet = self.wallet;
     accountVC.tokenData = self.tokenData;

@@ -15,7 +15,7 @@
 
 @interface TransactionRecordViewController ()<UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate,UISearchControllerDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *myTableView;
-@property (weak, nonatomic) IBOutlet UISearchBar *mySearchBar;
+//@property (weak, nonatomic) IBOutlet UISearchBar *mySearchBar;
 @property (strong, nonatomic) NSMutableArray <TransactionRecordDateModel*>*showDatas;
 
 @end
@@ -26,9 +26,6 @@
     [super viewDidLoad];
     self.myTableView.rowHeight = UITableViewAutomaticDimension;
     self.myTableView.estimatedRowHeight = 56;
-//    if (@available(iOS 11.0, *)) {
-//        [self.myTableView setContentInsetAdjustmentBehavior:UIScrollViewContentInsetAdjustmentNever];
-//    }
     [self dispalyLoading:nil];
     [self loadData];
 }
@@ -39,7 +36,9 @@
 }
 
 - (void)loadData{
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     [TransactionRecordModel getRecordDataWithAddress:self.wallet success:^(__kindof NSObject *data) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         [self hideLoading:NO];
         self.showDatas = data;
         [self.myTableView reloadData];
@@ -53,18 +52,18 @@
     return _showDatas;
 }
 
-- (void)updateSearchResultsForSearchController:(UISearchController *)searchController{
-    searchController.searchResultsController.view.hidden = NO;
-}
-
-- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar{
-    UISearchController *search = [[UISearchController alloc] initWithSearchResultsController:nil];
-    search.delegate = self;
-    [self presentViewController:search animated:YES completion:^{
-        
-    }];
-    return true;
-}
+//- (void)updateSearchResultsForSearchController:(UISearchController *)searchController{
+//    searchController.searchResultsController.view.hidden = NO;
+//}
+//
+//- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar{
+//    UISearchController *search = [[UISearchController alloc] initWithSearchResultsController:nil];
+//    search.delegate = self;
+//    [self presentViewController:search animated:YES completion:^{
+//
+//    }];
+//    return true;
+//}
 
 #pragma mark - UITableViewDataSource,UITableViewDelegate
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{

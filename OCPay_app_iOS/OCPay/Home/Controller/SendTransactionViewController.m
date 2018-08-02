@@ -12,7 +12,6 @@
 #import "BasicWebViewController.h"
 #import "SignVerifyProcessView.h"
 #import "QRCodeDataModel.h"
-#import "TransactionInfo+Extension.h"
 
 @interface SendTransactionViewController ()
 @property (weak, nonatomic) IBOutlet UIButton *helpButton;
@@ -27,6 +26,8 @@
 @property (weak, nonatomic) IBOutlet UITextField *hexDataTextField;
 @property (weak, nonatomic) IBOutlet UIView *myContentView;
 @property (weak, nonatomic) IBOutlet UIScrollView *contentScrollView;
+@property (weak, nonatomic) IBOutlet UILabel *balanceLabel;
+
 //paymentDetailsView相关控件
 @property (weak, nonatomic) IBOutlet UIView *paymentDetailsView;
 @property (weak, nonatomic) IBOutlet UILabel *paymentFromAddressLabel;
@@ -58,6 +59,7 @@
 
 - (void)initUI{
     self.title = self.tokenData.tokenTypeString;
+    self.balanceLabel.text = [NSString stringWithFormat:@"Balance:%@",[WrenchTool numberSting:self.tokenData.tokenAmount maximumFractionDigits:8]];
     self.paymentDetailsView.closeCustomViewAnimations = ^{
         self.paymentDetailsView.top = DEVICE_SCREEN_HEIGHT;
     };
@@ -91,7 +93,7 @@
         dispatch_group_t group = dispatch_group_create();
         dispatch_group_enter(group);
         [nonceCallback onCompletion:^(IntegerPromise *itp) {
-            self.trans.nonce = itp.value;
+            self.trans.nonce = itp.value+self.wallet.transactionCache.count;
             dispatch_group_leave(group);
         }];
         dispatch_group_enter(group);
@@ -125,7 +127,7 @@
     IntegerPromise *nonceCallback = [self.wallet.api getTransactionCount:[Address addressWithString:self.wallet.address]];
     [nonceCallback onCompletion:^(IntegerPromise *itp) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-        self.trans.nonce = itp.value;
+        self.trans.nonce = itp.value+self.wallet.transactionCache.count;
         if (finish) finish();
     }];
 }
@@ -231,29 +233,11 @@
         [self closePaymentDetailsView];
         if (hash.value.hexString.length > 0) {
             [self.navigationController dispalyText:@"Transfer success!"];
-            NSMutableDictionary *dic = [NSMutableDictionary dictionary];
-            [dic setValue:[NSString stringWithFormat:@"%f",[NSDate date].timeIntervalSince1970] forKey:@"timestamp"];
-            [dic setValue:hash.value.hexString forKey:@"hash"];
-            [dic setValue:self.trans.fromAddress.checksumAddress forKey:@"from"];
-            [dic setValue:self.trans.toAddress.checksumAddress forKey:@"to"];
-            [dic setValue:self.trans.gasLimit.decimalString forKey:@"gasLimit"];
-            [dic setValue:self.trans.gasPrice forKey:@"gasPrice"];
-            [dic setValue:[NSString stringWithFormat:@"%ld",self.trans.nonce] forKey:@"nonce"];
-            [dic setValue:(self.tokenData.tokenType == TokenType_OCN) ? OCNAddress : nil forKey:@"contractAddress"];
-            [dic setValue:[SecureData dataToHexString:self.trans.data] forKey:@"data"];
-            [dic setValue:self.trans.value.decimalString forKey:@"value"];
-            [dic setValue:[self.costLabel.text decimalNumberByMultiplying:DecimalNumberTenPower18] forKey:@"gasUsed"];
-            TransactionInfo *info = [TransactionInfo transactionInfoFromDictionary:dic];
-            
-#if DEBUG
-            if (info.transactionHash == nil) {
-                [self dispalyConfirmText:[NSString stringWithFormat:@"交易信息缓存数据生成失败:%@",info]];
-            }
-#endif
+            TransactionInfo *info = [TransactionInfo transactionInfoWithPendingTransaction:[Transaction transactionWithData:transData] hash:hash.value];
+            NSDictionary *transactionInfoDic = [info dictionaryRepresentation];
             if (info.transactionHash) {
-                info.pending = @"Pendding";
-                [self.wallet.transactionCache addObject:info];
-                [WalletManager synchronize];
+                [self.wallet.transactionCache addObject:transactionInfoDic];
+                [WalletManager synchronizeWithType:WalletManagerCacheType_Wallets];
             }
             [self.navigationController popViewControllerAnimated:YES];
         }else{
@@ -280,6 +264,8 @@
 
 
 - (IBAction)nextStepAction:(id)sender {
+    [FIRAnalytics logEventWithName:self.wallet.isObserver ? @"ETHTransfer-oberserved_button_Nextstep" : @"Paymentdetails_button_Nextstep" parameters:nil];
+
     [self keyboardFinishAction];
     if (![self checkPass]) {
         return;
@@ -303,7 +289,7 @@
 
 - (IBAction)pamentDetailViewNextAction:(id)sender {
     [self closePaymentDetailsView];
-    [self checkPassWithWallet:self.wallet completion:^(BOOL pass, Account *account) {
+    [self checkPassWithWallet:self.wallet completion:^(BOOL pass, Account *account, NSString *password) {
         if (pass) {
             [account sign:self.trans];
             [self send:[self.trans serialize]];

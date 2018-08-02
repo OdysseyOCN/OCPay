@@ -17,10 +17,25 @@
 @property (weak, nonatomic) IBOutlet UILabel *fromAddressLabel;
 @property (weak, nonatomic) IBOutlet UILabel *amountLabel;
 @property (weak, nonatomic) IBOutlet UILabel *costLabel;
-
+@property (strong, nonatomic) WalletModel *wallet;
 @end
 
 @implementation SignDetailViewController
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    if(self.data.type == QRCodeType_Transaction){
+        [(BasicNavigationController*)self.navigationController setNavigationBarTransparent];
+    }
+}
+
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    if(self.data.type == QRCodeType_Transaction){
+        [(BasicNavigationController*)self.navigationController reverseNavigationBar];
+    }
+}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -28,6 +43,7 @@
     BOOL haveAddress = NO;
     for (WalletModel *wallet in WalletManager.share.wallets) {
         if ([[Address addressWithString:wallet.address] isEqualToAddress:[Address addressWithString:self.data.ethereum]]) {
+            self.wallet = wallet;
             haveAddress = YES;
             break;
         }
@@ -69,10 +85,14 @@
     switch (self.data.type) {
         case QRCodeType_Observer:
         {
-            NSString *md5 = [self.data.data md5String];
-            self.data.data = md5;
-            NSString *value = [self.data modelToJSONString];
-            [SignVerifyProcessView showWithType:WalletType_Observer_Cold value:value];
+            [self checkPassWithWallet:self.wallet completion:^(BOOL pass, Account *myAccount, NSString *password) {
+                if (pass) {
+                    NSString *md5 = [self.data.data md5String];
+                    self.data.data = md5;
+                    NSString *value = [self.data modelToJSONString];
+                    [SignVerifyProcessView showWithType:WalletType_Observer_Cold value:value];
+                }
+            }];
             break;
         }
         case QRCodeType_Transaction:
@@ -87,7 +107,7 @@
                     break;
                 }
             }
-            [self checkPassWithWallet:myWallet completion:^(BOOL pass, Account *myAccount) {
+            [self checkPassWithWallet:myWallet completion:^(BOOL pass, Account *myAccount, NSString *password) {
                 if (pass) {
                     Transaction *trans = [Transaction transactionWithFromAddress:[Address addressWithString:self.data.transaction.transactionFrom]];
                     trans.toAddress = [Address addressWithString:self.data.transaction.transactionTo];

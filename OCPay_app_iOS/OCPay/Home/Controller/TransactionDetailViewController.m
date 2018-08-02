@@ -35,10 +35,23 @@
     [super viewDidLoad];
     [self initUI];
     [self updateUI];
+    [self initData];
+}
+
+- (void)initData{
+    for (MessageModel *message in WalletManager.share.messages) {
+        if (message.messageType != MessageType_Notice && message.messageType != MessageType_Waring) {
+            if ([[TransactionInfo transactionInfoFromDictionary:message.transactionInfo].transactionHash isEqualToHash:self.info.transactionHash]) {
+                message.read = YES;
+                [WalletManager synchronizeWithType:WalletManagerCacheType_Messages];
+            }
+        }
+    }
+    [UIApplication sharedApplication].applicationIconBadgeNumber = WalletManager.share.unreadMessageCount;
 }
 
 - (void)initUI{
-    self.neverAdjustContentInserScrollView = self.myScrollView;
+    self.neverAdjustContentInsetScrollView = self.myScrollView;
     self.topConstraint.constant = IPHONE_NAVIGATION_BAR_HEIGHT+IPHONE_STATUS_BAR_HEIGHT;
     _myCardView.layer.cornerRadius = 6;
     [_myCardView setLayerShadow:[UIColor colorWithRGB:0x040000 alpha:0.35f] offset:CGSizeMake(0, 7.5) radius:6];
@@ -78,7 +91,7 @@
 
 - (IBAction)readTransactionCodeAction:(UIButton *)sender {
     BasicWebViewController *webVC = [[BasicWebViewController alloc]init];
-    webVC.URLString = [NSString stringWithFormat:@"https://ropsten.etherscan.io/tx/%@",sender.titleLabel.text];
+    webVC.URLString = [NSString stringWithFormat:@"%@%@",TransactionAddressPrefix,sender.titleLabel.text];
     [self.navigationController pushViewController:webVC animated:YES];
 }
 

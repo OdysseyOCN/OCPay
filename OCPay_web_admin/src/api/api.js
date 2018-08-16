@@ -35,7 +35,6 @@ export const HomepageDelete = params => { return axios.post(`${base}/delete-home
 export const HomepageAdd = params => { return axios.post(`${base}/add-homePage`,params).then(res => res.data); };
 
 // Banner
-// Banner
 export const Banner= params => { return axios.post(`${base}/get-advertisment`,params).then(res => res.data); };
 // BannerEdit
 export const BannerEdit= params => { return axios.post(`${base}/edit-advertisment`,params).then(res => res.data); };

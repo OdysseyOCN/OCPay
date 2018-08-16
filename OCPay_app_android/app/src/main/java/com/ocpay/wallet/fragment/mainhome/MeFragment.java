@@ -36,6 +36,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
 import static android.app.Activity.RESULT_OK;
+import static com.ocpay.wallet.Constans.RXBUS.ACTION_SIGN_IN_UPDATE;
 import static com.ocpay.wallet.bean.SettingsBean.TYPE.ABOUT_US;
 import static com.ocpay.wallet.bean.SettingsBean.TYPE.CONTACT;
 import static com.ocpay.wallet.bean.SettingsBean.TYPE.CONTACT_US;
@@ -109,16 +110,6 @@ public class MeFragment extends BaseFragment<FragmentMeBinding> implements View.
 
         addDisposable(disposable);
 
-        Disposable signInUpdate = RxBus.getInstance().toObservable(Constans.RXBUS.ACTION_SIGN_IN_UPDATE, String.class)
-                .subscribe(new Consumer<String>() {
-                    @Override
-                    public void accept(String s) throws Exception {
-                        MyAccountActivity.startMyAccountActivity(getActivity());
-                    }
-                });
-
-        addDisposable(signInUpdate);
-
 
     }
 
@@ -146,10 +137,10 @@ public class MeFragment extends BaseFragment<FragmentMeBinding> implements View.
 
                 break;
             case USER:
-                if (OUserManager.getInstance().isHasSignIn()) {
+                if (OUserManager.getInstance().hasToken()) {
                     MyAccountActivity.startMyAccountActivity(getActivity());
                 } else {
-                    AccountSignInActivity.startForResultAccountSignInActivity(getContext(),this, REQUEST_SIGN_IN);
+                    AccountSignInActivity.startForResultAccountSignInActivity(getContext(), this, REQUEST_SIGN_IN);
                 }
                 break;
             case CONTACT:

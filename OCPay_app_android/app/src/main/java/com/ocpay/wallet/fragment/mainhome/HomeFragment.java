@@ -57,6 +57,7 @@ import io.reactivex.functions.Consumer;
 import static com.ocpay.wallet.Constans.CONFIG.HIDE_ASSET;
 import static com.ocpay.wallet.activities.QRReaderActivity.QR_CODE_MODE_PARSE;
 import static com.ocpay.wallet.utils.OCPPrefUtils.getLocalHomeBean;
+import static com.ocpay.wallet.utils.OCPPrefUtils.setLocalHomeBean;
 import static com.ocpay.wallet.utils.TokenUtils.ETH;
 import static com.ocpay.wallet.utils.TokenUtils.OCN;
 import static com.ocpay.wallet.utils.eth.OCPWalletUtils.foldWalletAddress;
@@ -208,7 +209,10 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements V
                             Toast.makeText(getContext(), "get homepage error", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        mainAdapter.setData(tokenPriceResponse.getData().homePageVos);
+                        if (tokenPriceResponse.getData().homePageVos != null) {
+                            mainAdapter.setData(tokenPriceResponse.getData().homePageVos);
+                            setLocalHomeBean(tokenPriceResponse);
+                        }
                     }
                 });
         addDisposable(updateHomePage);
@@ -230,8 +234,6 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements V
             }
         }
         updateAmount();
-
-
     }
 
     private void updateAmount() {

@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.ocpay.wallet.R;
 import com.ocpay.wallet.activities.AccountSignInActivity;
@@ -20,6 +21,7 @@ import com.ocpay.wallet.http.client.BlockAsiaClientIml;
 import com.ocpay.wallet.http.rx.RxBus;
 import com.snow.commonlibrary.recycleview.xrecyclerview.XRecyclerView;
 import com.snow.commonlibrary.utils.StringUtil;
+import com.snow.commonlibrary.utils.ViewUtils;
 
 import java.util.List;
 
@@ -128,7 +130,8 @@ public class MarketsPageFragment extends BaseFragment<FragmentMarketsPageBinding
                                 if (tempMarketToken.ID != null) {
                                     RxBus.getInstance().post(RXBUS_TOKEN_COLLECT_UPDATE, tempMarketToken.ID);
                                 }
-                                adapter.getmData().remove(tempMarketToken);
+                                tempMarketToken.collect_status = "1".equals(tempMarketToken.collect_status) ? "0" : "1";
+                                adapter.notifyDataSetChanged();
                                 showMarketToken(adapter.getmData());
                                 RxBus.getInstance().post(RXBUS_MARKET_TOKEN_UPDATE, "");
                             }
@@ -278,6 +281,16 @@ public class MarketsPageFragment extends BaseFragment<FragmentMarketsPageBinding
         int visibleNone = hasData ? View.GONE : View.VISIBLE;
         bindingView.rlLogin.setVisibility(View.GONE);
         bindingView.clSearchNone.setVisibility(visibleNone);
+
+        if (getActivity() instanceof MainActivity) {
+            ViewGroup.LayoutParams layoutParams = bindingView.ivSearchPic.getLayoutParams();
+            layoutParams.width = ViewUtils.dp2px(getContext(), 70);
+            layoutParams.height = ViewUtils.dp2px(getContext(), 70);
+            bindingView.ivSearchPic.setLayoutParams(layoutParams);
+            bindingView.ivSearchPic.setImageResource(R.mipmap.ic_no_record);
+            bindingView.tvSearchTip.setText(getString(R.string.tip_no_data));
+        }
+
         return hasData;
     }
 
@@ -456,6 +469,7 @@ public class MarketsPageFragment extends BaseFragment<FragmentMarketsPageBinding
 
     //1 - 2 - 3
     public void actionSort(int sortType) {
+        if (getContext() == null) return;
         showLoading();
         switch (keyMode) {
             case RXBUS_MARKET_EXCHANGE:

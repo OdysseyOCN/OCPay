@@ -61,8 +61,4 @@ body {
 .fade-leave-active {
 	opacity: 0;
 }
-
-// .el-table--enable-row-transition .el-table__body td{
-// 	border: 1px solid black;
-// }
 </style>

@@ -9,6 +9,7 @@ $charset = $config["charset"];
 $db_name = $config["dbname"];
 $lang = $config["lang"];
 require_once "./lang/".$lang.".php";
+require_once "./Util.php";
 require_once  "Log.php";
 
 $log = new Log();

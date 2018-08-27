@@ -16,7 +16,6 @@ public abstract class BaseAdapter<T, V extends RecyclerView.ViewHolder> extends 
 
     public interface OnItemClickListener<T> {
         /**
-         *
          * @param adapter  adapter
          * @param data
          * @param position
@@ -46,8 +45,6 @@ public abstract class BaseAdapter<T, V extends RecyclerView.ViewHolder> extends 
     }
 
     /**
-     *
-     *
      * @param data data
      */
     public void add(T data) {
@@ -55,8 +52,6 @@ public abstract class BaseAdapter<T, V extends RecyclerView.ViewHolder> extends 
     }
 
     /**
-     *
-     *
      * @param position position
      * @param data     data
      */
@@ -65,8 +60,6 @@ public abstract class BaseAdapter<T, V extends RecyclerView.ViewHolder> extends 
     }
 
     /**
-     *
-     *
      * @param datas datas
      */
     public void addAll(List<T> datas) {
@@ -76,8 +69,6 @@ public abstract class BaseAdapter<T, V extends RecyclerView.ViewHolder> extends 
     }
 
     /**
-     *
-     *
      * @param datas
      */
     public void setData(List<T> datas) {
@@ -147,6 +138,9 @@ public abstract class BaseAdapter<T, V extends RecyclerView.ViewHolder> extends 
 
     @Override
     public int getItemCount() {
+        if (mData == null) {
+            mData = new ArrayList<>();
+        }
         return mData.size();
     }
 

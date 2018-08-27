@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
@@ -25,6 +26,7 @@ import android.widget.Toast;
 
 import com.snow.commonlibrary.R;
 import com.snow.commonlibrary.utils.CheckNetwork;
+import com.snow.commonlibrary.utils.ShareUtils;
 import com.snow.commonlibrary.widget.statusbar.StatusBarUtil;
 import com.snow.commonlibrary.widget.webview.config.FullscreenHolder;
 import com.snow.commonlibrary.widget.webview.config.IWebPageView;
@@ -54,10 +56,11 @@ public class WebViewActivity extends AppCompatActivity implements IWebPageView {
     private String mTitle;
     // 网页链接
     private String mUrl;
-    // 可滚动的title 使用复杂 文字显示有渐变效果，文字两旁没有阴影
-    private TextSwitcher mTsTitle;
+    //    // 可滚动的title 使用复杂 文字显示有渐变效果，文字两旁没有阴影
+//    private TextSwitcher mTsTitle;
     // 可滚动的title 使用简单 没有渐变效果，文字两旁有阴影
     private TextView tvGunTitle;
+    private ImageView ivShare;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +79,14 @@ public class WebViewActivity extends AppCompatActivity implements IWebPageView {
         webView = findViewById(R.id.webview_detail);
         videoFullView = findViewById(R.id.video_fullView);
         mTitleToolBar = findViewById(R.id.title_tool_bar);
-        mTsTitle = findViewById(R.id.ts_title);
         tvGunTitle = findViewById(R.id.tv_gun_title);
+        ivShare = findViewById(R.id.iv_share);
+        ivShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShareUtils.toShare(WebViewActivity.this, mUrl, webView.getTitle());
+            }
+        });
 
         initToolBar();
     }
@@ -89,7 +98,7 @@ public class WebViewActivity extends AppCompatActivity implements IWebPageView {
             //去除默认Title显示
             actionBar.setDisplayShowTitleEnabled(false);
         }
-        mTitleToolBar.setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.actionbar_more));
+//        mTitleToolBar.setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.actionbar_more));
         tvGunTitle.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -335,7 +344,6 @@ public class WebViewActivity extends AppCompatActivity implements IWebPageView {
     }
 
     /**
-     *
      * @param mContext
      * @param mUrl
      */

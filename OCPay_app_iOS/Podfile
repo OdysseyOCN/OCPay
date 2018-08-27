@@ -1,0 +1,33 @@
+# Uncomment the next line to define a global platform for your project
+ platform :ios, '9.0'
+
+target 'OCPay' do
+  # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
+  use_frameworks!
+
+  # Pods for OCPay
+    pod 'AFNetworking', '~> 3.0'
+    pod 'Masonry'
+    pod 'YYKit'
+    pod 'MBProgressHUD'
+    pod 'SDWebImage'
+    pod 'SDWebImage/GIF'
+    pod 'ZWPlaceHolder'
+    pod 'TZImagePickerController'
+    pod 'EBBannerView'
+    pod 'MJRefresh'
+    pod 'Firebase/Core'
+    pod 'Firebase/Messaging'
+    pod 'Bugly'
+    
+  target 'OCPayTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+  target 'OCPayUITests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end

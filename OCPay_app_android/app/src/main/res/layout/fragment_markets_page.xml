@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <com.snow.commonlibrary.recycleview.xrecyclerview.XRecyclerView
+            android:id="@+id/xrl_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/cl_search_none"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/iv_search_pic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="70dp"
+                android:src="@drawable/ic_search_none"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/tv_search_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:text="@string/tip_search_none"
+                android:textColor="#A4AFB4"
+                android:textSize="@dimen/text_ba_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_search_pic" />
+        </android.support.constraint.ConstraintLayout>
+
+
+        <LinearLayout
+            android:id="@+id/rl_login"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorBGDefault"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/iv_tip_bg"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="60dp"
+                android:src="@mipmap/ic_no_record" />
+
+
+            <TextView
+                android:id="@+id/tv_tip_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="32dp"
+                android:layout_marginTop="29dp"
+                android:gravity="center"
+                android:paddingLeft="30dp"
+                android:paddingRight="40dp"
+                android:text="@string/tip_follow_login"
+                android:textColor="#A4AFB4"
+                android:textSize="@dimen/text_ba_content" />
+
+            <TextView
+                android:id="@+id/btn_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/shape_bg_corner_red_3"
+                android:gravity="center"
+                android:minHeight="40dp"
+                android:minWidth="290dp"
+                android:text="@string/activity_login_login"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_ba_subtitle" />
+
+        </LinearLayout>
+
+
+    </android.support.constraint.ConstraintLayout>
+
+
+</layout>

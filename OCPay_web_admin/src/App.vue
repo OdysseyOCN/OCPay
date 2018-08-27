@@ -23,19 +23,16 @@ body {
 	font-size: 14px;
 	-webkit-font-smoothing: antialiased;
 }
-
 #app {
 	position: absolute;
 	top: 0px;
 	bottom: 0px;
 	width: 100%;
 }
-
 .el-submenu [class^=fa] {
 	vertical-align: baseline;
 	margin-right: 10px;
 }
-
 .el-menu-item [class^=fa] {
 	vertical-align: baseline;
 	margin-right: 10px;

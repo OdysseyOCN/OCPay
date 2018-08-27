@@ -1,27 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".fragment.mainhome.HomeFragment">
+        android:background="@color/white"
+        android:orientation="vertical">
 
-        <include
-            android:id="@+id/include_action_bar"
-            layout="@layout/layout_action_bar" />
-
-        <RelativeLayout
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/cl_action_ba"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/color_wallet_item_selected">
+            android:layout_height="wrap_content"
+            android:background="@color/white">
 
-            <ImageView
+
+            <TextView
+                android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:src="@mipmap/ic_market_null_bg" />
-        </RelativeLayout>
+                android:padding="16dp"
+                android:text="@string/fragment_title_market"
+                android:textColor="#38525F "
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:src="@drawable/ic_search_gray"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </android.support.constraint.ConstraintLayout>
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="bottom"
+                    android:background="#E1E5E9" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="horizontal">
+
+                    <com.snow.commonlibrary.widget.xtab.XTabLayout
+                        android:id="@+id/tab_home"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_weight="1"
+                        android:background="@color/white"
+                        android:fillViewport="true"
+                        android:textSize="16sp"
+                        app:x_tabBackground="@drawable/bg_home_fragment_indicate"
+                        app:x_tabIndicatorColor="#1A3D4E"
+                        app:x_tabIndicatorHeight="2dp"
+                        app:x_tabIndicatorWidth="50dp"
+                        app:x_tabMode="fixed"
+                        app:x_tabSelectedTextColor="#33525F"
+                        app:x_tabTextAppearance="@style/CustomTab"
+                        app:x_tabTextColor="#A4AFB4" />
+
+                </LinearLayout>
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="#FFFAFAFA">
+
+
+                    <com.snow.commonlibrary.widget.XTextView
+                        android:id="@+id/xtv_token_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:drawablePadding="2dp"
+                        android:gravity="center_vertical"
+                        android:text="Token/Value"
+                        android:textColor="#38525F "
+                        android:textSize="13sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintHorizontal_bias="0.25"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toLeftOf="@+id/xtv_last_price"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:rightDrawable="@drawable/ic_sort_desc"
+
+                        />
+
+                    <com.snow.commonlibrary.widget.XTextView
+                        android:id="@+id/xtv_last_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:drawablePadding="2dp"
+                        android:gravity="center_vertical"
+                        android:text="Token/Value"
+                        android:textColor="#38525F "
+                        android:textSize="13sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:rightDrawable="@drawable/ic_sort_desc" />
+
+
+                    <com.snow.commonlibrary.widget.XTextView
+                        android:id="@+id/xtv_change"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:drawablePadding="2dp"
+                        android:gravity="center_vertical"
+                        android:text="Token/Value"
+                        android:textColor="#38525F "
+                        android:textSize="13sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintHorizontal_bias="0.8"
+                        app:layout_constraintLeft_toRightOf="@+id/xtv_last_price"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:rightDrawable="@drawable/ic_sort_desc" />
+
+
+                </android.support.constraint.ConstraintLayout>
+
+                <com.ocpay.wallet.widget.ScrollViewPager
+                    android:id="@+id/vp_home"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+
+            </LinearLayout>
+
+        </FrameLayout>
+
     </LinearLayout>
 
 </layout>

@@ -314,23 +314,23 @@ function exchange_list($post, $db, $log) {
     $order = isset($post["order"])?$post["order"]:5;
     $search = isset($post["search"])?$post["search"]:"";
     if ($search) {
-        $sql = "select exchange exchange_name, pair, vol vol_format, icon from wp_exchange where exchange like '{$search}%' ";
+        $sql = "select exchange exchange_name, pair, vol vol_format, icon from exchange where exchange like '{$search}%' ";
         $info = $db->get_result($sql);
 
-        $sql = "select token, search_count from wp_hot_search where token = '{$search}' ";
+        $sql = "select token, search_count from hot_search where token = '{$search}' ";
         $hot_search = $db->get_row($sql);
         if ($hot_search) {
-            $db->update("wp_hot_search", [
+            $db->update("hot_search", [
                 "search_count" => $hot_search["search_count"] + 1
             ], " token = '{$search}' ");
         } else {
-            $db->insert("wp_hot_search", [
+            $db->insert("hot_search", [
                 "token" => $search,
                 "search_count" => 1
             ]);
         }
     } else {
-        $sql = "select exchange exchange_name, pair, vol vol_format, icon from wp_exchange order by vol desc";
+        $sql = "select exchange exchange_name, pair, vol vol_format, icon from exchange order by vol desc";
         $info = $db->get_result($sql);
     }
 

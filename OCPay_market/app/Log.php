@@ -5,7 +5,7 @@ class Log {
     private $maxsize = 4096000; 
 
     public function writeLog($msg) {
-        $filename = __DIR__."/log/ba.log";
+        $filename = __DIR__."/log/ocp.log";
         $res = [];
         $res["msg"] = $msg;
         $res["logtime"] = date("Y-m-d H:i:s", time());

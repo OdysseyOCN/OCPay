@@ -91,14 +91,15 @@ public class MemberService {
         if (saveUserReq.getCountryCode() == null) {
             return new FailResponse("Verification code error");
         }
-        Member member = getMember(saveUserReq.getPhone(), saveUserReq.getCountryCode());
+        String phone = handlePhone(saveUserReq.getPhone(), saveUserReq.getCountryCode());
+        Member member = getMember(phone, saveUserReq.getCountryCode());
         if (member != null) {
             return new FailResponse("Your phone number is exist, please log in");
         }
-        checkSmsCode(saveUserReq.getPhone(), saveUserReq.getSmscode(), saveUserReq.getCountryCode().toString());
+        checkSmsCode(phone, saveUserReq.getSmscode(), saveUserReq.getCountryCode().toString());
         //1. 创建用户
         member = new Member();
-        member.setPhone(saveUserReq.getPhone());
+        member.setPhone(phone);
         member.setPassword(saveUserReq.getPassword());
         if (StringUtils.isNotBlank(saveUserReq.getWalletAddress())) {
             boolean validAddress = WalletUtils.isValidAddress(saveUserReq.getWalletAddress());
@@ -264,7 +265,8 @@ public class MemberService {
         if (userLoginReq.getCountryCode() == null) {
             return new FailResponse("Account or password error");
         }
-        Member member = getMember(userLoginReq.getPhone(), userLoginReq.getCountryCode());
+        String phone = handlePhone(userLoginReq.getPhone(), userLoginReq.getCountryCode());
+        Member member = getMember(phone, userLoginReq.getCountryCode());
         if (member == null) {
             return new FailResponse("Account or password error");
         }
@@ -332,13 +334,14 @@ public class MemberService {
         if (StringUtils.isBlank(req.getAccesstoken())) {
             return new FailResponse("token is null");
         }
-        String phone = redisTemplate.opsForValue().get(req.getAccesstoken());
-        if (StringUtils.isBlank(phone) || !phone.equals(req.getPhone())) {
+        String phone = handlePhone(req.getPhone(), req.getCountryCode());
+        String tokenPhone = redisTemplate.opsForValue().get(req.getAccesstoken());
+        if (StringUtils.isBlank(tokenPhone) || !tokenPhone.equals(phone)) {
             return new FailResponse("token is error");
         }
         redisTemplate.delete(req.getAccesstoken());
-        checkSmsCode(req.getPhone(), req.getSmscode(), req.getCountryCode().toString());
-        Member member = getMember(req.getPhone(), req.getCountryCode());
+        checkSmsCode(phone, req.getSmscode(), req.getCountryCode().toString());
+        Member member = getMember(phone, req.getCountryCode());
         if (member != null) {
             Member update = new Member();
             update.setId(member.getId());
@@ -554,6 +557,62 @@ public class MemberService {
         }
 
 
+//        for (int i = 0; i < ocpayAddressBalances.size(); i++) {
+//            OcpDetail ocpDetail = new OcpDetail();
+//            OcpayAddressBalance ocpayAddressBalance = ocpayAddressBalances.get(i);
+//            if (ocpayAddressBalance.getCreateTime().after(ocpDate)) {
+//                ocpDetail.setPeriod(String.valueOf(period));
+//                ocpDetail.setAddressNum(ocpayAddressBalance.getAddressNum().toString());
+//                ocpDetail.setOcnRegistered(ocpayAddressBalance.getTotalBalance().toString());
+//                if (period == 0) {
+//                    ocpDetail.setTotalOcp(Constants.SYMBOL);
+//                    ocpDetail.setOcpDistributed(Constants.SYMBOL);
+//                    ocpDetail.setAverageOcpDistributed(Constants.SYMBOL);
+//                } else {
+//                    ocpDetail.setTotalOcp(Constants.OCP_TOTAL.toString());
+//                    BigDecimal ocpDistributed = ocpayAddressBalance.getTotalBalance().divide(Constants.OCN_TOTAL, 3, BigDecimal.ROUND_HALF_DOWN).multiply(Constants.OCP_TOTAL);
+//                    ocpDetail.setOcpDistributed(ocpDistributed.toString());
+//                    ocpDetail.setAverageOcpDistributed(ocpDistributed.divide(new BigDecimal(ocpayAddressBalance.getAddressNum()), 3, BigDecimal.ROUND_HALF_DOWN).toString());
+//                }
+//                ocpDetail.setScreenTime(ocpayAddressBalance.getCreateTime());
+//                period++;
+//            } else {
+//                ocpDetail.setPeriod(Constants.SYMBOL);
+//                ocpDetail.setAddressNum(ocpayAddressBalance.getAddressNum().toString());
+//                ocpDetail.setOcnRegistered(ocpayAddressBalance.getTotalBalance().toString());
+//                ocpDetail.setOcpDistributed(Constants.SYMBOL);
+//                ocpDetail.setTotalOcp(Constants.SYMBOL);
+//                ocpDetail.setAverageOcpDistributed(Constants.SYMBOL);
+//                ocpDetail.setScreenTime(ocpayAddressBalance.getCreateTime());
+//            }
+//            list.add(ocpDetail);
+//            if (i == (ocpayAddressBalances.size() - 1)) {
+//                addressBalanceResp.setLastDetail(ocpDetail);
+//            }
+//        }
+//        int futureDay = 1;
+//        while (period <= Constants.FUTURE_DAY) {
+//            OcpDetail ocpDetail = new OcpDetail();
+//            Date date = DateUtils.addDay(lastRecordDate, futureDay);
+//            if (period == 0) {
+//                ocpDetail.setTotalOcp(Constants.SYMBOL);
+//            } else {
+//                ocpDetail.setTotalOcp(Constants.OCP_TOTAL.toString());
+//            }
+//            if (date.after(ocpDate)) {
+//                ocpDetail.setPeriod(String.valueOf(period));
+//                period++;
+//            } else {
+//                ocpDetail.setPeriod(Constants.SYMBOL);
+//            }
+//            ocpDetail.setAddressNum(Constants.SYMBOL);
+//            ocpDetail.setOcnRegistered(Constants.SYMBOL);
+//            ocpDetail.setOcpDistributed(Constants.SYMBOL);
+//            ocpDetail.setAverageOcpDistributed(Constants.SYMBOL);
+//            ocpDetail.setScreenTime(date);
+//            futureDay++;
+//            list.add(ocpDetail);
+//        }
         addressBalanceResp.setOcpDetails(list);
         return new SuccessResponse(addressBalanceResp);
     }

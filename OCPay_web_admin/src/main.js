@@ -37,8 +37,6 @@ Vue.filter('time',function(value){
 import axios from 'axios';
 axios.interceptors.request.use((config)=>{
   config.headers.Authorization = `Bearer ${sessionStorage.getItem('user')}`;
-  // console.log(config)
-  // config.responseType='blob'
   return config;
 },(error)=>{
   console.log(error)

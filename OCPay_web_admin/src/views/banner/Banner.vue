@@ -91,8 +91,6 @@
                     <el-option label="跳入第三方APP" value="1"></el-option>
                      <el-option label="调转APP内页" value="2"></el-option>
                      <el-option label="跳转到新网址" value="3"></el-option>
-                     
-                    <!-- <el-option label="SHOP Link" value="3"></el-option> -->
                  </el-select>    
            </el-form-item>
            <el-form-item label="LINK：">
@@ -143,9 +141,6 @@
            <el-form-item label="LINK：">
              <el-input v-model="form1.directUrl"></el-input>
              </el-form-item>
-           <!-- <el-form-item label="Pic">
-             <el-input v-model="form1.showImg"></el-input>
-           </el-form-item> -->
             <el-form-item label="Pic：">
               <el-col :span="18">
                  <el-input v-model="form1.showImg" disabled=""></el-input>
@@ -222,7 +217,6 @@ export default {
     upload() {
       this.$refs.img.click();
     },
-
     uploadImg1() {
       let para = new FormData();
       para.append("file", this.$refs.img2.files[0]);
@@ -315,8 +309,6 @@ export default {
     Slook(index, row) {
       this.dialogVisible = true;
       this.form = row;
-      console.log(this.form);
-      //    this.$store.state.count=row;
     },
     handleCurrentChange(val) {
       //  console.log(val)

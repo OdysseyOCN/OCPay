@@ -55,7 +55,6 @@
     }
     function address(ele){
         let html=`<span>Please input the valid wallet address</span>`
-        // console.log(ele.val().slice(0,2))
         if(ele.val().length!=42) {
             ele.parent().find("div").html(html);
             flag1=false;
@@ -66,14 +65,9 @@
     }
   
     $("#submit").click(function(){
-        // console.log(flag,flag1)
         if(isEmail($("#email").val())&&$("#address").val().length==42){
-            //let para={
-            //  "walletAddress":$("#address").val(),
-            //    "email":$("#email").val()
-            //}
+            
             let para="?walletAddress="+$("#address").val()+"&email="+$("#email").val()
-            //axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded'
             $.getJSON("http://ocpay-admin.ocoins.cc/api/ocpay/token/v1/save-mail-wallet"+para,function(data){
                 console.log(data)
                
@@ -85,17 +79,7 @@
                     $(".all_error").html(html);
                 }
             })
-            // axios.get("http://ocpay-admin.ocoins.cc/api/ocpay/token/v1/save-mail-wallet"+para).then(data=>{
-            //     console.log(data)
-               
-            //     if(data.data.success){
-
-            //         window.location.href="airdrop-success.html"
-            //     }else{
-            //         let html=` <div class="error"><img src="images/icon-warning.png" alt=""> ${data.data.data.message}</div>`
-            //         $(".all_error").html(html);
-            //     }
-            // })
+            
         }else{
             console.log("未通过")
         }

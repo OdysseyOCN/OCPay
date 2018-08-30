@@ -74,4 +74,26 @@ class DB {
         }
         return $res;
     }
+
+        // 获得最后一条记录id
+    public function getInsertid() {
+        return mysqli_insert_id($this->link);
+    }
+
+    /**
+     * 获取单个值
+     * @param $sql
+     * @param int $result_type
+     * @return bool|void
+     */
+    public function get_var($sql, $result_type=MYSQLI_NUM) {
+        $result = $this->query($sql);
+        if ($result && mysqli_num_rows($result) > 0){
+            $row =  mysqli_fetch_array($result, $result_type);
+            mysqli_free_result($result);
+            return $row[0];
+        }else {
+            return false;
+        }
+    }
 }

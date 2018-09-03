@@ -96,4 +96,16 @@ class DB {
             return false;
         }
     }
+
+    /**
+     * 获取一行记录 (一维数组)
+     * @param $sql
+     * @param string $type
+     * @return mixed
+     */
+    public function get_row($sql, $type="assoc") {
+        $query = $this->query($sql);
+        $list[] = $this->getFormSource($query);
+        return $list;
+    }
 }

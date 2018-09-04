@@ -10,7 +10,6 @@
     <el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox>
     <el-form-item style="width:100%;">
       <el-button type="primary" style="width:100%;" @click.native.prevent="handleSubmit2" :loading="logining">登录</el-button>
-      <!--<el-button @click.native.prevent="handleReset2">重置</el-button>-->
     </el-form-item>
   </el-form>
 </template>
@@ -54,7 +53,6 @@
           if (valid) {
             //_this.$router.replace('/table');
             this.logining = true;
-            // NProgress.start();
             var loginParams = { 
                 name: this.ruleForm2.account,
                 password: this.ruleForm2.checkPass 

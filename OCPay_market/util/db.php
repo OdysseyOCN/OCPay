@@ -108,4 +108,33 @@ class DB {
         $list[] = $this->getFormSource($query);
         return $list;
     }
+
+    /**
+     * 获取一条记录 前置条件通过资源获取一条记录
+     * @param $query
+     * @param string $type
+     * @return mixed
+     */
+    public function getFormSource($query, $type = "assoc") {
+        if (!in_array($type, array("assoc", "array", "row"))) {
+            die("mysqli_query error");
+        }
+
+        $funcname = "mysqli_fetch_".$type;
+        return $funcname($query);
+    }
+
+    /**
+     * 获取多条数据 (二维数组)
+     * @param $sql
+     * @return array
+     */
+    public function get_all($sql) {
+        $query = $this->query($sql);
+        $list = array();
+        while($r = $this->getFormSource($query)) {
+            $list[] = $r;
+        }
+        return $list;
+    }
 }

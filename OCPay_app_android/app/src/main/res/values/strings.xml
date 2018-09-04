@@ -36,9 +36,9 @@
     <string name="create_your_ocpay">Create your OCPay</string>
     <string name="wallet_file_not_exists">Wallet File not exists</string>
     <string name="activity_wallet_manager">Wallet Manager</string>
-    <string name="backup_wallet_tip_content_p1">Block chain wallet is different from traditional website account. It is a de centralized accounting system for cryptography. </string>
-    <string name="backup_wallet_tip_content_p2"> You must keep your wallet\'s private key and transaction password, any thought that it will lead to loss of assets.</string>
-    <string name="backup_wallet_tip_content_p3"> We suggest that we do double backup first, then enter the small test, and finally start to use it happily.</string>
+    <string name="backup_wallet_tip_content_p1">Blockchain wallets are different from traditional website user accounts. </string>
+    <string name="backup_wallet_tip_content_p2">Unlike traditional user accounts, lost passwords or private keys can not be recovered once lost.\n\nPlease use extreme caution will making backup copies of your wallets information.</string>
+    <string name="backup_wallet_tip_content_p3">We highly suggest creating a wallet, and backing up the private keys and passwords, then testing the wallet with a small transaction first.</string>
     <string name="backup_wallet_mnemonic">Backup OCPay</string>
     <string name="wallet_detail">Wallet Detail</string>
     <string name="modify_current_password">Current Password</string>
@@ -67,12 +67,12 @@
     <string name="wallet_create_tip_great">Great</string>
     <string name="wallet_create_tip_good">Good</string>
     <string name="wallet_create_tip_so">So-so</string>
-    <string name="wallet_create_tip_weak">Weak</string>
+    <string name="wallet_create_tip_weak">@string/wallet_create_pwd_tip_weak</string>
     <string name="characters">characters</string>
     <string name="dialog_tip_name_token">The name is taken,please try another</string>
     <string name="btn_bottom_send">Send</string>
     <string name="btn_bottom_receive">Receive</string>
-    <string name="tip_backup_content">The wallet is your blockchain account which is total different from websit/app account and account and it’s crytographic based.\n\nYou need to double check the wallet is being back properly in case of any assets loss.\n\nWe suggesr you backup mnemonic words and keystore both,then test with tiny ethers untill you feel confidence.\n</string>
+    <string name="tip_backup_content">The wallet is your blockchain account which is total different from websit/app account and account and it’s crytographic based.\n\nYou need to double check the wallet is being back properly in case of any assets loss.\n\nWe suggesr you backup mnemonic words and keystore both,then test with tiny ethers until you feel confidence.\n</string>
 
 
     <!--lock pattern-->
@@ -107,20 +107,24 @@
 
     <!--activity risk assessment-->
     <string name="activity_risk_assessment">Risk Assessment</string>
-    <string name="risk_assessment_title">Why do you need risk assessment</string>
-    <string name="risk_assessment_content">Blockchain is a brand new technology. Decentralization, irreconcilable, individual control (accounts, assets and data) that is the difference between the Internet and the conventional art features apart. The wallet is the passport of this new world. Its essence is the private key.\n\nOcpay is a wallet tool that helps you manage private keys. If there is no block chain and wallet basic understanding, if there is no high-speed driving license, this is a very dangerous thing. Therefore, we have established a risk assessment system to ensure your ability to meet specific standards before starting to use it. Everything is for safety, thank you for your cooperation!</string>
     <string name="action_learn_more">Learn More</string>
     <string name="action_create_your_wallet">Create your Wallet</string>
 
     <!--activity risk assessment detail-->
-    <string name="risk_assessment_detail_content">Blockchain is a brand new technology. Decentralization, irreconcilable, individual control (accounts, assets and data) that is the difference between the Internet and the conventional art features apart. The wallet is the passport of this new world. Its essence is the private key. Ocpay is a wallet tool that helps you manage private keys.\n\n If there is no block chain and wallet basic understanding, if there is no high-speed driving license, this is a very dangerous thing. Therefore, we have established a risk assessment system to ensure your ability to meet specific standards before starting to use it. Everything is for safety, thank you for your cooperation!</string>
-    <string name="risk_assessment_detail_title">Why do you need risk assessment</string>
+    <string name="risk_assessment_detail_content">Blockchain is a new technology that is decentralized, focuses on individual control of satay and assets, and features irreversible payments.
+
+In this new world, your account wallet and private keys act as your digital passport, and OCPay does just that.
+
+Without a basic understanding of Blockchain and wallet technology, users can make mistakes that can lead to loss of funds by mistake.
+
+To ensure your ability and basic understanding of this new paradigm, we’ve implemented some basic tools of risk assessment meant to make sure our users are safe while using OCPay. </string>
+    <string name="risk_assessment_detail_title">The Importance of Risk Assessment </string>
     <string name="activity_title_create_your_wallet">Create Your Wallet</string>
 
 
     <!--activity wallet create -->
-    <string name="create_wallet_tip_one">The password is used to protect the private key and transaction authorization, the strength is very important</string>
-    <string name="create_wallet_tip_two">Ocn does not store passwords, nor does it help you to retrieve them. Please remember to remember</string>
+    <string name="create_wallet_tip_one">The password is used to protect your private key, it it very important to utilize a strong password. </string>
+    <string name="create_wallet_tip_two">OCPay does not store passwords, and cannot help retrieve them. Please make sure to backup your password. </string>
     <string name="edit_hint_wallet_name">Wallet Name</string>
     <string name="edit_hint_password">Password</string>
     <string name="edit_hint_repeat_password">Repeat Password</string>
@@ -269,6 +273,46 @@
     <string name="tip_sign_in_success">Sign In Successful !</string>
     <string name="tip_account_pwd_error">Account or password error</string>
     <string name="tip_ensure_particippation">Please submit your wallet address to ensure participation.</string>
+
+
+    <string name="tip_cover_wallet_address">Are you sure to cover the existing wallet address?\nYou will need to reset the password.\n%s</string>
+
+
+    <string name="tip_wallet_not_exits">Wallet does not exist !</string>
+
+
+    <!--market  fragment-->
+    <string name="fg_market_favorite">Favorite</string>
+    <string name="fg_market_token">Token</string>
+    <string name="fg_market_exchange">Exchange</string>
+    <string name="market_property_token">Token</string>
+    <string name="market_property_exchange">Exchange</string>
+    <string name="market_property_last_price">Last Price</string>
+    <string name="market_property_volume">Volume</string>
+    <string name="market_property_change_24h">Change.24H</string>
+    <string name="fragment_title_market">Market</string>
+
+
+    <string name="title_token_value">Token/Value</string>
+    <string name="title_last_price_volume">Last Price/Volume</string>
+    <string name="title_name">Name</string>
+    <string name="title_token_pair">Token Pair</string>
+
+
+    <!--token search -->
+    <string name="hint_search">Search</string>
+    <string name="tip_search_none">Not find related results</string>
+    <string name="search_title_hot_history">Hot History</string>
+    <string name="search_title_history">Search History</string>
+    <string name="action_log_in">Log in</string>
+    <string name="activity_login_login">Login</string>
+    <string name="tip_follow_login">The favorite will occur after login</string>
+    <string name="tip_to_retry">Failed to load, click to retry !</string>
+    <string name="option_cancel">Cancel</string>
+    <string name="tip_no_data">No data</string>
+
+    <string name="tip_need_login">Need to log in to operate</string>
+    <string name="tip_copy_wallet_note">Mnemonics are phrases used to restore a wallet or reset the wallets password. These phrases allow you to access your funds, so make sure to copy the words to paper accurately, and to store them in a safe and private place. </string>
 
 
 </resources>

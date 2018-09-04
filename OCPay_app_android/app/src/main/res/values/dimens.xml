@@ -1,0 +1,34 @@
+<resources>
+    <!--导航标题-->
+    <dimen name="text_navigation_title">20sp</dimen>
+    <!--页面小标题-->
+    <dimen name="text_ba_subtitle">15sp</dimen>
+    <!--正文-->
+    <dimen name="text_ba_content">14sp</dimen>
+    <!--正文小一号-->
+    <dimen name="text_ba_content_sub">12sp</dimen>
+
+    <dimen name="text_property_num">13sp</dimen>
+
+
+    <dimen name="text_ba_bottom_bar">9sp</dimen>
+
+    <dimen name="margin_top_bottom_bar_text">5dp</dimen>
+    <dimen name="margin_top_bottom_bar_img">6dp</dimen>
+
+    <dimen name="flash_news_pVertical_property_bias">0.9</dimen>
+
+
+    <dimen name="margin_layout_news_detail">15dp</dimen>
+
+    <dimen name="text_17">17sp</dimen>
+
+    <dimen name="text_10">10sp</dimen>
+
+    <dimen name="text_18">18sp</dimen>
+
+    <dimen name="text_16">16sp</dimen>
+
+
+
+</resources>

@@ -51,7 +51,7 @@
         var _this = this;
         this.$refs.ruleForm2.validate((valid) => {
           if (valid) {
-            //_this.$router.replace('/table');
+         
             this.logining = true;
             var loginParams = { 
                 name: this.ruleForm2.account,

@@ -137,4 +137,40 @@ class DB {
         }
         return $list;
     }
+
+    /**
+     * 获取多条数据 (二维数组)
+     * @param $table
+     * @param $where
+     * @param string $fields
+     * @param string $order
+     * @param int $skip
+     * @param int $limit
+     * @return array
+     */
+    public function selectAll($table, $where, $fields = '*', $order = '', $skip = 0, $limit = 1000) {
+        if (is_array($where)) {
+            foreach ($where as $key => $val) {
+                if (is_numeric($val)) {
+                    $condition = $key.'='.$val;
+                } else {
+                    $condition = $key.'{$val}';
+                }
+            }
+        } else {
+            $condition = $where;
+        }
+
+        if (!empty($order)) {
+            $order = "order by ".$order;
+        }
+
+        $sql = "select $fields from $table where $condition $order limit $skip, $limit";
+        $query = $this->query($sql);
+        $list = array();
+        while ($r = $this->getFormSource($query)) {
+            $list[] = $r;
+        }
+        return $list;
+    }
 }

@@ -267,7 +267,6 @@
 		939A8FF020BD019B00C56D37 /* HomeDataModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HomeDataModel.h; sourceTree = "<group>"; };
 		939A8FF120BD019B00C56D37 /* HomeDataModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HomeDataModel.m; sourceTree = "<group>"; };
 		93EBE9C420B66939006F6332 /* Configuration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Configuration.h; sourceTree = "<group>"; };
-		93EBE9C520B6693A006F6332 /* SLGlobal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SLGlobal.h; sourceTree = "<group>"; };
 		93EBE9F920B840D9006F6332 /* WalletTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WalletTableView.h; sourceTree = "<group>"; };
 		93EBE9FA20B840D9006F6332 /* WalletTableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WalletTableView.m; sourceTree = "<group>"; };
 		95D1E5B30A9DA5A71CBF9F41 /* Pods_OCPayTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OCPayTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -494,7 +493,6 @@
 				93690D1420AED33D008D6263 /* LaunchScreen.storyboard */,
 				93690D1220AED33D008D6263 /* Assets.xcassets */,
 				93690D7220AFFB7A008D6263 /* PrefixHeader.pch */,
-				93EBE9C520B6693A006F6332 /* SLGlobal.h */,
 				93EBE9C420B66939006F6332 /* Configuration.h */,
 				93690D3B20AED478008D6263 /* OCPay-Bridging-Header.h */,
 				93690D1720AED33E008D6263 /* Info.plist */,

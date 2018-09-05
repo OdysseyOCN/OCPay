@@ -35,6 +35,39 @@
     <color name="color_transfer_text_green">#2EC424</color>
     <color name="color_transfer_text_red">#D6556D</color>
     <color name="color_transfer_text_blue">#2870C3</color>
-    #2EC424
+    <color name="color_btn_text_un_click">#A4AFB4</color>
+
+    <color name="color_edit_tip_main">#33535F</color>
+
+    <color name="color_edit_tip_red">#DA4224</color>
+    <color name="color_token_transaction_title">#FFB5BDC8</color>
+    <color name="transaction_center_date_title">#FF38525F</color>
+    <color name="grey_a5a5a5">#a5a5a5</color>
+    <color name="red_f4333c">#f4333c</color>
+
+
+    <color name="blue_43addc">#43ADDC</color>
+
+
+    <color name="colorAuthorName">#606060</color>
+
+    <color name="colorBGDefault">#F4F4F4</color>
+
+    <color name="colorTextTint20">#20c9c9c9</color>
+
+
+    <color name="colorArticleProperty">#A7A7A7</color>
+
+    <color name="colorTransparent">#00FFFFFF</color>
+
+    <color name="colorPointColumn">#D8D8D8</color>
+
+    <color name="colorBlack">#000</color>
+    <color name="colorSearchInputBg">#D3473B</color>
+
+    <color name="colorWhite60">#00FFFFFF</color>
+    <color name="colorGrayBorder30">#30F2F2F2</color>
+    <color name="colorHint">#F3F3F3</color>
+
 
 </resources>

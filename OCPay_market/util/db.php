@@ -173,4 +173,30 @@ class DB {
         }
         return $list;
     }
+
+    /**
+     * 添加数据
+     * @param $table
+     * @param $data
+     * @return int|string
+     */
+    public function insert($table, $data) {
+        // 遍历数组 得到每一个字段和字段的值
+        $key_str = '';
+        $v_str = '';
+        foreach ($data as $key => $v) {
+            // $key 的值是每一个字段s一个字段所对应的值
+            $key_str .= $key.',';
+            $v_str .= "'$v',";
+        }
+        $key_str = trim($key_str,",");
+        $v_str = trim($v_str, ",");
+
+        // 判断数据是否为空
+        $sql = "insert into $table ($key_str) values ($v_str)";
+        $this->query($sql);
+
+        // 返回上一次增加产生ID值
+        return $this->getInsertid();
+    }
 }

@@ -199,4 +199,26 @@ class DB {
         // 返回上一次增加产生ID值
         return $this->getInsertid();
     }
+
+    /**
+     * 删除单条数据
+     * @param $table
+     * @param $where
+     * @return int
+     */
+    public function deleteOne($table, $where) {
+        if (is_array($where)) {
+            foreach ($where as $key => $val) {
+                $condition = $key.'='.$val;
+            }
+        } else {
+            $condition = $where;
+        }
+
+        $sql = "delete from $table where $condition";
+        $this->query($sql);
+
+        // 返回受影响行数
+        return mysqli_affected_rows($this->link);
+    }
 }

@@ -9,7 +9,6 @@
 #import "AppDelegate.h"
 #import "LaunchViewController.h"
 #import "BasicNavigationController.h"
-#import "WalletManager.h"
 
 @interface AppDelegate ()
 
@@ -20,16 +19,14 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
-
-
-    if (WalletManager.share.wallets.count > 0) {
-        self.window.rootViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateInitialViewController];
-    }else{
-        LaunchViewController *vc = [[LaunchViewController alloc]init];
-        BasicNavigationController *nvc = [[BasicNavigationController alloc]initWithRootViewController:vc];
-        nvc.navigationBar.hidden = YES;
-        self.window.rootViewController = nvc;
-    }
+//    if (WalletManager.share.wallets.count > 0) {
+//        self.window.rootViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateInitialViewController];
+//    }else{
+//        LaunchViewController *vc = [[LaunchViewController alloc]init];
+//        BasicNavigationController *nvc = [[BasicNavigationController alloc]initWithRootViewController:vc];
+//        nvc.navigationBar.hidden = YES;
+//        self.window.rootViewController = nvc;
+//    }
     
     [self.window makeKeyAndVisible];
     return YES;

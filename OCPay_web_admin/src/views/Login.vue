@@ -31,7 +31,7 @@
           ],
           checkPass: [
             { required: true, message: '请输入密码', trigger: 'blur' },
-            //{ validator: validaePass2 }
+          
           ]
         },
         checked: true

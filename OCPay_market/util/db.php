@@ -221,4 +221,30 @@ class DB {
         // 返回受影响行数
         return mysqli_affected_rows($this->link);
     }
+
+    /**
+     * 删除多条记录
+     * @param $table
+     * @param $where
+     * @return int
+     */
+    public function deleteAll($table, $where) {
+        if (is_array($where)) {
+            foreach ($where as $key => $val) {
+                if (is_array($val)) {
+                    $condition = $key.' in ('.implode(",", $val).')';
+                } else {
+                    $condition = $key.'='.$val;
+                }
+            }
+        } else {
+            $condition = $where;
+        }
+
+        $sql = "delete from $table where $condition";
+        $this->query($sql);
+
+        // 返回受影响行数
+        return mysqli_affected_rows($this->link);
+    }
 }

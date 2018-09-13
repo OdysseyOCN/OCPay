@@ -12,11 +12,6 @@
 			<el-col :span="4" class="userinfo">
 				<el-dropdown trigger="hover">
 					<span class="el-dropdown-link userinfo-inner"><el-dropdown-item  @click.native="logout">退出登录</el-dropdown-item></span>
-					<!-- <el-dropdown-menu slot="dropdown">
-						<el-dropdown-item>我的消息</el-dropdown-item>
-					
-						
-					</el-dropdown-menu> -->
 				</el-dropdown>
 			</el-col>
 		</el-col>

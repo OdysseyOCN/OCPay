@@ -87,6 +87,7 @@
 		939A8FDB20BBDA5600C56D37 /* HomeCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 939A8FDA20BBDA5600C56D37 /* HomeCollectionViewCell.m */; };
 		939A8FDF20BBDB2800C56D37 /* HomeViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 939A8FDE20BBDB2800C56D37 /* HomeViewModel.m */; };
 		939A8FF220BD019B00C56D37 /* HomeDataModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 939A8FF120BD019B00C56D37 /* HomeDataModel.m */; };
+		93B40DC82147D2A8009AAC7C /* NSObjectSafe.m in Sources */ = {isa = PBXBuildFile; fileRef = 93B40DC62147D2A8009AAC7C /* NSObjectSafe.m */; };
 		93EBE9FB20B840D9006F6332 /* WalletTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EBE9FA20B840D9006F6332 /* WalletTableView.m */; };
 		FDDA5DC56833E7AA816D1BE9 /* Pods_OCPayTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95D1E5B30A9DA5A71CBF9F41 /* Pods_OCPayTests.framework */; };
 /* End PBXBuildFile section */
@@ -266,6 +267,8 @@
 		939A8FDE20BBDB2800C56D37 /* HomeViewModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HomeViewModel.m; sourceTree = "<group>"; };
 		939A8FF020BD019B00C56D37 /* HomeDataModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HomeDataModel.h; sourceTree = "<group>"; };
 		939A8FF120BD019B00C56D37 /* HomeDataModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HomeDataModel.m; sourceTree = "<group>"; };
+		93B40DC62147D2A8009AAC7C /* NSObjectSafe.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSObjectSafe.m; sourceTree = "<group>"; };
+		93B40DC72147D2A8009AAC7C /* NSObjectSafe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSObjectSafe.h; sourceTree = "<group>"; };
 		93EBE9C420B66939006F6332 /* Configuration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Configuration.h; sourceTree = "<group>"; };
 		93EBE9F920B840D9006F6332 /* WalletTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WalletTableView.h; sourceTree = "<group>"; };
 		93EBE9FA20B840D9006F6332 /* WalletTableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WalletTableView.m; sourceTree = "<group>"; };
@@ -586,6 +589,7 @@
 		939A8FBB20BBB42800C56D37 /* Third */ = {
 			isa = PBXGroup;
 			children = (
+				93B40DC52147D2A8009AAC7C /* NSObjectSafe */,
 				9334FC042146862A0065A12A /* AAChartKitLib */,
 				9363035C20BFDA61000B6C91 /* GTMBase64 */,
 				939A8FBC20BBB45700C56D37 /* SGQRCode */,
@@ -636,6 +640,15 @@
 				930D3BA320CE384900E3D026 /* TransactionInfo+Extension.m */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		93B40DC52147D2A8009AAC7C /* NSObjectSafe */ = {
+			isa = PBXGroup;
+			children = (
+				93B40DC62147D2A8009AAC7C /* NSObjectSafe.m */,
+				93B40DC72147D2A8009AAC7C /* NSObjectSafe.h */,
+			);
+			path = NSObjectSafe;
 			sourceTree = "<group>";
 		};
 		93B47D1620BB9EE700B16B42 /* QRCode */ = {
@@ -949,6 +962,7 @@
 				9334FC582146862A0065A12A /* AACrosshair.m in Sources */,
 				9334FC622146862A0065A12A /* AAMarker.m in Sources */,
 				9363036020BFDA61000B6C91 /* GTMBase64.m in Sources */,
+				93B40DC82147D2A8009AAC7C /* NSObjectSafe.m in Sources */,
 				9334C959213EC48400F66596 /* TransactionRecordViewController.m in Sources */,
 				93690D5F20AFF649008D6263 /* BasicViewController.m in Sources */,
 				93690D4B20AEFB6D008D6263 /* NetWorkManager.m in Sources */,

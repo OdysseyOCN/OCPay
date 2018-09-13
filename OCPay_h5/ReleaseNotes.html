@@ -1,37 +1,524 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title> What is a private key?</title>
-    <link rel="stylesheet" href="css/main.css">
-</head>
-
-<body>
-    <div class="article">
-        <h3> What is a private key?</h3>
-
-
-
-        
-        <p> The private key is an unencrypted private key, unlike the keystore which is encrypted. Anyone with access to your
-            private key can control your wallet. If you do not have your private key you do not own your wallet. We advise
-            you not keep your private key and simply use your mnemonic or keystore to keep your wallet secure. Since the
-            keystore and mnemonic are encrypted they are safer than the private key. Remember: We do not save your password,
-            once forgotten, it cannot be recovered.
-        </p>
-		<p> Every account is defined by a pair of keys: (1) a private key and (2) a public key. Each account has an address that
-            is derived from the public key by using the last 20 bytes of information. The private key is the secret half
-            of your address/public key. The private key consists of 64 hexadecimal characters that should look like this:
-            15f427ece75f0ab1b783893cbe390288978d4d4ff24dd233245b4285fcc31cf6. If you misspell any portion of the private
-            key, you will be attempting to access a different wallet. Without your private key you cannot access your funds.
-        </p>
-
-
-
-    </div>
-</body>
-
-</html>
+     1	<!DOCTYPE html>
+     2	<html lang="en">
+     3	
+     4	<head>
+     5	    <meta charset="UTF-8">
+     6	    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+     7	    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+     8	    <title>Release Notes</title>
+     9	    <link rel="stylesheet" href="css/main.css">
+    10	</head>
+    11	
+    12	<body>
+    13	    <div class="article">
+    14	        <p>
+    15	            <h3>
+    16	                <span>Release Notes</span>
+    17	            </h3>
+    18	        </p>
+    19	        <p>
+    20	
+    21	        </p>
+    22	        <p>
+    23	            <span>1.4.3</span>
+    24	        </p>
+    25	        <p>
+    26	            <span>Show token contract address</span>
+    27	        </p>
+    28	        <p>
+    29	            <span>Token search Bugfix</span>
+    30	        </p>
+    31	        <p>
+    32	            <span>Integrate HyperDragon</span>
+    33	        </p>
+    34	        <p>
+    35	            <span>Integrate EOS mapping function</span>
+    36	        </p>
+    37	        <p>
+    38	            <span>Add App rating entrance</span>
+    39	        </p>
+    40	        <p>
+    41	
+    42	        </p>
+    43	        <p>
+    44	            <span>1.4.2</span>
+    45	        </p>
+    46	        <p>
+    47	            <span>Optimize token search performance</span>
+    48	        </p>
+    49	        <p>
+    50	            <span>Fix wallet duplicated bug</span>
+    51	        </p>
+    52	        <p>
+    53	
+    54	        </p>
+    55	        <p>
+    56	            <span>1.4.0 Candy</span>
+    57	        </p>
+    58	        <p>
+    59	            <span>Launch CandyBar DApp</span>
+    60	        </p>
+    61	        <p>
+    62	            <span>Fix assets suddenly turn zero balance bug</span>
+    63	        </p>
+    64	        <p>
+    65	            <span>Pop warning when user try to resend possible same transfer</span>
+    66	        </p>
+    67	        <p>
+    68	            <span>Make blockchain node error readable</span>
+    69	        </p>
+    70	        <p>
+    71	            <span>Stop iCloud from syncing keystore files</span>
+    72	        </p>
+    73	        <p>
+    74	
+    75	        </p>
+    76	        <p>
+    77	            <span>1.3.5</span>
+    78	        </p>
+    79	        <p>
+    80	            <span>Adjust watch wallet process</span>
+    81	        </p>
+    82	        <p>
+    83	            <span>New guides to wallet backup</span>
+    84	        </p>
+    85	        <p>
+    86	            <span>More wallet usage notice</span>
+    87	        </p>
+    88	        <p>
+    89	            <span>Risk questionaire skippable</span>
+    90	        </p>
+    91	        <p>
+    92	
+    93	        </p>
+    94	        <p>
+    95	            <span>1.3.4</span>
+    96	        </p>
+    97	        <p>
+    98	            <span>improve Risk Questionnaire flow</span>
+    99	        </p>
+   100	        <p>
+   101	            <span>fix view scroll bug</span>
+   102	        </p>
+   103	        <p>
+   104	
+   105	        </p>
+   106	        <p>
+   107	            <span>1.3.3</span>
+   108	        </p>
+   109	        <p>
+   110	            <span>Add user questionnaire</span>
+   111	        </p>
+   112	        <p>
+   113	            <span>Update new Terms of Service and Privacy Policy</span>
+   114	        </p>
+   115	        <p>
+   116	            <span>Add maintenance page</span>
+   117	        </p>
+   118	        <p>
+   119	            <span>Support popup system alerts</span>
+   120	        </p>
+   121	        <p>
+   122	
+   123	        </p>
+   124	        <p>
+   125	            <span>1.3.2</span>
+   126	        </p>
+   127	        <p>
+   128	            <span>Support wallet password change/reset</span>
+   129	        </p>
+   130	        <p>
+   131	            <span>Add receivce address blacklist filter</span>
+   132	        </p>
+   133	        <p>
+   134	            <span>New support center</span>
+   135	        </p>
+   136	        <p>
+   137	            <span>Fix offline-signing bug and balance display bug</span>
+   138	        </p>
+   139	        <p>
+   140	
+   141	        </p>
+   142	        <p>
+   143	            <span>1.3.1</span>
+   144	        </p>
+   145	        <p>
+   146	            <span>Add app guide to new users</span>
+   147	        </p>
+   148	        <p>
+   149	            <span>Support search/add/submit new tokens</span>
+   150	        </p>
+   151	        <p>
+   152	            <span>Support plain private key export</span>
+   153	        </p>
+   154	        <p>
+   155	            <span>Improve QRCode scanner</span>
+   156	        </p>
+   157	        <p>
+   158	            <span>minor bugfix</span>
+   159	        </p>
+   160	        <p>
+   161	
+   162	        </p>
+   163	        <p>
+   164	            <span>1.3.0 Hodor</span>
+   165	        </p>
+   166	        <p>
+   167	            <span>Supports Touch ID/wallet password login</span>
+   168	        </p>
+   169	        <p>
+   170	            <span>Supports ENS domain as recipient address</span>
+   171	        </p>
+   172	        <p>
+   173	            <span>Supports custom path to mnemonic HD wallet</span>
+   174	        </p>
+   175	        <p>
+   176	            <span>Yunbi app UX improvements</span>
+   177	        </p>
+   178	        <p>
+   179	            <span>Transfer preview gas fee details</span>
+   180	        </p>
+   181	        <p>
+   182	            <span>Fix iOS 8.* crash bugs</span>
+   183	        </p>
+   184	        <p>
+   185	
+   186	        </p>
+   187	        <p>
+   188	            <span>1.2.9</span>
+   189	        </p>
+   190	        <p>
+   191	            <span>Force user to backup wallet</span>
+   192	        </p>
+   193	        <p>
+   194	            <span>Fix inaccurate estimateGas bug</span>
+   195	        </p>
+   196	        <p>
+   197	            <span>Support custom gas price</span>
+   198	        </p>
+   199	        <p>
+   200	            <span>Web3 provider fallback</span>
+   201	        </p>
+   202	        <p>
+   203	            <span>Filter Yunbi wrong orderbook data entries</span>
+   204	        </p>
+   205	        <p>
+   206	
+   207	        </p>
+   208	        <p>
+   209	            <span>1.2.8</span>
+   210	        </p>
+   211	        <p>
+   212	            <span>Reduce web3 request to server</span>
+   213	        </p>
+   214	        <p>
+   215	            <span>Improve ENS DApp, ready for beta release</span>
+   216	        </p>
+   217	        <p>
+   218	            <span>Use official ENS Resolver</span>
+   219	        </p>
+   220	        <p>
+   221	            <span>Enable customized gasPrice to DApps</span>
+   222	        </p>
+   223	        <p>
+   224	
+   225	        </p>
+   226	        <p>
+   227	            <span>1.2.7</span>
+   228	        </p>
+   229	        <p>
+   230	            <span>ENS DApp supports</span>
+   231	        </p>
+   232	        <p>
+   233	            <span>Allow ENS bids backup and set reminder</span>
+   234	        </p>
+   235	        <p>
+   236	
+   237	        </p>
+   238	        <p>
+   239	            <span>1.2.4</span>
+   240	        </p>
+   241	        <p>
+   242	            <span>fix camera crash bug</span>
+   243	        </p>
+   244	        <p>
+   245	            <span>fix articles’ language switch bug</span>
+   246	        </p>
+   247	        <p>
+   248	            <span>fix jpush crash bug</span>
+   249	        </p>
+   250	        <p>
+   251	            <span>improve asset price display</span>
+   252	        </p>
+   253	        <p>
+   254	
+   255	        </p>
+   256	        <p>
+   257	            <span>1.2.3</span>
+   258	        </p>
+   259	        <p>
+   260	            <span>Add navigation/refresh/share functionalities to webview</span>
+   261	        </p>
+   262	        <p>
+   263	            <span>Improve ICO DApp stabality</span>
+   264	        </p>
+   265	        <p>
+   266	            <span>Add DApp deep linking</span>
+   267	        </p>
+   268	        <p>
+   269	
+   270	        </p>
+   271	        <p>
+   272	            <span>1.2.2</span>
+   273	        </p>
+   274	        <p>
+   275	            <span>fix offline-signing token transfer bug</span>
+   276	        </p>
+   277	        <p>
+   278	            <span>fix sms verify code bug</span>
+   279	        </p>
+   280	        <p>
+   281	            <span>fix time offset caused yunbi connection failed</span>
+   282	        </p>
+   283	        <p>
+   284	            <span>improve Yunbi UX</span>
+   285	        </p>
+   286	        <p>
+   287	
+   288	        </p>
+   289	        <p>
+   290	            <span>1.2.1 Yunbi</span>
+   291	        </p>
+   292	        <p>
+   293	            <span>Integrate ENS DApp</span>
+   294	        </p>
+   295	        <p>
+   296	            <span>Integrate Yunbi DApp</span>
+   297	        </p>
+   298	        <p>
+   299	            <span>Remove login/register requirements</span>
+   300	        </p>
+   301	        <p>
+   302	            <span>Fix incall status bar bug</span>
+   303	        </p>
+   304	        <p>
+   305	            <span>Fix cold wallet token transfer amount always be 0 bug</span>
+   306	        </p>
+   307	        <p>
+   308	
+   309	        </p>
+   310	        <p>
+   311	            <span>1.2.0 Iceage</span>
+   312	        </p>
+   313	        <p>
+   314	            <span>Fully support offline-signing</span>
+   315	        </p>
+   316	        <p>
+   317	            <span>Handle gracefully when web3 return overrun estimateGas</span>
+   318	        </p>
+   319	        <p>
+   320	            <span>Enable to copy ddress from tx receipt</span>
+   321	        </p>
+   322	        <p>
+   323	            <span>More UX improments&amp;bug fixes</span>
+   324	        </p>
+   325	        <p>
+   326	
+   327	        </p>
+   328	        <p>
+   329	            <span>1.1.2</span>
+   330	        </p>
+   331	        <p>
+   332	            <span>Web3 provider upgrade</span>
+   333	        </p>
+   334	        <p>
+   335	            <span>SendTransaction bug fixes</span>
+   336	        </p>
+   337	        <p>
+   338	            <span>Add request agent info</span>
+   339	        </p>
+   340	        <p>
+   341	
+   342	        </p>
+   343	        <p>
+   344	            <span>1.1.1</span>
+   345	        </p>
+   346	        <p>
+   347	            <span>Ico DApp integrated</span>
+   348	        </p>
+   349	        <p>
+   350	            <span>Watch wallet mode support</span>
+   351	        </p>
+   352	        <p>
+   353	            <span>Address uniqueness validation</span>
+   354	        </p>
+   355	        <p>
+   356	            <span>Fix android jpush update registerID bug</span>
+   357	        </p>
+   358	        <p>
+   359	
+   360	        </p>
+   361	        <p>
+   362	            <span>1.0.8</span>
+   363	        </p>
+   364	        <p>
+   365	            <span>Improve keystore validation</span>
+   366	        </p>
+   367	        <p>
+   368	            <span>More friendly error&amp;exception info</span>
+   369	        </p>
+   370	        <p>
+   371	            <span>All assets request from webview goes https</span>
+   372	        </p>
+   373	        <p>
+   374	            <span>Requires 8 characters password length</span>
+   375	        </p>
+   376	        <p>
+   377	            <span>Add password strength signal</span>
+   378	        </p>
+   379	        <p>
+   380	            <span>Add backup guides when new wallet created</span>
+   381	        </p>
+   382	        <p>
+   383	            <span>Supports checksum address</span>
+   384	        </p>
+   385	        <p>
+   386	
+   387	        </p>
+   388	        <p>
+   389	            <span>1.0.7</span>
+   390	        </p>
+   391	        <p>
+   392	            <span>Custom Gas/Data advance mode</span>
+   393	        </p>
+   394	        <p>
+   395	            <span>Geth/Parity Spurious Dragon server upgrade</span>
+   396	        </p>
+   397	        <p>
+   398	            <span>Implement EIP155 for anti replay attack</span>
+   399	        </p>
+   400	        <p>
+   401	            <span>Market in today widget</span>
+   402	        </p>
+   403	        <p>
+   404	            <span>Market charts have volumn data</span>
+   405	        </p>
+   406	        <p>
+   407	            <span>Fix keyboard dismiss bug</span>
+   408	        </p>
+   409	        <p>
+   410	
+   411	        </p>
+   412	        <p>
+   413	            <span>1.0.6</span>
+   414	        </p>
+   415	        <p>
+   416	            <span>Add signup/login confirmation code feature</span>
+   417	        </p>
+   418	        <p>
+   419	            <span>API URL all ssl enabled</span>
+   420	        </p>
+   421	        <p>
+   422	            <span>Adjust tx gas slider caculation</span>
+   423	        </p>
+   424	        <p>
+   425	
+   426	        </p>
+   427	        <p>
+   428	            <span>1.0.5</span>
+   429	        </p>
+   430	        <p>
+   431	            <span>Add support center</span>
+   432	        </p>
+   433	        <p>
+   434	            <span>Add terms&amp;privacy pages</span>
+   435	        </p>
+   436	        <p>
+   437	
+   438	        </p>
+   439	        <p>
+   440	            <span>1.0.4</span>
+   441	        </p>
+   442	        <p>
+   443	            <span>More market asset pairs</span>
+   444	        </p>
+   445	        <p>
+   446	            <span>New design with weekly balance chart</span>
+   447	        </p>
+   448	        <p>
+   449	            <span>Fix timestamp bump bug</span>
+   450	        </p>
+   451	        <p>
+   452	            <span>Improve UI on iPhone 5S</span>
+   453	        </p>
+   454	        <p>
+   455	
+   456	        </p>
+   457	        <p>
+   458	            <span>1.0.3</span>
+   459	        </p>
+   460	        <p>
+   461	            <span>Push to refresh assets list</span>
+   462	        </p>
+   463	        <p>
+   464	            <span>Fix contact save bug</span>
+   465	        </p>
+   466	        <p>
+   467	            <span>Fix duplicated tx bug</span>
+   468	        </p>
+   469	        <p>
+   470	
+   471	        </p>
+   472	        <p>
+   473	            <span>1.0.2</span>
+   474	        </p>
+   475	        <p>
+   476	            <span>Improve performance</span>
+   477	        </p>
+   478	        <p>
+   479	            <span>Fix market crash problem</span>
+   480	        </p>
+   481	        <p>
+   482	            <span>New feature: transfer with memo</span>
+   483	        </p>
+   484	        <p>
+   485	
+   486	        </p>
+   487	        <p>
+   488	            <span>1.0.1</span>
+   489	        </p>
+   490	        <p>
+   491	            <span>Refactor HDWallet native code</span>
+   492	        </p>
+   493	        <p>
+   494	            <span>Adjust extended API service architecture</span>
+   495	        </p>
+   496	        <p>
+   497	            <span>Apply brand new UI</span>
+   498	        </p>
+   499	        <p>
+   500	            <span>Improve Discover channel UX</span>
+   501	        </p>
+   502	        <p>
+   503	            <span>New feature: contacts</span>
+   504	        </p>
+   505	        <p>
+   506	            <span>New feature: official announcements</span>
+   507	        </p>
+   508	        <p>
+   509	            <span>Improve i18n/multi-currency</span>
+   510	        </p>
+   511	        <p>
+   512	            <span>Support web3 custom URL</span>
+   513	        </p>
+   514	        <p>
+   515	            <br>
+   516	        </p>
+   517	
+   518	
+   519	
+   520	
+   521	    </div>
+   522	</body>
+   523	
+   524	</html>

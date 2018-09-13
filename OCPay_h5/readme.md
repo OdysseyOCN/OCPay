@@ -1,4 +1,4 @@
-#OCPay update1 list
+#OCPay update list
 5892
 13767
 26709

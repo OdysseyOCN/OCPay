@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.coinwallet.airdrop.dao.AirdropTransactionOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.coinwallet.airdrop.entity.AirdropTransactionOrder" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="tx_hash" property="txHash" jdbcType="VARCHAR" />
+    <result column="order_status" property="orderStatus" jdbcType="INTEGER" />
+    <result column="from_address" property="fromAddress" jdbcType="VARCHAR" />
+    <result column="to_address" property="toAddress" jdbcType="VARCHAR" />
+    <result column="coin_name" property="coinName" jdbcType="VARCHAR" />
+    <result column="coin_num" property="coinNum" jdbcType="DECIMAL" />
+    <result column="gas_price" property="gasPrice" jdbcType="DECIMAL" />
+    <result column="gas_limit" property="gasLimit" jdbcType="BIGINT" />
+    <result column="fee" property="fee" jdbcType="DECIMAL" />
+    <result column="nonce" property="nonce" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, tx_hash, order_status, from_address, to_address, coin_name, coin_num, gas_price, 
+    gas_limit, fee, nonce, create_time, update_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.coinwallet.airdrop.entity.AirdropTransactionOrderExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from airdrop_transaction_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from airdrop_transaction_order
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from airdrop_transaction_order
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.coinwallet.airdrop.entity.AirdropTransactionOrder" >
+    insert into airdrop_transaction_order (id, tx_hash, order_status, 
+      from_address, to_address, coin_name, 
+      coin_num, gas_price, gas_limit, 
+      fee, nonce, create_time, 
+      update_time)
+    values (#{id,jdbcType=INTEGER}, #{txHash,jdbcType=VARCHAR}, #{orderStatus,jdbcType=INTEGER}, 
+      #{fromAddress,jdbcType=VARCHAR}, #{toAddress,jdbcType=VARCHAR}, #{coinName,jdbcType=VARCHAR}, 
+      #{coinNum,jdbcType=DECIMAL}, #{gasPrice,jdbcType=DECIMAL}, #{gasLimit,jdbcType=BIGINT}, 
+      #{fee,jdbcType=DECIMAL}, #{nonce,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.coinwallet.airdrop.entity.AirdropTransactionOrder" >
+    insert into airdrop_transaction_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="txHash != null" >
+        tx_hash,
+      </if>
+      <if test="orderStatus != null" >
+        order_status,
+      </if>
+      <if test="fromAddress != null" >
+        from_address,
+      </if>
+      <if test="toAddress != null" >
+        to_address,
+      </if>
+      <if test="coinName != null" >
+        coin_name,
+      </if>
+      <if test="coinNum != null" >
+        coin_num,
+      </if>
+      <if test="gasPrice != null" >
+        gas_price,
+      </if>
+      <if test="gasLimit != null" >
+        gas_limit,
+      </if>
+      <if test="fee != null" >
+        fee,
+      </if>
+      <if test="nonce != null" >
+        nonce,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="txHash != null" >
+        #{txHash,jdbcType=VARCHAR},
+      </if>
+      <if test="orderStatus != null" >
+        #{orderStatus,jdbcType=INTEGER},
+      </if>
+      <if test="fromAddress != null" >
+        #{fromAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="toAddress != null" >
+        #{toAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="coinName != null" >
+        #{coinName,jdbcType=VARCHAR},
+      </if>
+      <if test="coinNum != null" >
+        #{coinNum,jdbcType=DECIMAL},
+      </if>
+      <if test="gasPrice != null" >
+        #{gasPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="gasLimit != null" >
+        #{gasLimit,jdbcType=BIGINT},
+      </if>
+      <if test="fee != null" >
+        #{fee,jdbcType=DECIMAL},
+      </if>
+      <if test="nonce != null" >
+        #{nonce,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update airdrop_transaction_order
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.txHash != null" >
+        tx_hash = #{record.txHash,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderStatus != null" >
+        order_status = #{record.orderStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.fromAddress != null" >
+        from_address = #{record.fromAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.toAddress != null" >
+        to_address = #{record.toAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.coinName != null" >
+        coin_name = #{record.coinName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.coinNum != null" >
+        coin_num = #{record.coinNum,jdbcType=DECIMAL},
+      </if>
+      <if test="record.gasPrice != null" >
+        gas_price = #{record.gasPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.gasLimit != null" >
+        gas_limit = #{record.gasLimit,jdbcType=BIGINT},
+      </if>
+      <if test="record.fee != null" >
+        fee = #{record.fee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.nonce != null" >
+        nonce = #{record.nonce,jdbcType=BIGINT},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update airdrop_transaction_order
+    set id = #{record.id,jdbcType=INTEGER},
+      tx_hash = #{record.txHash,jdbcType=VARCHAR},
+      order_status = #{record.orderStatus,jdbcType=INTEGER},
+      from_address = #{record.fromAddress,jdbcType=VARCHAR},
+      to_address = #{record.toAddress,jdbcType=VARCHAR},
+      coin_name = #{record.coinName,jdbcType=VARCHAR},
+      coin_num = #{record.coinNum,jdbcType=DECIMAL},
+      gas_price = #{record.gasPrice,jdbcType=DECIMAL},
+      gas_limit = #{record.gasLimit,jdbcType=BIGINT},
+      fee = #{record.fee,jdbcType=DECIMAL},
+      nonce = #{record.nonce,jdbcType=BIGINT},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.coinwallet.airdrop.entity.AirdropTransactionOrder" >
+    update airdrop_transaction_order
+    <set >
+      <if test="txHash != null" >
+        tx_hash = #{txHash,jdbcType=VARCHAR},
+      </if>
+      <if test="orderStatus != null" >
+        order_status = #{orderStatus,jdbcType=INTEGER},
+      </if>
+      <if test="fromAddress != null" >
+        from_address = #{fromAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="toAddress != null" >
+        to_address = #{toAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="coinName != null" >
+        coin_name = #{coinName,jdbcType=VARCHAR},
+      </if>
+      <if test="coinNum != null" >
+        coin_num = #{coinNum,jdbcType=DECIMAL},
+      </if>
+      <if test="gasPrice != null" >
+        gas_price = #{gasPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="gasLimit != null" >
+        gas_limit = #{gasLimit,jdbcType=BIGINT},
+      </if>
+      <if test="fee != null" >
+        fee = #{fee,jdbcType=DECIMAL},
+      </if>
+      <if test="nonce != null" >
+        nonce = #{nonce,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.coinwallet.airdrop.entity.AirdropTransactionOrder" >
+    update airdrop_transaction_order
+    set tx_hash = #{txHash,jdbcType=VARCHAR},
+      order_status = #{orderStatus,jdbcType=INTEGER},
+      from_address = #{fromAddress,jdbcType=VARCHAR},
+      to_address = #{toAddress,jdbcType=VARCHAR},
+      coin_name = #{coinName,jdbcType=VARCHAR},
+      coin_num = #{coinNum,jdbcType=DECIMAL},
+      gas_price = #{gasPrice,jdbcType=DECIMAL},
+      gas_limit = #{gasLimit,jdbcType=BIGINT},
+      fee = #{fee,jdbcType=DECIMAL},
+      nonce = #{nonce,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

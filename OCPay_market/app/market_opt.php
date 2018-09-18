@@ -22,6 +22,10 @@ if ($type == "favor") { // 收藏列表
     favor_list($_POST, $db, $redis, $log, $code);
 }
 
+if ($type == "list") { // token列表
+    query($_POST, $db, $redis, $log);
+}
+
 $redis->close();
 
 function add_collect($post, $db, $log, $code) {
@@ -166,4 +170,120 @@ function favor_list($post, $db, $redis, $log, $code) {
         return ;
     }
     echo json_encode(["code" => 200, "data" => []]);
+}
+
+function query($post, $db, $redis, $log) {
+    $order = isset($post["order"])?$post["order"]:1;
+    $user_id = isset($post["user_id"])?$post["user_id"]:0;
+    $search = isset($post["search"]) ? $post["search"] : "";
+    $plat_type = isset($post["plat_type"])?$post["plat_type"]:1;
+
+    //if ($search) $res = $redis->zRange("market_search", 0, -1, true);
+    //else
+    $res = $redis->zRange("market", 0, -1, true);
+
+    $info = [];
+    if (!$res) {
+        $sql = "select create_time from market order by create_time desc limit 1";
+        $time = $db->get_var($sql);
+
+        if ($search) {
+            $sql = "select ID, exchange_name, token, currency, `close`, degree, vol from market where create_time = $time and (currency = 'USD' or current = 'USDT') and token like '{$search}%' order by `vol` desc ";
+            $info = $db->get_result($sql);
+        } else {
+            $sql = "select ID, exchange_name, token, currency, `close`, degree, vol from market where create_time = $time and (currency = 'USD' or current = 'USDT') order by `vol` desc ";
+            $info = $db->get_result($sql);
+        }
+    } else {
+        foreach($res as $key => $val) {
+            $source = json_decode($key, true);
+            if ($search) {
+                if (stripos($source["token"], $search) !== false) $info[] = $source;
+            } else {
+                $info[] = $source;
+            }
+        }
+    }
+
+    // 处理最优
+    $norm_col = [];
+    $opt_col = [];
+    if ($user_id) {
+        $sql = "select token, exchange, col_type from collect where user_id = $user_id and type = 1 and plat_type = $plat_type";
+        $col = $db->get_result($sql);
+
+        if ($col) {
+            foreach($col as $val) {
+                if ($val["col_type"] == 1) $opt_col[$val["token"]] = 1;
+                else $norm_col[$val["token"]."_".$val["exchange"]] = 1;
+            }
+        }
+    }
+
+    // 获取代币发行量
+    $util = new Utils();
+    $max_supply = $util->get_max_supply($db);
+
+    $arr = [];
+    if ($info) {
+        // 处理排序
+        $res = [];
+        foreach($info as $val) {
+            if (isset($max_supply[$val["token"]])) {
+                $value = $max_supply[$val["token"]] * $val["close"];
+                $val["value_sort"] = $value;
+                if ($value / 1000000 > 1000) {
+                    $value = round(($value / 1000000000), 3)."B";
+                } else {
+                    $value = round(($value / 1000000), 3)."M";
+                }
+
+                $val["value"] = $value;
+            } else {
+                continue;
+            }
+            $val["close"] = sprintf("%0.4f", $val["close"]);
+            $val["degree"] = sprintf("%0.2f", $val["degree"]);
+            $val["vol"] = $val["vol"] * $val["close"];
+            $val["vol_format"] = number_format(sprintf("%0.2f", $val["vol"]));
+            //$val["vol_format"] = number_format($val["vol"], 0);
+            $val["collect_status"] = 0;
+            if (isset($norm_col[$val["token"]."_".$val["exchange_name"]])) $val["collect_status"] = 1;
+
+            $res[$val["token"]][] = $val;
+        }
+
+        // 处理最优
+        foreach($res as $key =>$val) {
+            $tem = $res[$key];
+            //unset($tem[0]);
+            if (isset($opt_col[$res[$key][0]["token"]])) $res[$key][0]["collect_status"] = 1;
+            else $res[$key][0]["collect_status"] = 0;
+
+            $res[$key][0]["child"] = array_values($tem);
+
+            $arr[] = $res[$key][0];
+            unset($res[$key]);
+        }
+
+        $arr = get_market_sort($order, $arr);
+    }
+
+    if ($search) {
+        $sql = "select token, search_count from hot_search where token = '{$search}' ";
+        $hot_search = $db->get_row($sql);
+        if ($hot_search) {
+            $db->update("hot_search", [
+                "search_count" => $hot_search["search_count"] + 1
+            ], " token = '{$search}' ");
+        } else {
+            $db->insert("hot_search", [
+                "token" => $search,
+                "search_count" => 1
+            ]);
+        }
+    }
+
+    $log->writeLog($arr);
+    echo json_encode(["code" => 200, "data" => $arr]);
 }

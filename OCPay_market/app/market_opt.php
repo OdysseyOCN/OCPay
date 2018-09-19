@@ -26,6 +26,10 @@ if ($type == "list") { // token列表
     query($_POST, $db, $redis, $log);
 }
 
+if ($type == "exchange") { // 交易所列表
+    exchange_list($_POST, $db, $log);
+}
+
 $redis->close();
 
 function add_collect($post, $db, $log, $code) {
@@ -286,4 +290,50 @@ function query($post, $db, $redis, $log) {
 
     $log->writeLog($arr);
     echo json_encode(["code" => 200, "data" => $arr]);
+}
+
+function exchange_list($post, $db, $log) {
+    $order = isset($post["order"])?$post["order"]:5;
+    $search = isset($post["search"])?$post["search"]:"";
+    if ($search) {
+        $sql = "select exchange exchange_name, pair, vol vol_format, icon from exchange where exchange like '{$search}%' ";
+        $info = $db->get_result($sql);
+
+        $sql = "select token, search_count from hot_search where token = '{$search}' ";
+        $hot_search = $db->get_row($sql);
+        if ($hot_search) {
+            $db->update("hot_search", [
+                "search_count" => $hot_search["search_count"] + 1
+            ], " token = '{$search}' ");
+        } else {
+            $db->insert("hot_search", [
+                "token" => $search,
+                "search_count" => 1
+            ]);
+        }
+    } else {
+        $sql = "select exchange exchange_name, pair, vol vol_format, icon from exchange order by vol desc";
+        $info = $db->get_result($sql);
+    }
+
+    if ($info) {
+        if ($order == 6) {
+            $sort = array_column($info, "vol_format");
+            array_multisort($sort, SORT_ASC, $info);
+        } else if ($order == 3) {
+            $sort = array_column($info, "pair");
+            array_multisort($sort, SORT_DESC, $info);
+        } else if ($order == 4) {
+            $sort = array_column($info, "pair");
+            array_multisort($sort, SORT_ASC, $info);
+        }
+        foreach($info as $key => $val) {
+            $info[$key]["vol_format"] = "$".$val["vol_format"]."M";
+        }
+    } else {
+        $info = [];
+    }
+
+    $log->writeLog($info);
+    echo json_encode(["code" => 200, "data" => $info]);
 }

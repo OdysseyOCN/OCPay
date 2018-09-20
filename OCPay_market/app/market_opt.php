@@ -30,6 +30,10 @@ if ($type == "exchange") { // 交易所列表
     exchange_list($_POST, $db, $log);
 }
 
+if ($type == "search_init") { // 初始搜索
+    search_init($db, $log);
+}
+
 $redis->close();
 
 function add_collect($post, $db, $log, $code) {
@@ -333,6 +337,15 @@ function exchange_list($post, $db, $log) {
     } else {
         $info = [];
     }
+
+    $log->writeLog($info);
+    echo json_encode(["code" => 200, "data" => $info]);
+}
+
+function search_init($db, $log) {
+    $sql = "select token from hot_search limit 5";
+    $info = $db->get_result($sql);
+    if (!$info) $info = [];
 
     $log->writeLog($info);
     echo json_encode(["code" => 200, "data" => $info]);

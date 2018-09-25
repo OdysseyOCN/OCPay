@@ -1,6 +1,11 @@
 <?php
 // 工具类
 class Utils {
+    /**
+     * 获取代币发行量
+     *
+     * $db 数据库连接对象
+    */
 	function get_max_supply($db) {
         // 获取代币发行量
         $sql = "select token, supply from token";

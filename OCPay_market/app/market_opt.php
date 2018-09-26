@@ -36,6 +36,14 @@ if ($type == "search_init") { // 初始搜索
 
 $redis->close();
 
+/**
+ * 添加收藏
+ *
+ * @param $post 请求参数
+ * @param $db 数据库连接对象
+ * @param $log 日志
+ * @param $code 返回码
+*/
 function add_collect($post, $db, $log, $code) {
     $user_id = isset($post["user_id"])?$post["user_id"]:0;
     $curr_token = isset($post["curr_token"])?$post["curr_token"]:"";

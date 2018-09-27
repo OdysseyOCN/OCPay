@@ -93,6 +93,15 @@ function add_collect($post, $db, $log, $code) {
     echo json_encode(["code" => 200]);
 }
 
+/**
+ * 收藏列表
+ *
+ * @param $post 请求参数
+ * @param $db 数据库连接对象
+ * @param $redis
+ * @param $log 日志
+ * @param $code 返回码
+*/
 function favor_list($post, $db, $redis, $log, $code) {
     $order = isset($post["order"])?$post["order"]:1;
     $user_id = isset($post["user_id"])?$post["user_id"]:0;

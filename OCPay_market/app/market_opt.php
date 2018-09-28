@@ -197,6 +197,13 @@ function favor_list($post, $db, $redis, $log, $code) {
     echo json_encode(["code" => 200, "data" => []]);
 }
 
+/**
+ * token 列表
+ * $post 请求参数
+ * $db 数据库连接对象
+ * $redis 
+ * $log 
+*/
 function query($post, $db, $redis, $log) {
     $order = isset($post["order"])?$post["order"]:1;
     $user_id = isset($post["user_id"])?$post["user_id"]:0;

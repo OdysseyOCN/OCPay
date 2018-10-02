@@ -320,6 +320,11 @@ function query($post, $db, $redis, $log) {
     echo json_encode(["code" => 200, "data" => $arr]);
 }
 
+/**
+ * $post 请求参数
+ * $db 数据库连接对象
+ * $log 日志
+*/
 function exchange_list($post, $db, $log) {
     $order = isset($post["order"])?$post["order"]:5;
     $search = isset($post["search"])?$post["search"]:"";

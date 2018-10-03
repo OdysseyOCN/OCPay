@@ -371,6 +371,12 @@ function exchange_list($post, $db, $log) {
     echo json_encode(["code" => 200, "data" => $info]);
 }
 
+/**
+ * 初始搜索词
+ *
+ * @param $db 数据库连接对象
+ * @param $log 日志
+*/
 function search_init($db, $log) {
     $sql = "select token from hot_search limit 5";
     $info = $db->get_result($sql);

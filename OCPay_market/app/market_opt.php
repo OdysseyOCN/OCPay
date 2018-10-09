@@ -197,6 +197,13 @@ function favor_list($post, $db, $redis, $log, $code) {
     echo json_encode(["code" => 200, "data" => []]);
 }
 
+/**
+ * token 列表
+ * $post 请求参数
+ * $db 数据库连接对象
+ * $redis 
+ * $log 
+*/
 function query($post, $db, $redis, $log) {
     $order = isset($post["order"])?$post["order"]:1;
     $user_id = isset($post["user_id"])?$post["user_id"]:0;
@@ -313,6 +320,11 @@ function query($post, $db, $redis, $log) {
     echo json_encode(["code" => 200, "data" => $arr]);
 }
 
+/**
+ * $post 请求参数
+ * $db 数据库连接对象
+ * $log 日志
+*/
 function exchange_list($post, $db, $log) {
     $order = isset($post["order"])?$post["order"]:5;
     $search = isset($post["search"])?$post["search"]:"";
@@ -359,6 +371,12 @@ function exchange_list($post, $db, $log) {
     echo json_encode(["code" => 200, "data" => $info]);
 }
 
+/**
+ * 初始搜索词
+ *
+ * @param $db 数据库连接对象
+ * @param $log 日志
+*/
 function search_init($db, $log) {
     $sql = "select token from hot_search limit 5";
     $info = $db->get_result($sql);

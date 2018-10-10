@@ -25,6 +25,9 @@ class BaseController extends ActiveController
 	                'Access-Control-Request-Method' => ['GET', 'POST', 'OPTIONS'],
 	            ],
 	        ],
+	        'access' => [
+	    	    'class' => 'api\modules\v1\filters\AccessFilter',
+	    	],
 	    ], parent::behaviors());
 	}
 }

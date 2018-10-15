@@ -72,12 +72,12 @@ class MarketController extends BaseController
 			return ["code" => 1011, "msg" => Code::code(1011)];
 		}
 
-		$sql = "select token, exchange, col_type from wp_collect where user_id = $user_id and type in (1, 2) and plat_type = $plat_type";
+		$sql = "select token, exchange, col_type from collect where user_id = $user_id and type in (1, 2) and plat_type = $plat_type";
 		$col = Yii::$app->db->createCommand($sql)->queryAll();
 
 		$res = [];
 		if ($col) {
-	        $sql = "select create_time from wp_market order by create_time desc limit 1";
+	        $sql = "select create_time from market order by create_time desc limit 1";
 	        $time = Yii::$app->db->createCommand($sql)->queryOne();
 	        if (isset($time["create_time"])) $time = $time["create_time"];
 	        else $time = time();
@@ -115,14 +115,14 @@ class MarketController extends BaseController
 	                if (isset($opt_info[$token])) {
 	                    $info = $opt_info[$token];
 	                } else {
-	                    $sql = "select ID, exchange_name, token, currency, `close`, degree, vol from wp_market where create_time = $time and token in ('{$token}') order by `close` limit 1";
+	                    $sql = "select ID, exchange_name, token, currency, `close`, degree, vol from market where create_time = $time and token in ('{$token}') order by `close` limit 1";
 	                    $info = Yii::$app->db->createCommand($sql)->queryOne();
 	                }
 	            } else {
 	                if (isset($nor_info[$exchange.$token])) {
 	                    $info = $nor_info[$exchange.$token];
 	                } else {
-	                    $sql = "select ID, exchange_name, token, currency, `close`, degree, vol from wp_market where create_time = $time and token = '{$token}' and exchange_name = '{$exchange}' ";
+	                    $sql = "select ID, exchange_name, token, currency, `close`, degree, vol from market where create_time = $time and token = '{$token}' and exchange_name = '{$exchange}' ";
 	                    $info = Yii::$app->db->createCommand($sql)->queryOne();
 	                }
 	                $type = 2;

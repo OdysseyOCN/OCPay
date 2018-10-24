@@ -158,10 +158,13 @@ class MarketController extends BaseController
 
 	// token 列表
 	public function actionList(0) {
-	    $order = isset($post["order"])?$post["order"]:1;
-	    $user_id = isset($post["user_id"])?$post["user_id"]:0;
-	    $search = isset($post["search"]) ? $post["search"] : "";
-	    $plat_type = isset($post["plat_type"])?$post["plat_type"]:1;
+		Yii::$app->response->format=Response::FORMAT_JSON;
+
+		$request = Yii::$app->request;
+		$order = $request->post("order", 1);
+		$user_id = $request->post("user_id", 0);
+		$search = $request->post("search", "");
+		$plat_type = $request->post("plat_type", 1);
 	    //if ($search) $res = $redis->zRange("market_search", 0, -1, true);
 	    //else
 	    $res = $redis->zRange("market", 0, -1, true);

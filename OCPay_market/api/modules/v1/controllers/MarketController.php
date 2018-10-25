@@ -157,7 +157,7 @@ class MarketController extends BaseController
 	}
 
 	// token 列表
-	public function actionList(0) {
+	public function actionList() {
 		Yii::$app->response->format=Response::FORMAT_JSON;
 
 		$request = Yii::$app->request;
@@ -171,13 +171,15 @@ class MarketController extends BaseController
 	    $info = [];
 	    if (!$res) {
 	        $sql = "select create_time from market order by create_time desc limit 1";
-	        $time = $db->get_var($sql);
+	        $create_time = Yii::$app->db->createCommand($sql)->queryOne();
+	        $time = time();
+	        if (isset($create_time["create_time"])) $time = $create_time["create_time"];
 	        if ($search) {
 	            $sql = "select ID, exchange_name, token, currency, `close`, degree, vol from market where create_time = $time and (currency = 'USD' or current = 'USDT') and token like '{$search}%' order by `vol` desc ";
-	            $info = $db->get_result($sql);
+	            $info = $info = Yii::$app->db->createCommand($sql)->queryAll();
 	        } else {
 	            $sql = "select ID, exchange_name, token, currency, `close`, degree, vol from market where create_time = $time and (currency = 'USD' or current = 'USDT') order by `vol` desc ";
-	            $info = $db->get_result($sql);
+	            $info = $info = Yii::$app->db->createCommand($sql)->queryAll();
 	        }
 	    } else {
 	        foreach($res as $key => $val) {
@@ -194,7 +196,7 @@ class MarketController extends BaseController
 	    $opt_col = [];
 	    if ($user_id) {
 	        $sql = "select token, exchange, col_type from collect where user_id = $user_id and type = 1 and plat_type = $plat_type";
-	        $col = $db->get_result($sql);
+	        $col = $info = Yii::$app->db->createCommand($sql)->queryAll();
 	        if ($col) {
 	            foreach($col as $val) {
 	                if ($val["col_type"] == 1) $opt_col[$val["token"]] = 1;
@@ -245,19 +247,17 @@ class MarketController extends BaseController
 	    }
 	    if ($search) {
 	        $sql = "select token, search_count from hot_search where token = '{$search}' ";
-	        $hot_search = $db->get_row($sql);
+	        $hot_search = $info = Yii::$app->db->createCommand($sql)->queryOne();
 	        if ($hot_search) {
-	            $db->update("hot_search", [
-	                "search_count" => $hot_search["search_count"] + 1
-	            ], " token = '{$search}' ");
+	        	HotSearch::updateAll(["search_count" => $hot_search["search_count"] + 1], " token = '{$search}' ");
 	        } else {
-	            $db->insert("hot_search", [
-	                "token" => $search,
-	                "search_count" => 1
-	            ]);
+	        	$hotsearch = new HotSearch();
+	        	$hotsearch->token = $search;
+	        	$hotsearch->search_count = 1;
+	        	$hotsearch->save();
 	        }
 	    }
 	    $log->writeLog($arr);
-	    echo json_encode(["code" => 200, "data" => $arr]);
+	    return ["code" => 200, "data" => $arr];
 	}
 }

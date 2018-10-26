@@ -157,33 +157,35 @@ class MarketController extends BaseController
 	}
 
 	// token 列表
-	public function actionList() {
-		Yii::$app->response->format=Response::FORMAT_JSON;
+		public function actionList() {
+	    Yii::$app->response->format=Response::FORMAT_JSON;
 
 		$request = Yii::$app->request;
 		$order = $request->post("order", 1);
 		$user_id = $request->post("user_id", 0);
 		$search = $request->post("search", "");
 		$plat_type = $request->post("plat_type", 1);
-	    //if ($search) $res = $redis->zRange("market_search", 0, -1, true);
-	    //else
-	    $res = $redis->zRange("market", 0, -1, true);
+
+		$redis = Yii::$app->redis;
+	    $res = $redis->zrange("market", 0, -1);
+
 	    $info = [];
 	    if (!$res) {
-	        $sql = "select create_time from market order by create_time desc limit 1";
-	        $create_time = Yii::$app->db->createCommand($sql)->queryOne();
-	        $time = time();
-	        if (isset($create_time["create_time"])) $time = $create_time["create_time"];
+	        $sql = "select create_time from wp_market order by create_time desc limit 1";
+	        $time = Yii::$app->db->createCommand($sql)->queryOne(); 
+	        if (isset($time["create_time"])) $time = $time["create_time"];
+	        else $time = time();
+
 	        if ($search) {
-	            $sql = "select ID, exchange_name, token, currency, `close`, degree, vol from market where create_time = $time and (currency = 'USD' or current = 'USDT') and token like '{$search}%' order by `vol` desc ";
-	            $info = $info = Yii::$app->db->createCommand($sql)->queryAll();
+	            $sql = "select ID, exchange_name, token, currency, `close`, degree, vol from wp_market where create_time = $time and (currency = 'USD' or currency = 'USDT') and token like '{$search}%' order by `vol` desc ";
+	            $info = Yii::$app->db->createCommand($sql)->queryAll(); 
 	        } else {
-	            $sql = "select ID, exchange_name, token, currency, `close`, degree, vol from market where create_time = $time and (currency = 'USD' or current = 'USDT') order by `vol` desc ";
-	            $info = $info = Yii::$app->db->createCommand($sql)->queryAll();
+	            $sql = "select ID, exchange_name, token, currency, `close`, degree, vol from wp_market where create_time = $time and (currency = 'USD' or currency = 'USDT') order by `vol` desc ";
+	            $info = Yii::$app->db->createCommand($sql)->queryAll(); 
 	        }
 	    } else {
 	        foreach($res as $key => $val) {
-	            $source = json_decode($key, true);
+	            $source = json_decode($val, true);
 	            if ($search) {
 	                if (stripos($source["token"], $search) !== false) $info[] = $source;
 	            } else {
@@ -191,12 +193,14 @@ class MarketController extends BaseController
 	            }
 	        }
 	    }
+
 	    // 处理最优
 	    $norm_col = [];
 	    $opt_col = [];
 	    if ($user_id) {
-	        $sql = "select token, exchange, col_type from collect where user_id = $user_id and type = 1 and plat_type = $plat_type";
-	        $col = $info = Yii::$app->db->createCommand($sql)->queryAll();
+	        $sql = "select token, exchange, col_type from wp_collect where user_id = $user_id and type = 1 and plat_type = $plat_type";
+	        $col = Yii::$app->db->createCommand($sql)->queryAll();
+
 	        if ($col) {
 	            foreach($col as $val) {
 	                if ($val["col_type"] == 1) $opt_col[$val["token"]] = 1;
@@ -204,9 +208,10 @@ class MarketController extends BaseController
 	            }
 	        }
 	    }
+
 	    // 获取代币发行量
-	    $util = new Utils();
-	    $max_supply = $util->get_max_supply($db);
+	    $max_supply = Util::get_max_supply();
+
 	    $arr = [];
 	    if ($info) {
 	        // 处理排序
@@ -220,6 +225,7 @@ class MarketController extends BaseController
 	                } else {
 	                    $value = round(($value / 1000000), 3)."M";
 	                }
+
 	                $val["value"] = $value;
 	            } else {
 	                continue;
@@ -231,33 +237,38 @@ class MarketController extends BaseController
 	            //$val["vol_format"] = number_format($val["vol"], 0);
 	            $val["collect_status"] = 0;
 	            if (isset($norm_col[$val["token"]."_".$val["exchange_name"]])) $val["collect_status"] = 1;
+
 	            $res[$val["token"]][] = $val;
 	        }
+
 	        // 处理最优
 	        foreach($res as $key =>$val) {
 	            $tem = $res[$key];
 	            //unset($tem[0]);
 	            if (isset($opt_col[$res[$key][0]["token"]])) $res[$key][0]["collect_status"] = 1;
 	            else $res[$key][0]["collect_status"] = 0;
+
 	            $res[$key][0]["child"] = array_values($tem);
+
 	            $arr[] = $res[$key][0];
 	            unset($res[$key]);
 	        }
-	        $arr = get_market_sort($order, $arr);
+
+	        $arr = self::get_market_sort($order, $arr);
 	    }
+
 	    if ($search) {
-	        $sql = "select token, search_count from hot_search where token = '{$search}' ";
-	        $hot_search = $info = Yii::$app->db->createCommand($sql)->queryOne();
+	        $sql = "select token, search_count from wp_hot_search where token = '{$search}' ";
+	        $hot_search = Yii::$app->db->createCommand($sql)->queryOne();
 	        if ($hot_search) {
 	        	HotSearch::updateAll(["search_count" => $hot_search["search_count"] + 1], " token = '{$search}' ");
 	        } else {
-	        	$hotsearch = new HotSearch();
-	        	$hotsearch->token = $search;
-	        	$hotsearch->search_count = 1;
-	        	$hotsearch->save();
+	        	$hot = new HotSearch();
+	        	$hot->token = $search;
+	        	$hot->search_count = 1;
+	        	$hot->save();
 	        }
 	    }
-	    $log->writeLog($arr);
+
 	    return ["code" => 200, "data" => $arr];
 	}
-}

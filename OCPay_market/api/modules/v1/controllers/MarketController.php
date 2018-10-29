@@ -272,3 +272,52 @@ class MarketController extends BaseController
 
 	    return ["code" => 200, "data" => $arr];
 	}
+
+		// 交易所列表
+	public function actionExchange() {
+		Yii::$app->response->format=Response::FORMAT_JSON;
+
+		$request = Yii::$app->request;
+		$order = $request->post("order", 5);
+		$search = $request->post("search", "");
+	    if ($search) {
+	        $sql = "select exchange exchange_name, pair, vol vol_format, icon from wp_exchange where exchange like '{$search}%' ";
+	        $info = Yii::$app->db->createCommand($sql)->queryAll(); 
+
+	        $sql = "select token, search_count from wp_hot_search where token = '{$search}' ";
+	        $hot_search = Yii::$app->db->createCommand($sql)->queryOne(); 
+	        if ($hot_search) {
+	        	HotSearch::updateAll(['search_count' => ($hot_search["search_count"] + 1)], " token = '{$search}' ");
+	        } else {
+	        	$hot = new HotSearch();
+	        	$hot->token = $search;
+	        	$hot->search_count = 1;
+	        	$hot->save();
+	        }
+	    } else {
+	        $sql = "select exchange exchange_name, pair, vol vol_format, icon from wp_exchange order by vol desc";
+	        $info = Yii::$app->db->createCommand($sql)->queryAll(); 
+	    }
+
+	    if ($info) {
+	        if ($order == 6) {
+	            $sort = array_column($info, "vol_format");
+	            array_multisort($sort, SORT_ASC, $info);
+	        } else if ($order == 3) {
+	            $sort = array_column($info, "pair");
+	            array_multisort($sort, SORT_DESC, $info);
+	        } else if ($order == 4) {
+	            $sort = array_column($info, "pair");
+	            array_multisort($sort, SORT_ASC, $info);
+	        }
+	        foreach($info as $key => $val) {
+	            $info[$key]["vol_format"] = "$".$val["vol_format"]."M";
+	        }
+	    } else {
+	        $info = [];
+	    }
+
+	    return ["code" => 200, "data" => $info];
+	}
+
+}

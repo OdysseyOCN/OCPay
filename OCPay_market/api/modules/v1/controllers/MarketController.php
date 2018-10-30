@@ -273,7 +273,7 @@ class MarketController extends BaseController
 	    return ["code" => 200, "data" => $arr];
 	}
 
-		// 交易所列表
+	// 交易所列表
 	public function actionExchange() {
 		Yii::$app->response->format=Response::FORMAT_JSON;
 
@@ -318,6 +318,39 @@ class MarketController extends BaseController
 	    }
 
 	    return ["code" => 200, "data" => $info];
+	}
+
+	// 初始搜索
+	public function actionSearchhot() {
+	    Yii::$app->response->format=Response::FORMAT_JSON;
+
+		$sql = "select token from wp_hot_search limit 5";
+		$info = Yii::$app->db->createCommand($sql)->queryAll(); 
+		if (!$info) $info = [];
+		return ["code" => 200, "data" => $info];
+	}
+
+	function get_market_sort ($order, $arr) {
+	    if ($order == 2) {
+	        $sort = array_column($arr, "value_sort");
+	        array_multisort($sort, SORT_ASC, $arr);
+	    } else if ($order == 3) {
+	        $sort = array_column($arr, "vol");
+	        array_multisort($sort, SORT_DESC, $arr);
+	    } else if ($order == 4) {
+	        $sort = array_column($arr, "vol");
+	        array_multisort($sort, SORT_ASC, $arr);
+	    } else if ($order == 5) {
+	        $sort = array_column($arr, "degree");
+	        array_multisort($sort, SORT_DESC, $arr);
+	    } else if ($order == 6) {
+	        $sort = array_column($arr, "degree");
+	        array_multisort($sort, SORT_ASC, $arr);
+	    } else {
+	        $sort = array_column($arr, "value_sort");
+	        array_multisort($sort, SORT_DESC, $arr);
+	    }
+	    return $arr;
 	}
 
 }

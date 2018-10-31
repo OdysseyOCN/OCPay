@@ -9,7 +9,6 @@ use api\modules\v1\models\Code;
 use api\modules\v1\models\Collect;
 use api\modules\v1\models\Util;
 use api\modules\v1\models\HotSearch;
-use api\modules\v1\models\Constant;
 
 class MarketController extends BaseController
 {
@@ -27,15 +26,8 @@ class MarketController extends BaseController
 
 		$exchange = $request->post("exchange", "");
 		$plat_type = $request->post("plat_type", 1);
-
-		if ($exchange) { // 处理普通收藏
-			$sql = "select ID, type from collect where user_id = $user_id and token = '{$curr_token}' and exchange = '{$exchange}' and plat_type = $plat_type ";
-            $col_type = 2;
-		} else { // 处理最优收藏
-			$sql = "select ID, type from collect where user_id = $user_id and token = '{$curr_token}' and plat_type = $plat_type ";
-            $col_type = 1;
-		}
-		$col = Yii::$app->db->createCommand($sql)->queryOne(); 
+		
+		$col = Collect::get_col($exchange, $user_id, $curr_token, $plat_type);
 
 		if ($col) {
 			$c_type = $col["type"];

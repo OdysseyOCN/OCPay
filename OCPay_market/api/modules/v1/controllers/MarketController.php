@@ -37,15 +37,7 @@ class MarketController extends BaseController
 	        $id = $col["ID"];
 	        Collect::updateAll(['type' => $c_type], 'ID = '.$id);
 		} else {
-			$collect = new Collect();
-			$collect->user_id = $user_id;
-			$collect->token = $curr_token;
-			$collect->exchange = $exchange;
-			$collect->type = 1;
-			$collect->col_type = $col_type;
-			$collect->plat_type = $plat_type;
-			$collect->create_time = time();
-			$collect->save();
+			Collect::add($user_id, $curr_token, $exchange, $col_type, $plat_type);
 		}
 
 		return ['code' => 200];

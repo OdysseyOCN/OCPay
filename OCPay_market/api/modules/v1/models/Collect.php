@@ -54,4 +54,14 @@ class Collect extends ActiveRecord
         $collect->create_time = time();
         $collect->save();
     }
+
+    /**
+     * 获取用户收藏记录
+     * @param $user_id 用户id
+     * @param $plat_type  
+     */
+    public function get_list_for_userid($user_id, $plat_type ) {
+        $sql = "select token, exchange, col_type from collect where user_id = $user_id and type in (1, 2) and plat_type = $plat_type";
+        return Yii::$app->db->createCommand($sql)->queryAll();
+    }
 }

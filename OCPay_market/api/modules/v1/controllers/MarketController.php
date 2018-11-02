@@ -56,8 +56,7 @@ class MarketController extends BaseController
 			return ["code" => 1011, "msg" => Code::code(1011)];
 		}
 
-		$sql = "select token, exchange, col_type from collect where user_id = $user_id and type in (1, 2) and plat_type = $plat_type";
-		$col = Yii::$app->db->createCommand($sql)->queryAll();
+		$col = Collect::get_list_for_userid($user_id, $plat_type);
 
 		$res = [];
 		if ($col) {

@@ -9,6 +9,7 @@ use api\modules\v1\models\Code;
 use api\modules\v1\models\Collect;
 use api\modules\v1\models\Util;
 use api\modules\v1\models\HotSearch;
+use api\modules\v1\models\Market;
 
 class MarketController extends BaseController
 {
@@ -60,10 +61,7 @@ class MarketController extends BaseController
 
 		$res = [];
 		if ($col) {
-	        $sql = "select create_time from market order by create_time desc limit 1";
-	        $time = Yii::$app->db->createCommand($sql)->queryOne();
-	        if (isset($time["create_time"])) $time = $time["create_time"];
-	        else $time = time();
+			$time = Market::get_create_time();
 	        $redis = Yii::$app->redis;
 	        $market = $redis->zrange("market", 0, -1);
 	        $opt_info = []; // 最优
@@ -98,8 +96,7 @@ class MarketController extends BaseController
 	                if (isset($opt_info[$token])) {
 	                    $info = $opt_info[$token];
 	                } else {
-	                    $sql = "select ID, exchange_name, token, currency, `close`, degree, vol from market where create_time = $time and token in ('{$token}') order by `close` limit 1";
-	                    $info = Yii::$app->db->createCommand($sql)->queryOne();
+	                	$info = Market::get_list_for_token($create_time, $token);
 	                }
 	            } else {
 	                if (isset($nor_info[$exchange.$token])) {

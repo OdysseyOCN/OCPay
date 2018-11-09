@@ -47,7 +47,7 @@ class Market extends ActiveRecord
 	 * @param $exchange 指定交易所
 	 * @return array 返回指定交易所的token信息
 	 */
-	public function get ($time, $token, $exchange) {
+	public function get_list_for_exchange($time, $token, $exchange) {
 		$sql = "select ID, exchange_name, token, currency, `close`, degree, vol from market where create_time = $time and token = '{$token}' and exchange_name = '{$exchange}' ";
 	    return Yii::$app->db->createCommand($sql)->queryOne();
 	}

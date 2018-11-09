@@ -102,8 +102,7 @@ class MarketController extends BaseController
 	                if (isset($nor_info[$exchange.$token])) {
 	                    $info = $nor_info[$exchange.$token];
 	                } else {
-	                    $sql = "select ID, exchange_name, token, currency, `close`, degree, vol from market where create_time = $time and token = '{$token}' and exchange_name = '{$exchange}' ";
-	                    $info = Yii::$app->db->createCommand($sql)->queryOne();
+	                	$info = Market::get_list_for_exchange($time, $token, $exchange);
 	                }
 	                $type = 2;
 	            }
@@ -151,10 +150,7 @@ class MarketController extends BaseController
 
 	    $info = [];
 	    if (!$res) {
-	        $sql = "select create_time from wp_market order by create_time desc limit 1";
-	        $time = Yii::$app->db->createCommand($sql)->queryOne(); 
-	        if (isset($time["create_time"])) $time = $time["create_time"];
-	        else $time = time();
+	    	$time = Market::get_create_time();
 
 	        if ($search) {
 	            $sql = "select ID, exchange_name, token, currency, `close`, degree, vol from wp_market where create_time = $time and (currency = 'USD' or currency = 'USDT') and token like '{$search}%' order by `vol` desc ";

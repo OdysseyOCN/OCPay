@@ -28,7 +28,7 @@ class Market extends ActiveRecord
 	}
 
 	/**
-	 * 获取当时时间的token信息
+	 * 获取当前时间的token信息
 	 *
 	 * @param $time 当前时间
 	 * @param $token
@@ -50,5 +50,24 @@ class Market extends ActiveRecord
 	public function get_list_for_exchange($time, $token, $exchange) {
 		$sql = "select ID, exchange_name, token, currency, `close`, degree, vol from market where create_time = $time and token = '{$token}' and exchange_name = '{$exchange}' ";
 	    return Yii::$app->db->createCommand($sql)->queryOne();
+	}
+
+	/**
+	 * 搜索当前时间 token 信息
+	 * @param $time 当前时间
+	 * @param $search 搜索token
+	 */
+	public function get_list_search_token($time, $search) {
+	    $sql = "select ID, exchange_name, token, currency, `close`, degree, vol from market where create_time = $time and (currency = 'USD' or currency = 'USDT') and token like '{$search}%' order by `vol` desc ";
+	    return Yii::$app->db->createCommand($sql)->queryAll(); 
+	}
+
+	/**
+	 * 获取当前时间的 token 信息
+	 * @param $time 当前时间
+	 */
+	public function get_list_for_time($time) {
+		$sql = "select ID, exchange_name, token, currency, `close`, degree, vol from market where create_time = $time and (currency = 'USD' or currency = 'USDT') order by `vol` desc ";
+	    return Yii::$app->db->createCommand($sql)->queryAll(); 
 	}
 }

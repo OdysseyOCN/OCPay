@@ -153,10 +153,9 @@ class MarketController extends BaseController
 	    	$time = Market::get_create_time();
 
 	        if ($search) {
-	            $sql = "select ID, exchange_name, token, currency, `close`, degree, vol from wp_market where create_time = $time and (currency = 'USD' or currency = 'USDT') and token like '{$search}%' order by `vol` desc ";
-	            $info = Yii::$app->db->createCommand($sql)->queryAll(); 
+	        	$info = Market::get_list_search_token($time, $search);
 	        } else {
-	            $sql = "select ID, exchange_name, token, currency, `close`, degree, vol from wp_market where create_time = $time and (currency = 'USD' or currency = 'USDT') order by `vol` desc ";
+	            $sql = "select ID, exchange_name, token, currency, `close`, degree, vol from market where create_time = $time and (currency = 'USD' or currency = 'USDT') order by `vol` desc ";
 	            $info = Yii::$app->db->createCommand($sql)->queryAll(); 
 	        }
 	    } else {

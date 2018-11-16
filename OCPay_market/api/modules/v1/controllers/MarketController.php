@@ -136,7 +136,7 @@ class MarketController extends BaseController
 	}
 
 	// token 列表
-		public function actionList() {
+	public function actionList() {
 	    Yii::$app->response->format=Response::FORMAT_JSON;
 
 		$request = Yii::$app->request;
@@ -155,8 +155,7 @@ class MarketController extends BaseController
 	        if ($search) {
 	        	$info = Market::get_list_search_token($time, $search);
 	        } else {
-	            $sql = "select ID, exchange_name, token, currency, `close`, degree, vol from market where create_time = $time and (currency = 'USD' or currency = 'USDT') order by `vol` desc ";
-	            $info = Yii::$app->db->createCommand($sql)->queryAll(); 
+	        	$info = Market::get_list_for_time($time);
 	        }
 	    } else {
 	        foreach($res as $key => $val) {
@@ -170,19 +169,9 @@ class MarketController extends BaseController
 	    }
 
 	    // 处理最优
-	    $norm_col = [];
-	    $opt_col = [];
-	    if ($user_id) {
-	        $sql = "select token, exchange, col_type from wp_collect where user_id = $user_id and type = 1 and plat_type = $plat_type";
-	        $col = Yii::$app->db->createCommand($sql)->queryAll();
-
-	        if ($col) {
-	            foreach($col as $val) {
-	                if ($val["col_type"] == 1) $opt_col[$val["token"]] = 1;
-	                else $norm_col[$val["token"]."_".$val["exchange"]] = 1;
-	            }
-	        }
-	    }
+	    $data = Collect::get_opt_col($user_id, $plat_type);
+	    $norm_col = $data["norm_col"];
+	    $opt_col = $data["opt_col"];
 
 	    // 获取代币发行量
 	    $max_supply = Util::get_max_supply();

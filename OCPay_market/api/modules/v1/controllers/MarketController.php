@@ -222,8 +222,7 @@ class MarketController extends BaseController
 	    }
 
 	    if ($search) {
-	        $sql = "select token, search_count from wp_hot_search where token = '{$search}' ";
-	        $hot_search = Yii::$app->db->createCommand($sql)->queryOne();
+	    	$hot_search = HotSearch::get_list_for_search($search);
 	        if ($hot_search) {
 	        	HotSearch::updateAll(["search_count" => $hot_search["search_count"] + 1], " token = '{$search}' ");
 	        } else {

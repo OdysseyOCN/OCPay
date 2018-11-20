@@ -10,6 +10,7 @@ use api\modules\v1\models\Collect;
 use api\modules\v1\models\Util;
 use api\modules\v1\models\HotSearch;
 use api\modules\v1\models\Market;
+use api\modules\v1\models\Exchange;
 
 class MarketController extends BaseController
 {
@@ -244,9 +245,7 @@ class MarketController extends BaseController
 		$order = $request->post("order", 5);
 		$search = $request->post("search", "");
 	    if ($search) {
-	        $sql = "select exchange exchange_name, pair, vol vol_format, icon from wp_exchange where exchange like '{$search}%' ";
-	        $info = Yii::$app->db->createCommand($sql)->queryAll(); 
-
+	    	$info = Exchange::get_list_for_search($search);
 	        $sql = "select token, search_count from wp_hot_search where token = '{$search}' ";
 	        $hot_search = Yii::$app->db->createCommand($sql)->queryOne(); 
 	        if ($hot_search) {

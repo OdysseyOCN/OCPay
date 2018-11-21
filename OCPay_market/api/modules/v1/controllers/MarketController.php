@@ -246,16 +246,7 @@ class MarketController extends BaseController
 		$search = $request->post("search", "");
 	    if ($search) {
 	    	$info = Exchange::get_list_for_search($search);
-	        $sql = "select token, search_count from wp_hot_search where token = '{$search}' ";
-	        $hot_search = Yii::$app->db->createCommand($sql)->queryOne(); 
-	        if ($hot_search) {
-	        	HotSearch::updateAll(['search_count' => ($hot_search["search_count"] + 1)], " token = '{$search}' ");
-	        } else {
-	        	$hot = new HotSearch();
-	        	$hot->token = $search;
-	        	$hot->search_count = 1;
-	        	$hot->save();
-	        }
+	    	HotSearch::add_search($search);
 	    } else {
 	        $sql = "select exchange exchange_name, pair, vol vol_format, icon from wp_exchange order by vol desc";
 	        $info = Yii::$app->db->createCommand($sql)->queryAll(); 

@@ -24,4 +24,14 @@ class Exchange extends ActiveRecord
     	$sql = "select exchange exchange_name, pair, vol vol_format, icon from wp_exchange where exchange like '{$search}%' ";
 	    return Yii::$app->db->createCommand($sql)->queryAll(); 
     }
+
+    /**
+     * 获取交易所列表
+     *
+     * @return array 交易所列表
+     */
+    public function get_list() {
+        $sql = "select exchange exchange_name, pair, vol vol_format, icon from wp_exchange order by vol desc";
+        return Yii::$app->db->createCommand($sql)->queryAll(); 
+    }
 }

@@ -26,6 +26,18 @@ class HotSearch extends ActiveRecord
     }
 
     /**
+     * 获取前五个热搜词
+     *
+     * @return array
+     */
+    public function get_list() {
+        $sql = "select token from hot_search limit 5";
+        $info = Yii::$app->db->createCommand($sql)->queryAll(); 
+        if (!$info) $info = [];
+        return $info;
+    }
+
+    /**
      * 添加热搜词
      * 
      * @param $search 搜索词

@@ -248,8 +248,7 @@ class MarketController extends BaseController
 	    	$info = Exchange::get_list_for_search($search);
 	    	HotSearch::add_search($search);
 	    } else {
-	        $sql = "select exchange exchange_name, pair, vol vol_format, icon from wp_exchange order by vol desc";
-	        $info = Yii::$app->db->createCommand($sql)->queryAll(); 
+	        $info = Exchange::get_list();
 	    }
 
 	    if ($info) {
@@ -276,10 +275,7 @@ class MarketController extends BaseController
 	// 初始搜索
 	public function actionSearchhot() {
 	    Yii::$app->response->format=Response::FORMAT_JSON;
-
-		$sql = "select token from wp_hot_search limit 5";
-		$info = Yii::$app->db->createCommand($sql)->queryAll(); 
-		if (!$info) $info = [];
+		$info = HotSearch::get_list();
 		return ["code" => 200, "data" => $info];
 	}
 

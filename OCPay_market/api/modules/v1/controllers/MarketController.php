@@ -131,7 +131,7 @@ class MarketController extends BaseController
 	            }
 	        }
 
-	        if ($res) $res = self::get_market_sort($order, $res);
+	        if ($res) $res = Util::get_market_sort($order, $res);
 	    }
 	    return ["code" => 200, "data" => $res];
 	}
@@ -219,7 +219,7 @@ class MarketController extends BaseController
 	            unset($res[$key]);
 	        }
 
-	        $arr = self::get_market_sort($order, $arr);
+	        $arr = Util::get_market_sort($order, $arr);
 	    }
 
 	    if ($search) {
@@ -278,28 +278,4 @@ class MarketController extends BaseController
 		$info = HotSearch::get_list();
 		return ["code" => 200, "data" => $info];
 	}
-
-	function get_market_sort ($order, $arr) {
-	    if ($order == 2) {
-	        $sort = array_column($arr, "value_sort");
-	        array_multisort($sort, SORT_ASC, $arr);
-	    } else if ($order == 3) {
-	        $sort = array_column($arr, "vol");
-	        array_multisort($sort, SORT_DESC, $arr);
-	    } else if ($order == 4) {
-	        $sort = array_column($arr, "vol");
-	        array_multisort($sort, SORT_ASC, $arr);
-	    } else if ($order == 5) {
-	        $sort = array_column($arr, "degree");
-	        array_multisort($sort, SORT_DESC, $arr);
-	    } else if ($order == 6) {
-	        $sort = array_column($arr, "degree");
-	        array_multisort($sort, SORT_ASC, $arr);
-	    } else {
-	        $sort = array_column($arr, "value_sort");
-	        array_multisort($sort, SORT_DESC, $arr);
-	    }
-	    return $arr;
-	}
-
 }

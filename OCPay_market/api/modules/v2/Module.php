@@ -1,5 +1,5 @@
 <?php
-namespace api\modules\v1;
+namespace api\modules\v2;
 
 use yii\filters\auth\HttpBasicAuth;
 use yii\filters\auth\QueryParamAuth;

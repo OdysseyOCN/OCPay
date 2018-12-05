@@ -24,6 +24,8 @@ class MarketController extends BaseController
 		$exchange = $request->post("exchange", "");
 		$plat_type = $request->post("plat_type", 1);
 
+		$col = Collect::get_col($exchange, $user_id, $curr_token, $plat_type);
+
 		return ['code' => 200];
 	}
 }

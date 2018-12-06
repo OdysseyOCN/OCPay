@@ -33,4 +33,26 @@ class Collect extends ActiveRecord
 		}
 		return Yii::$app->db->createCommand($sql)->queryOne();
     }
+
+    /**
+     * 添加收藏
+     * 
+     * @param $exchange    交易所
+     * @param $user_id     用户id
+     * @param $curr_token  当前币种
+     * @param $plat_type   平台类型
+    */
+    function add_collect($exchange, $user_id, $curr_token, $plat_type) {
+        $col = self::get_col($exchange, $user_id, $curr_token, $plat_type);
+
+        if ($col) {
+            $c_type = $col["type"];
+            if ($c_type == 1 || $c_type == 2) $c_type = 0;
+            else $c_type = 1;
+
+            $id = $col["ID"];
+            Collect::updateAll(['type' => $c_type], 'ID = '.$id);
+        }
+        return '';
+    }
 }

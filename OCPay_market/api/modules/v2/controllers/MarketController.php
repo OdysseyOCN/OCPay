@@ -10,7 +10,7 @@ use api\modules\v2\models\Collect;
 
 class MarketController extends BaseController
 {
-	    // 添加收藏
+	// 添加收藏
 	public function actionAdd() {
 		Yii::$app->response->format=Response::FORMAT_JSON;
 
@@ -23,6 +23,7 @@ class MarketController extends BaseController
 
 		$exchange = $request->post("exchange", "");
 		$plat_type = $request->post("plat_type", 1);
+		Collect::add($exchange, $user_id, $curr_token, $plat_type);
 
 		return ['code' => 200];
 	}

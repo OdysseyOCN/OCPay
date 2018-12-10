@@ -6,7 +6,7 @@ use yii;
 use yii\rest\ActiveController;
 use yii\web\Response;
 use api\modules\v2\models\Code;
-use api\modules\v2\models\Collect;
+use api\modules\v2\Services\SCollect;
 
 class MarketController extends BaseController
 {
@@ -23,7 +23,7 @@ class MarketController extends BaseController
 
 		$exchange = $request->post("exchange", "");
 		$plat_type = $request->post("plat_type", 1);
-		Collect::add($exchange, $user_id, $curr_token, $plat_type);
+		SCollect::add($exchange, $user_id, $curr_token, $plat_type);
 
 		return ['code' => 200];
 	}

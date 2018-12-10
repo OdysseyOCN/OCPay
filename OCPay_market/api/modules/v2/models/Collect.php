@@ -35,36 +35,6 @@ class Collect extends ActiveRecord
 
     /**
      * 添加收藏
-     * 
-     * @param $exchange    交易所
-     * @param $user_id     用户id
-     * @param $curr_token  当前币种
-     * @param $plat_type   平台类型
-    */
-    function add_collect($exchange, $user_id, $curr_token, $plat_type) {
-        $col = self::get_col($exchange, $user_id, $curr_token, $plat_type);
-
-        $col_type = 1;
-        if ($exchange) {
-            $col_type = 2;
-        }
-
-        if ($col) {
-            $c_type = $col["type"];
-            if ($c_type == 1 || $c_type == 2) $c_type = 0;
-            else $c_type = 1;
-
-            $id = $col["ID"];
-            self::updateAll(['type' => $c_type], 'ID = '.$id);
-        } else {
-            self::add($user_id, $curr_token, $exchange, $col_type, $plat_type);
-        }
-        return '';
-    }
-
-
-    /**
-     * 添加收藏
      *
      * @param $user_id 用户id
      * @param $curr_token 当前币种

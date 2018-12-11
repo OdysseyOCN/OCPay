@@ -27,4 +27,21 @@ class MarketController extends BaseController
 
 		return ['code' => 200];
 	}
+
+	// 收藏列表
+	public function actionFavor() {
+		Yii::$app->response->format=Response::FORMAT_JSON;
+
+		$request = Yii::$app->request;
+		$redis = Yii::$app->redis;
+		$order = $request->post("order", 1);
+		$user_id = $request->post("user_id", 0);
+		$plat_type = $request->post("plat_type", 1);
+		if ($user_id == 0) {
+			return ["code" => 1011, "msg" => Code::code(1011)];
+		}
+
+		$col = SCollect::get_list_for_userid($user_id, $plat_type);
+		return [];
+	}
 }

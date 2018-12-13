@@ -41,7 +41,7 @@ class MarketController extends BaseController
 			return ["code" => 1011, "msg" => Code::code(1011)];
 		}
 
-		$col = SCollect::get_list_for_userid($user_id, $plat_type);
-		return [];
+		$res = SCollect::get_list_for_userid($user_id, $plat_type);
+		return ["code" => 200, "data" => $res];
 	}
 }

@@ -4,7 +4,7 @@ namespace api\modules\v1\models;
 
 use yii\base\Model;
 
-class Code extends Model
+class Util extends Model
 {
     /**
      * 获取代币发行量

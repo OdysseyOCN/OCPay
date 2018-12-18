@@ -21,4 +21,16 @@ class Util
         }
         return $max_supply;
     }
+
+    function get_calc($info) {
+        $value = $max_supply[$info["token"]] * $info["close"];
+        $info["value_sort"] = $value;
+        if ($value / 1000000 > 1000) {
+            $value = round(($value / 1000000000), 3)."B";
+        } else {
+            $value = round(($value / 1000000), 3)."M";
+        }
+        $info["value"] = $value;
+        return $info;
+    }
 }

@@ -3,9 +3,10 @@ namespace api\modules\v2\services;
 
 use Yii;
 use api\modules\v2\models\Collect;
+use api\modules\v2\models\Market;
 use api\modules\v2\utils\Util;
 
-class Collect
+class SCollect
 {
 	/**
      * 添加收藏
@@ -76,7 +77,7 @@ class Collect
                     if (isset($opt_info[$token])) {
                         $info = $opt_info[$token];
                     } else {
-                        $info = Market::get_list_for_token($create_time, $token);
+                        $info = Market::get_list_for_token($time, $token);
                     }
                 } else {
                     if (isset($nor_info[$exchange.$token])) {

@@ -1,6 +1,6 @@
 <?php 
 
-namespace api\modules\v1\utils;
+namespace api\modules\v2\utils;
 
 class Util
 {

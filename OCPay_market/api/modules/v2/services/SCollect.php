@@ -37,7 +37,7 @@ class SCollect
         return '';
     }
 
-    function get_list_for_userid($user_id, $plat_type) {
+    function get_list_for_userid($user_id, $plat_type, $order) {
         $col = Collect::get_list_for_userid($user_id, $plat_type);
 
         $res = [];

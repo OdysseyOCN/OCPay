@@ -37,6 +37,13 @@ class SCollect
         return '';
     }
 
+    /**
+     * 获取指定用户的收藏列表
+     * @param $user_id 用户id
+     * @param $plat_type 平台类型
+     * @param $order 排序
+     * @return array
+     */
     function get_list_for_userid($user_id, $plat_type, $order) {
         $col = Collect::get_list_for_userid($user_id, $plat_type);
 

@@ -63,4 +63,28 @@ class Collect extends ActiveRecord
         $sql = "select token, exchange, col_type from collect where user_id = $user_id and type in (1, 2) and plat_type = $plat_type";
         return Yii::$app->db->createCommand($sql)->queryAll();
     }
+
+    /**
+     *
+     * @param $user_id 用户id
+     * @param $plat_type
+     */
+    public function get_opt_col($user_id, $plat_type) {
+        $norm_col = [];
+        $opt_col = [];
+        if ($user_id) {
+            $sql = "select token, exchange, col_type from collect where user_id = $user_id and type = 1 and plat_type = $plat_type";
+            $col = Yii::$app->db->createCommand($sql)->queryAll();
+
+            if ($col) {
+                foreach($col as $val) {
+                    if ($val["col_type"] == 1) $opt_col[$val["token"]] = 1;
+                    else $norm_col[$val["token"]."_".$val["exchange"]] = 1;
+                }
+            }
+        }
+        $data["norm_col"] = $norm_col;
+        $data["opt_col"] = $opt_col;
+        return $data;
+    }
 }

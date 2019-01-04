@@ -13,7 +13,7 @@ class SMarket
      * @param $search 搜索词
      * @return array
      */
-    function get_list($search) {
+    function get_list($search, $user_id, $plat_type, $order) {
         $redis = Yii::$app->redis;
         $res = $redis->zrange("market", 0, -1);
 

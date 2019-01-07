@@ -103,7 +103,7 @@ class SCollect
                     $info["type"] = $type;
 
                     if (isset($max_supply[$info["token"]])) {
-                        $res[] = Util::get_calc_volume($info);
+                        $res[] = Util::get_calc_volume($max_supply, $info);
                     }
 
                 }

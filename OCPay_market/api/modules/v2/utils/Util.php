@@ -22,7 +22,14 @@ class Util
         return $max_supply;
     }
 
-    function get_calc_volume($info) {
+    /**
+     * 计算成交额
+     *
+     * @param $max_supply
+     * @param $info
+     * @return mixed
+     */
+    function get_calc_volume($max_supply, $info) {
         $value = $max_supply[$info["token"]] * $info["close"];
         $info["value_sort"] = $value;
         if ($value / 1000000 > 1000) {

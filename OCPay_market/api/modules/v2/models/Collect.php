@@ -65,7 +65,7 @@ class Collect extends ActiveRecord
     }
 
     /**
-     *
+     * 获取最优收藏
      * @param $user_id 用户id
      * @param $plat_type
      */

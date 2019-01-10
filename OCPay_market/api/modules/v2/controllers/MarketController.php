@@ -56,21 +56,9 @@ class MarketController extends BaseController
         $search = $request->post("search", "");
         $plat_type = $request->post("plat_type", 1);
 
-
-
         $info = SMarket::get_list($search, $user_id, $plat_type, $order);
 
         return ["code" => 200, "data" => $info];
     }
 
-
-    /**
-     * 搜索当前时间 token 信息
-     * @param $time 当前时间
-     * @param $search 搜索token
-     */
-    public function get_list_search_token($time, $search) {
-        $sql = "select ID, exchange_name, token, currency, `close`, degree, vol from market where create_time = $time and (currency = 'USD' or currency = 'USDT') and token like '{$search}%' order by `vol` desc  ";
-        return Yii::$app->db->createCommand($sql)->queryAll();
-    }
 }

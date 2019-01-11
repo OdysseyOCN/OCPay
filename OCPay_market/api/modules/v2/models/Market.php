@@ -63,4 +63,13 @@ class Market extends ActiveRecord
         return Yii::$app->db->createCommand($sql)->queryAll();
     }
 
+    /**
+     * 获取当前时间的 token 信息
+     * @param $time 当前时间
+     */
+    public function get_list_for_time($time) {
+        $sql = "select ID, exchange_name, token, currency, `close`, degree, vol from market where create_time = $time and (currency = 'USD' or currency = 'USDT') order by `vol` desc ";
+        return Yii::$app->db->createCommand($sql)->queryAll();
+    }
+
 }

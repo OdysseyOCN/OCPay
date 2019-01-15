@@ -61,4 +61,39 @@ class MarketController extends BaseController
         return ["code" => 200, "data" => $info];
     }
 
+    // 交易所列表
+    public function actionExchange() {
+        Yii::$app->response->format=Response::FORMAT_JSON;
+
+        $request = Yii::$app->request;
+        $order = $request->post("order", 5);
+        $search = $request->post("search", "");
+        if ($search) {
+            $info = Exchange::get_list_for_search($search);
+            HotSearch::add_search($search);
+        } else {
+            $info = Exchange::get_list();
+        }
+
+        if ($info) {
+            if ($order == 6) {
+                $sort = array_column($info, "vol_format");
+                array_multisort($sort, SORT_ASC, $info);
+            } else if ($order == 3) {
+                $sort = array_column($info, "pair");
+                array_multisort($sort, SORT_DESC, $info);
+            } else if ($order == 4) {
+                $sort = array_column($info, "pair");
+                array_multisort($sort, SORT_ASC, $info);
+            }
+            foreach($info as $key => $val) {
+                $info[$key]["vol_format"] = "$".$val["vol_format"]."M";
+            }
+        } else {
+            $info = [];
+        }
+
+        return ["code" => 200, "data" => $info];
+    }
+
 }

@@ -9,7 +9,7 @@ use api\modules\v2\utils\Util;
 class SExchange
 {
     /**
-     *
+     * 获取交易所列表
      */
     function get_exchange_list($search, $order) {
         if ($search) {

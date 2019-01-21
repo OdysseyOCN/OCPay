@@ -2,8 +2,8 @@
 namespace api\modules\v2\services;
 
 use Yii;
-use api\modules\v2\models\Collect;
-use api\modules\v2\models\Market;
+use api\modules\v2\models\Exchange;
+use api\modules\v2\models\HotSearch;
 use api\modules\v2\utils\Util;
 
 class SExchange

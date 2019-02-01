@@ -71,4 +71,29 @@ class Util
         }
         return $arr;
     }
+
+    /**
+     * 获取排序的数据
+     *
+     * @param $order 排序方式
+     * @param $arr 原始数据
+     *
+     * @return array 排序后的数组
+     */
+    function get_exchange_sort($order, $info) {
+        if ($order == 6) {
+            $sort = array_column($info, "vol_format");
+            array_multisort($sort, SORT_ASC, $info);
+        } else if ($order == 3) {
+            $sort = array_column($info, "pair");
+            array_multisort($sort, SORT_DESC, $info);
+        } else if ($order == 4) {
+            $sort = array_column($info, "pair");
+            array_multisort($sort, SORT_ASC, $info);
+        }
+        foreach($info as $key => $val) {
+            $info[$key]["vol_format"] = "$".$val["vol_format"]."M";
+        }
+        return $info;
+    }
 }

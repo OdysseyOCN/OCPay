@@ -20,19 +20,7 @@ class SExchange
         }
 
         if ($info) {
-            if ($order == 6) {
-                $sort = array_column($info, "vol_format");
-                array_multisort($sort, SORT_ASC, $info);
-            } else if ($order == 3) {
-                $sort = array_column($info, "pair");
-                array_multisort($sort, SORT_DESC, $info);
-            } else if ($order == 4) {
-                $sort = array_column($info, "pair");
-                array_multisort($sort, SORT_ASC, $info);
-            }
-            foreach($info as $key => $val) {
-                $info[$key]["vol_format"] = "$".$val["vol_format"]."M";
-            }
+            $info = Util::get_exchange_sort($order, $info);
         } else {
             $info = [];
         }

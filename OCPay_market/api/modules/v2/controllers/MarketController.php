@@ -75,4 +75,11 @@ class MarketController extends BaseController
         return ["code" => 200, "data" => $info];
     }
 
+    // 初始搜索
+    public function actionSearchhot() {
+        Yii::$app->response->format=Response::FORMAT_JSON;
+        $info = HotSearch::get_list();
+        return ["code" => 200, "data" => $info];
+    }
+
 }

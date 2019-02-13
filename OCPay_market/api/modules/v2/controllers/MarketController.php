@@ -35,7 +35,6 @@ class MarketController extends BaseController
 		Yii::$app->response->format=Response::FORMAT_JSON;
 
 		$request = Yii::$app->request;
-		$redis = Yii::$app->redis;
 		$order = $request->post("order", 1);
 		$user_id = $request->post("user_id", 0);
 		$plat_type = $request->post("plat_type", 1);

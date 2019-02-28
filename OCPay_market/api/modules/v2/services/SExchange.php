@@ -10,6 +10,9 @@ class SExchange
 {
     /**
      * 获取交易所列表
+     *
+     * @param $search 搜索词
+     * @param $order 排序
      */
     function get_exchange_list($search, $order) {
         if ($search) {
